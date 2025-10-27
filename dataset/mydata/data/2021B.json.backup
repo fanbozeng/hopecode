@@ -1,0 +1,297 @@
+[
+    {
+        "id": 20210401,
+        "subfield": "Sequence",
+        "context": "2021年全国高中数学联合竞赛B卷一试",
+        "question": "等差数列 $\\{a_{n}\\}$ 的公差 $d \\neq 0$，且 $a_{2021} = a_{20} + a_{21}$，则 $\\frac{a_{1}}{d}$ 的值为______。",
+        "solution": [
+            "由条件知 $a_{1} + 2020d = a_{1} + 19d + a_{1} + 20d$",
+            "又 $d \\neq 0$，故 $\\frac{a_{1}}{d} = 1981$"
+        ],
+        "final_answer": ["1981"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210402,
+        "subfield": "Complex Numbers",
+        "context": "2021年全国高中数学联合竞赛B卷一试",
+        "question": "设 $m$ 为实数，复数 $z_{1} = 1 + 2\\mathrm{i}$，$z_{2} = m + 3\\mathrm{i}$（这里i为虚数单位），若 $z_{1} \\cdot \\overline{z_{2}}$ 为纯虚数，则 $|z_{1} + z_{2}|$ 的值为______。",
+        "solution": [
+            "由于 $z_{1} \\cdot \\overline{z_{2}} = (1 + 2\\mathrm{i})(m - 3\\mathrm{i}) = m + 6 + (2m - 3)\\mathrm{i}$ 为纯虚数",
+            "故 $m = -6$",
+            "所以 $|z_{1} + z_{2}| = |-5 + 5\\mathrm{i}| = 5\\sqrt{2}$"
+        ],
+        "final_answer": ["$5\\sqrt{2}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210403,
+        "subfield": "Trigonometry",
+        "context": "2021年全国高中数学联合竞赛B卷一试",
+        "question": "当 $\\frac{\\pi}{4} \\leq x \\leq \\frac{\\pi}{2}$ 时，$y = \\sin^{2}x + \\sqrt{3}\\sin x\\cos x$ 的取值范围是______。",
+        "solution": [
+            "$y = \\sin^{2}x + \\sqrt{3}\\sin x\\cos x = \\frac{1 - \\cos 2x}{2} + \\frac{\\sqrt{3}}{2}\\sin 2x = \\sin(2x - \\frac{\\pi}{6}) + \\frac{1}{2}$",
+            "当 $\\frac{\\pi}{4} \\leq x \\leq \\frac{\\pi}{2}$ 时，$\\frac{\\pi}{3} \\leq 2x - \\frac{\\pi}{6} \\leq \\frac{5\\pi}{6}$",
+            "故 $\\sin(2x - \\frac{\\pi}{6})$ 的取值范围是 $[\\frac{1}{2}, 1]$",
+            "所以 $y$ 的取值范围是 $[1, \\frac{3}{2}]$"
+        ],
+        "final_answer": ["$[1, \\frac{3}{2}]$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210404,
+        "subfield": "Function",
+        "context": "2021年全国高中数学联合竞赛B卷一试",
+        "question": "设函数 $f(x)$ 的定义域为 $D = (-\\infty, 0) \\cup (0, +\\infty)$，且对任意 $x \\in D$，均有 $f(x) = \\frac{f(1) \\cdot x^{2} + f(2) \\cdot x - 1}{x}$，则 $f(x)$ 的所有零点之和为______。",
+        "solution": [
+            "令 $x = 1, 2$，分别得 $f(1) = f(1) + f(2) - 1$ 与 $f(2) = 2f(1) + f(2) - \\frac{1}{2}$",
+            "解得 $f(2) = 1$，$f(1) = \\frac{1}{4}$",
+            "从而 $f(x) = \\frac{1}{x} \\cdot (\\frac{1}{4}x^{2} + x - 1)$ ($x \\neq 0$)",
+            "令 $f(x) = 0$，得 $x = -2 \\pm 2\\sqrt{2}$",
+            "故 $f(x)$ 的所有零点之和为 $-4$"
+        ],
+        "final_answer": ["-4"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210405,
+        "subfield": "Logarithm",
+        "context": "2021年全国高中数学联合竞赛B卷一试",
+        "question": "设 $a, b, c > 1$，满足 $(a^{2}b)^{\\log_{a}c} = a \\cdot (ac)^{\\log_{a}b}$，则 $\\log_{c}(ab)$ 的值为______。",
+        "solution": [
+            "对原式两边取以 $a$ 为底的对数，得",
+            "$\\log_{a}c \\cdot (2 + \\log_{a}b) = 1 + \\log_{a}b \\cdot (1 + \\log_{a}c)$",
+            "化简得 $2\\log_{a}c = 1 + \\log_{a}b$",
+            "所以 $c^{2} = ab$",
+            "进而 $\\log_{c}(ab) = \\log_{c}c^{2} = 2$"
+        ],
+        "final_answer": ["2"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210406,
+        "subfield": "Trigonometry",
+        "context": "2021年全国高中数学联合竞赛B卷一试",
+        "question": "在 $\\triangle ABC$ 中，$AB = 1$，$AC = 2$，$\\cos B = 2\\sin C$，则 $BC$ 的长为______。",
+        "solution": [
+            "由正弦定理知 $\\frac{\\sin B}{\\sin C} = \\frac{AC}{AB} = 2$，故 $\\sin B = 2\\sin C = \\cos B$",
+            "即 $\\tan B = 1$，于是 $B = \\frac{\\pi}{4}$",
+            "设 $BC = a > 0$。由余弦定理知 $4 = 1 + a^{2} - 2a \\cdot \\frac{\\sqrt{2}}{2}$",
+            "故 $a = \\frac{\\sqrt{2} + \\sqrt{14}}{2}$"
+        ],
+        "final_answer": ["$\\frac{\\sqrt{2} + \\sqrt{14}}{2}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210407,
+        "subfield": "Analytic Geometry",
+        "context": "2021年全国高中数学联合竞赛B卷一试",
+        "question": "在平面直角坐标系 $xOy$ 中，已知抛物线 $y = ax^{2} - 3x + 3$ ($a \\neq 0$) 的图像与抛物线 $y^{2} = 2px$ ($p > 0$) 的图像关于直线 $y = x + m$ 对称，则实数 $a, p, m$ 的乘积为______。",
+        "solution": [
+            "对抛物线 $y = ax^{2} - 3x + 3$ 上任意一点 $(x_{0}, y_{0})$，有 $y_{0} = ax_{0}^{2} - 3x_{0} + 3$",
+            "设点 $(x_{0}, y_{0})$ 关于直线 $y = x + m$ 的对称点为 $(x_{1}, y_{1})$",
+            "由 $\\frac{y_{1} + y_{0}}{2} = \\frac{x_{1} + x_{0}}{2} + m$，$x_{1} + y_{1} = x_{0} + y_{0}$，可知 $x_{1} = y_{0} - m$，$y_{1} = x_{0} + m$",
+            "因 $(x_{1}, y_{1})$ 在抛物线 $y^{2} = 2px$ 上，故 $(x_{0} + m)^{2} = 2p(y_{0} - m)$",
+            "这等价于 $y_{0} = \\frac{1}{2p}x_{0}^{2} + \\frac{m}{p}x_{0} + \\frac{m^{2}}{2p} + m$",
+            "由点 $(x_{0}, y_{0})$ 取法的任意性，比较系数得 $\\frac{1}{2p} = a$，$\\frac{m}{p} = -3$，$\\frac{m^{2}}{2p} + m = 3$",
+            "因此有 $3 = \\frac{m}{p} \\cdot \\frac{m}{2} + m = -3 \\cdot \\frac{m}{2} + m = -\\frac{m}{2}$",
+            "解得 $m = -6$，故依次可得 $p = 2$，$a = \\frac{1}{4}$",
+            "从而 $apm = \\frac{1}{4} \\cdot 2 \\cdot (-6) = -3$"
+        ],
+        "final_answer": ["-3"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210408,
+        "subfield": "Probability",
+        "context": "2021年全国高中数学联合竞赛B卷一试",
+        "question": "设 $a_{1}, a_{2}, \\dots, a_{10}$ 是 $1, 2, \\dots, 10$ 的一个随机排列，则在 $a_{1}a_{2}, a_{2}a_{3}, \\dots, a_{9}a_{10}$ 这9个数中既出现9又出现12的概率为______。",
+        "solution": [
+            "一个随机排列满足要求当且仅当该排列中1,9两数相邻，且2,6与3,4中至少有一对数相邻",
+            "现计算这样的排列的个数 $N$。设这些排列中2,6相邻的排列有 $N_{1}$ 个，3,4相邻的排列有 $N_{2}$ 个，2,6与3,4两对数都相邻的排列有 $N_{3}$ 个",
+            "为计算 $N_{1}$，先将1,9两数"捆绑"，2,6两数"捆绑"，并将它们与剩下的6个数进行排列，有8!种方式，又考虑到1,9的次序与2,6的次序，得 $N_{1} = 2^{2} \\times 8!$",
+            "类似可知 $N_{2} = 2^{2} \\times 8!$，$N_{3} = 2^{3} \\times 7!$",
+            "由容斥原理，$N = N_{1} + N_{2} - N_{3} = 8 \\times (8! - 7!) = 7 \\times 8!$",
+            "因此，所求概率为 $\\frac{N}{10!} = \\frac{7}{90}$"
+        ],
+        "final_answer": ["$\\frac{7}{90}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210409,
+        "subfield": "Sequence",
+        "context": "2021年全国高中数学联合竞赛B卷解答题",
+        "question": "数列 $\\{a_{n}\\}$ 满足：$a_{1} = a_{2} = a_{3} = 1$。令 $b_{n} = a_{n} + a_{n+1} + a_{n+2}$ ($n \\in \\mathbb{N}^{*}$)。若 $\\{b_{n}\\}$ 是公比为3的等比数列，求 $a_{100}$ 的值。",
+        "solution": [
+            "由条件知 $b_{n} = b_{1} \\cdot 3^{n-1} = 3^{n}$ ($n \\in \\mathbb{N}^{*}$)",
+            "因此，$a_{n+3} - a_{n} = b_{n+1} - b_{n} = 3^{n+1} - 3^{n} = 2 \\cdot 3^{n}$ ($n \\in \\mathbb{N}^{*}$)",
+            "于是",
+            "$a_{100} = a_{1} + \\sum_{k=1}^{33}(a_{3k+1} - a_{3k-2}) = 1 + \\sum_{k=1}^{33}2 \\cdot 3^{3k-2}$",
+            "$= 1 + 6 \\cdot \\frac{27^{33} - 1}{27 - 1} = 1 + \\frac{3}{13}(3^{99} - 1) = \\frac{3^{100} + 10}{13}$"
+        ],
+        "final_answer": ["$\\frac{3^{100} + 10}{13}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210410,
+        "subfield": "Function",
+        "context": "2021年全国高中数学联合竞赛B卷解答题",
+        "question": "在平面直角坐标系中，函数 $y = \\frac{1}{|x|}$ 的图像为 $\\Gamma$。设 $\\Gamma$ 上的两点 $P, Q$ 满足：$P$ 在第一象限，$Q$ 在第二象限，且直线 $PQ$ 与 $\\Gamma$ 位于第二象限的部分相切于点 $Q$。求 $|PQ|$ 的最小值。",
+        "solution": [
+            "当 $x > 0$ 时，$y = \\frac{1}{x}$；当 $x < 0$ 时，$y = -\\frac{1}{x}$，相应的导数为 $y' = \\frac{1}{x^{2}}$",
+            "设 $Q(-a, \\frac{1}{a})$，其中 $a > 0$。由条件知 $PQ$ 的斜率为 $y'|_{x=-a} = \\frac{1}{a^{2}}$",
+            "直线 $PQ$ 的方程为 $y = \\frac{1}{a^{2}}(x + a) + \\frac{1}{a} = \\frac{x + 2a}{a^{2}}$",
+            "将上述方程与 $y = \\frac{1}{x}$ ($x > 0$) 联立，得 $x^{2} + 2ax - a^{2} = 0$，从而知点 $P$ 的横坐标 $x_{P} = (\\sqrt{2} - 1)a$（负根舍去）",
+            "于是",
+            "$|PQ| = \\sqrt{1 + (\\frac{1}{a^{2}})^{2}} \\cdot |x_{P} - x_{Q}| = \\sqrt{1 + \\frac{1}{a^{4}}} \\cdot \\sqrt{2}a \\geq \\sqrt{2\\sqrt{1 \\cdot \\frac{1}{a^{4}}}} \\cdot \\sqrt{2}a = 2$",
+            "当 $a = 1$，即 $Q(-1, 1)$ 时，$|PQ|$ 取到最小值2"
+        ],
+        "final_answer": ["2"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210411,
+        "subfield": "Solid Geometry",
+        "context": "2021年全国高中数学联合竞赛B卷解答题",
+        "question": "在正 $n$ ($n \\geq 3$) 棱锥 $P-A_{1}A_{2}\\dots A_{n}$ 中，$O$ 为底面正 $n$ 边形 $A_{1}A_{2}\\dots A_{n}$ 的中心，$B$ 为棱 $A_{1}A_{n}$ 的中点。(1) 证明：$PO^{2}\\sin^{2}\\frac{\\pi}{n} + PA_{1}^{2}\\cos^{2}\\frac{\\pi}{n} = PB^{2}$；(2) 设正 $n$ 棱锥 $P-A_{1}A_{2}\\dots A_{n}$ 的侧棱与底面所成的角为 $\\alpha$，侧面与底面所成的角为 $\\beta$，试确定 $\\frac{1}{n}\\sum_{i=1}^{n}\\cos \\angle A_{i}PB$ 与 $\\sin \\alpha \\cdot \\sin \\beta$ 的大小关系，并予以证明。",
+        "solution": [
+            "(1) 由于 $PO \\perp$ 底面 $A_{1}A_{2}\\dots A_{n}$，故 $\\angle POA_{1} = \\angle POB = 90^{\\circ}$",
+            "设 $OA_{1} = r$，则 $OB = OA_{1} \\cdot \\cos \\angle A_{1}OB = r\\cos \\frac{\\pi}{n}$，于是有",
+            "$r^{2} + PO^{2} = PA_{1}^{2}$，$r^{2}\\cos^{2}\\frac{\\pi}{n} + PO^{2} = PB^{2}$",
+            "消去 $r^{2}$ 得 $PO^{2}(1 - \\cos^{2}\\frac{\\pi}{n}) = PB^{2} - PA_{1}^{2}\\cos^{2}\\frac{\\pi}{n}$，即",
+            "$PO^{2}\\sin^{2}\\frac{\\pi}{n} + PA_{1}^{2}\\cos^{2}\\frac{\\pi}{n} = PB^{2}$",
+            "(2) 由条件知 $\\overrightarrow{PO} \\cdot \\overrightarrow{OA_{i}} = 0$ ($i = 1, 2, \\dots, n$)，$\\overrightarrow{PO} \\cdot \\overrightarrow{OB} = 0$",
+            "设正 $n$ 棱锥的侧棱长为 $l$，则",
+            "$l \\cdot |PB| \\cdot \\sum_{i=1}^{n}\\cos \\angle A_{i}PB = \\sum_{i=1}^{n}|PA_{i}| \\cdot |PB| \\cdot \\cos \\angle A_{i}PB$",
+            "$= \\sum_{i=1}^{n}\\overrightarrow{PA_{i}} \\cdot \\overrightarrow{PB} = \\sum_{i=1}^{n}(\\overrightarrow{PO} + \\overrightarrow{OA_{i}}) \\cdot (\\overrightarrow{PO} + \\overrightarrow{OB})$",
+            "$= \\sum_{i=1}^{n}(\\overrightarrow{PO}^{2} + \\overrightarrow{OA_{i}} \\cdot \\overrightarrow{OB}) = n\\overrightarrow{PO}^{2} + \\overrightarrow{OB} \\cdot \\sum_{i=1}^{n}\\overrightarrow{OA_{i}} = n \\cdot |PO|^{2}$",
+            "最后一步用到了 $\\sum_{i=1}^{n}\\overrightarrow{OA_{i}} = \\vec{0}$（这是因为，$O$ 为正 $n$ 边形 $A_{1}A_{2}\\dots A_{n}$ 的中心，各 $\\overrightarrow{OA_{i}}$ ($i = 1, 2, \\dots, n$) 在逆时针旋转 $\\frac{2\\pi}{n}$ 后仍为这些向量的排列，故它们的和向量逆时针旋转 $\\frac{2\\pi}{n}$ 后仍为自身，所以只能为零向量）",
+            "于是 $\\frac{1}{n}\\sum_{i=1}^{n}\\cos \\angle A_{i}PB = \\frac{|PO|^{2}}{l \\cdot |PB|} = \\frac{PO}{l} \\cdot \\frac{PO}{PB} = \\sin \\angle PA_{1}O \\cdot \\sin \\angle PBO$",
+            "易知 $\\angle PA_{1}O$ 是侧棱与底面所成的角，又由 $OB \\perp A_{1}A_{n}$，$PB \\perp A_{1}A_{n}$ 知 $\\angle PBO$ 是侧面与底面所成的角",
+            "于是 $\\angle PA_{1}O = \\alpha$，$\\angle PBO = \\beta$",
+            "从而 $\\frac{1}{n}\\sum_{i=1}^{n}\\cos \\angle A_{i}PB$ 与 $\\sin \\alpha \\cdot \\sin \\beta$ 相等"
+        ],
+        "final_answer": ["见解析"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "String",
+        "error": null
+    },
+    {
+        "id": 20210412,
+        "subfield": "Geometry",
+        "context": "2021年全国高中数学联合竞赛B卷加试",
+        "question": "如图所示，$I$ 是 $\\triangle ABC$ 的内心，点 $P, Q$ 分别为 $I$ 在边 $AB, AC$ 上的投影。直线 $PQ$ 与 $\\triangle ABC$ 的外接圆相交于点 $X, Y$（$P$ 在 $X, Q$ 之间）。已知 $B, I, P, X$ 四点共圆，证明：$C, I, Q, Y$ 四点共圆。<img_7fd856f680396c2d22b7771c159f74af990cb08298411fffb5c8b4fd0517ba7c>",
+        "solution": [
+            "记 $\\triangle ABC$ 的外接圆为 $\\omega$",
+            "因为 $\\angle API = \\angle AQI = 90^{\\circ}$，故 $A, P, I, Q$ 四点共圆。因此",
+            "$\\angle BPQ = \\angle BPI + \\angle IPQ = 90^{\\circ} + \\angle IAQ = 90^{\\circ} + \\frac{1}{2}\\angle BAC = \\angle BIC$",
+            "又由 $B, I, P, X$ 四点共圆可知 $\\angle BPX = \\angle BIX$，故",
+            "$\\angle BIX + \\angle BIC = \\angle BPX + \\angle BPQ = 180^{\\circ}$",
+            "因此 $C, I, X$ 三点共线",
+            "由 $B, I, P, X$ 共圆可知 $\\angle BXI = \\angle BPI = 90^{\\circ}$，故 $BX \\perp IX$，即 $BX \\perp CX$。因此 $\\angle BAC = \\angle BXC = 90^{\\circ}$",
+            "于是四边形 $APIQ$ 是正方形，$PQ$ 垂直平分线段 $AI$",
+            "设 $Y'$ 是 $\\widehat{AC}$ 的中点，则由内心熟知的结论可知 $Y'A = Y'I$，因此 $Y'$ 是 $AI$ 的中垂线 $PQ$ 与圆 $\\omega$ 的交点。又直线 $PQ$ 与圆 $\\omega$ 相交于 $X, Y$ 两点，且 $Y'$ 显然不同于 $X$，故 $Y'$ 与 $Y$ 重合。因此 $Y$ 是 $\\widehat{AC}$ 的中点",
+            "于是 $B, I, Y$ 三点共线。因此 $\\angle IYC = \\angle BYC = \\angle BAC = 90^{\\circ} = \\angle IQC$，进而 $C, I, Q, Y$ 四点共圆"
+        ],
+        "final_answer": ["见解析"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "String",
+        "error": null
+    },
+    {
+        "id": 20210413,
+        "subfield": "Number Theory",
+        "context": "2021年全国高中数学联合竞赛B卷加试",
+        "question": "求最大的正整数 $n$，使得存在8个整数 $x_{1}, x_{2}, x_{3}, x_{4}$ 和 $y_{1}, y_{2}, y_{3}, y_{4}$，满足：$\\{0, 1, \\dots, n\\} \\subseteq \\{|x_{i} - x_{j}| \\mid 1 \\leq i < j \\leq 4\\} \\cup \\{|y_{i} - y_{j}| \\mid 1 \\leq i < j \\leq 4\\}$。",
+        "solution": [
+            "设 $n$ 符合要求，则整数 $x_{1}, x_{2}, x_{3}, x_{4}, y_{1}, y_{2}, y_{3}, y_{4}$ 满足：$0, 1, \\dots, n$ 都属于集合 $X \\cup Y$，其中 $X = \\{|x_{i} - x_{j}| \\mid 1 \\leq i < j \\leq 4\\}$，$Y = \\{|y_{i} - y_{j}| \\mid 1 \\leq i < j \\leq 4\\}$",
+            "注意到 $0 \\in X \\cup Y$，不妨设 $0 \\in X$，则 $x_{1}, x_{2}, x_{3}, x_{4}$ 中必有两个数相等，不妨设 $x_{1} = x_{2}$",
+            "于是 $X = \\{0\\} \\cup \\{|x_{i} - x_{j}| \\mid 2 \\leq i < j \\leq 4\\}$，所以 $|X| \\leq 1 + 3 = 4$",
+            "又 $|Y| \\leq C_{4}^{2} = 6$，故 $n + 1 \\leq |X \\cup Y| \\leq |X| + |Y| \\leq 10$，得 $n \\leq 9$",
+            "另一方面，令 $(x_{1}, x_{2}, x_{3}, x_{4}) = (0, 0, 7, 8)$，$(y_{1}, y_{2}, y_{3}, y_{4}) = (0, 4, 6, 9)$，则",
+            "$X = \\{0, 1, 7, 8\\}$，$Y = \\{2, 3, 4, 5, 6, 9\\}$",
+            "即 $0, 1, \\dots, 9$ 都属于集合 $X \\cup Y$",
+            "综上，$n$ 的最大值为9"
+        ],
+        "final_answer": ["9"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210414,
+        "subfield": "Optimization",
+        "context": "2021年全国高中数学联合竞赛B卷加试",
+        "question": "已知 $a, b, c, d \\in [0, \\sqrt[4]{2})$，满足：$a^{3} + b^{3} + c^{3} + d^{3} = 2$。求 $\\frac{a}{\\sqrt{2 - a^{4}}} + \\frac{b}{\\sqrt{2 - b^{4}}} + \\frac{c}{\\sqrt{2 - c^{4}}} + \\frac{d}{\\sqrt{2 - d^{4}}}$ 的最小值。",
+        "solution": [
+            "当 $a > 0$ 时，有 $\\frac{a}{\\sqrt{2 - a^{4}}} = \\frac{a^{3}}{\\sqrt{a^{4}(2 - a^{4})}} \\geq a^{3}$",
+            "当 $a = 0$ 时，$\\frac{a}{\\sqrt{2 - a^{4}}} \\geq a^{3}$ 也成立",
+            "所以",
+            "$\\frac{a}{\\sqrt{2 - a^{4}}} + \\frac{b}{\\sqrt{2 - b^{4}}} + \\frac{c}{\\sqrt{2 - c^{4}}} + \\frac{d}{\\sqrt{2 - d^{4}}} \\geq a^{3} + b^{3} + c^{3} + d^{3} = 2$",
+            "当 $a = b = 1, c = d = 0$ 时上述不等式等号成立",
+            "故 $\\frac{a}{\\sqrt{2 - a^{4}}} + \\frac{b}{\\sqrt{2 - b^{4}}} + \\frac{c}{\\sqrt{2 - c^{4}}} + \\frac{d}{\\sqrt{2 - d^{4}}}$ 的最小值为2"
+        ],
+        "final_answer": ["2"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210415,
+        "subfield": "Number Theory",
+        "context": "2021年全国高中数学联合竞赛B卷加试",
+        "question": "设 $a$ 为正整数。数列 $\\{a_{n}\\}$ 满足：$a_{1} = a$，$a_{n+1} = a_{n}^{2} + 20$，$n = 1, 2, \\dots$。(1) 证明：存在一个非立方数的正整数 $a$，使得数列 $\\{a_{n}\\}$ 中有一项为立方数。(2) 证明：数列 $\\{a_{n}\\}$ 中至多有一项为立方数。",
+        "solution": [
+            "(1) 注意到 $14^{2} + 20 = 216 = 6^{3}$，故取 $a = 14$，则 $a_{2} = a^{2} + 20 = 6^{3}$ 为立方数，从而 $a = 14$ 满足条件",
+            "(2) 不妨设 $\\{a_{n}\\}$ 中存在立方数，$a_{k}$ 是所出现的第一个立方数",
+            "因为对任意整数 $m$，有 $m \\equiv 0, \\pm 1, \\pm 2, \\pm 3, \\pm 4 \\pmod{9}$，由此知 $m^{3} \\equiv 0, \\pm 1 \\pmod{9}$",
+            "所以 $a_{k} \\equiv 0, \\pm 1 \\pmod{9}$",
+            "于是",
+            "$a_{k+1} = a_{k}^{2} + 20 \\equiv 2, 3 \\pmod{9}$",
+            "$a_{k+2} = a_{k+1}^{2} + 20 \\equiv 6, 2 \\pmod{9}$",
+            "$a_{k+3} = a_{k+2}^{2} + 20 \\equiv 2, 6 \\pmod{9}$",
+            "以此类推知 $a_{k+i} \\equiv 2, 6 \\pmod{9}$，$i = 4, 5, \\dots$",
+            "于是 $a_{k}$ 后面的项模9不为 $0, \\pm 1$，故都不是立方数",
+            "因此，数列 $\\{a_{n}\\}$ 中至多有一项为立方数"
+        ],
+        "final_answer": ["见解析"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "String",
+        "error": null
+    }
+]

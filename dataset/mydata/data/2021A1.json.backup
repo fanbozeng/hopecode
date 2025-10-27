@@ -1,0 +1,316 @@
+[
+    {
+        "id": 20210101,
+        "subfield": "Set Theory",
+        "context": "2021年全国高中数学联合竞赛A1卷一试",
+        "question": "设 $A = \\{1,2,3\\}$，$B = \\{2x + y\\mid x,y\\in A, x < y\\}$，$C = \\{2x + y\\mid x,y\\in A, x > y\\}$，则 $B\\cap C$ 的所有元素之和为______。",
+        "solution": [
+            "枚举可得 $B = \\{4,5,7\\}$，$C = \\{5,7,8\\}$",
+            "所以 $B\\cap C = \\{5,7\\}$",
+            "因此 $B\\cap C$ 的所有元素之和为 $5 + 7 = 12$"
+        ],
+        "final_answer": ["12"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210102,
+        "subfield": "Vector",
+        "context": "2021年全国高中数学联合竞赛A1卷一试",
+        "question": "设 $m$ 为实数，向量 $\\vec{a} = (1 + 2^{m}, 1 - 2^{m}), \\vec{b} = (4^{m} - 3, 4^{m} + 5)$，则数量积 $\\vec{a}\\cdot \\vec{b}$ 的最小值为______。",
+        "solution": [
+            "设 $t = 2^{m}$，则 $\\vec{a} = (1 + t, 1 - t), \\vec{b} = (t^{2} - 3, t^{2} + 5)$",
+            "故 $\\vec{a}\\cdot \\vec{b} = (1 + t)(t^{2} - 3) + (1 - t)(t^{2} + 5) = 2(t - 2)^{2} - 6 \\geq -6$",
+            "当 $t = 2$，即 $m = 1$ 时，$\\vec{a}\\cdot \\vec{b}$ 取到最小值 $-6$"
+        ],
+        "final_answer": ["-6"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210103,
+        "subfield": "Trigonometry",
+        "context": "2021年全国高中数学联合竞赛A1卷一试",
+        "question": "已知 $\\triangle ABC$ 满足：$\\tan A$、$\\tan B$ 是方程 $x^{2} - 10x + 6 = 0$ 的两个根，则 $\\cos C$ 的值为______。",
+        "solution": [
+            "由条件知 $\\tan A + \\tan B = 10$，$\\tan A \\tan B = 6$",
+            "所以 $\\tan C = \\tan(\\pi - A - B) = -\\tan(A + B) = -\\frac{\\tan A + \\tan B}{1 - \\tan A \\tan B} = -\\frac{10}{1 - 6} = 2$",
+            "于是 $C$ 为锐角，进而有 $\\cos C = \\frac{1}{\\sqrt{1 + \\tan^{2}C}} = \\frac{1}{\\sqrt{5}} = \\frac{\\sqrt{5}}{5}$"
+        ],
+        "final_answer": ["$\\frac{\\sqrt{5}}{5}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210104,
+        "subfield": "Analytic Geometry",
+        "context": "2021年全国高中数学联合竞赛A1卷一试",
+        "question": "在平面直角坐标系中，双曲线 $\\Gamma: \\frac{x^{2}}{a^{2}} - \\frac{y^{2}}{b^{2}} = 1$ ($a, b > 0$)，一条倾斜角为 $\\frac{\\pi}{4}$ 的直线经过 $\\Gamma$ 的一个顶点及 $\\Gamma$ 上另外一点 $(2, 3)$，则 $\\Gamma$ 的离心率为______。",
+        "solution": [
+            "题述直线的斜率为1且经过点(2,3)，故其方程为 $y = x + 1$",
+            "该直线与 $x$ 轴交于点 $(-1, 0)$，故 $(-1, 0)$ 为 $\\Gamma$ 的一个顶点，所以 $a = 1$",
+            "又由点(2,3)在 $\\Gamma$ 上，可知 $\\frac{2^{2}}{1} - \\frac{3^{2}}{b^{2}} = 1$，所以 $b^{2} = 3$",
+            "记 $c = \\sqrt{a^{2} + b^{2}}$，则 $\\Gamma$ 的离心率为 $\\frac{c}{a} = \\frac{\\sqrt{a^{2} + b^{2}}}{a} = 2$"
+        ],
+        "final_answer": ["2"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210105,
+        "subfield": "Sequence",
+        "context": "2021年全国高中数学联合竞赛A1卷一试",
+        "question": "数列 $\\{a_{n}\\}$ 满足 $a_{1} = 1$，$a_{n} = \\frac{1}{4a_{n-1}} + \\frac{1}{n}$ ($n\\geq 2$)，则 $a_{100}$ 的值为______。",
+        "solution": [
+            "用数学归纳法证明 $a_{n} = \\frac{n + 1}{2n}$",
+            "当 $n = 1$ 时，$a_{1} = 1 = \\frac{1 + 1}{2}$，结论成立",
+            "假设 $n = k$ 时结论成立，则当 $n = k + 1$ 时，利用条件及归纳假设得",
+            "$a_{k+1} = \\frac{1}{4a_{k}} + \\frac{1}{k+1} = \\frac{k}{2(k+1)} + \\frac{1}{k+1} = \\frac{(k+1) + 1}{2(k+1)}$",
+            "即 $n = k + 1$ 时结论也成立",
+            "所以由数学归纳法得 $a_{n} = \\frac{n + 1}{2n}$。特别地，$a_{100} = \\frac{101}{200}$"
+        ],
+        "final_answer": ["$\\frac{101}{200}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210106,
+        "subfield": "Solid Geometry",
+        "context": "2021年全国高中数学联合竞赛A1卷一试",
+        "question": "设正四棱锥 $P-ABCD$ 的底面边长与高相等，点 $G$ 为侧面 $\\triangle PBC$ 的重心，则直线 $AG$ 与底面 $ABCD$ 所成角的正弦值为______。<img_825ba48cfa2e216c9f81f28ba33688eb8016e6e7e0c42eddda8872553f0ba53f>",
+        "solution": [
+            "取 $BC$ 的中点 $M$，则 $G$ 在 $PM$ 上。分别取 $P, G$ 在底面 $ABCD$ 上的射影 $O, H$，则 $O$ 为底面正方形的中心，$H$ 在 $OM$ 上，且 $\\frac{GH}{PO} = \\frac{HM}{OM} = \\frac{GM}{PM} = \\frac{1}{3}$",
+            "为方便计算，不妨设 $AB = PO = 6$。于是 $GH = \\frac{PO}{3} = 2$，$OH = \\frac{2}{3}OM = 2$，又 $AO = 3\\sqrt{2}$，$\\angle AOH = 135^{\\circ}$",
+            "故 $AH^{2} = AO^{2} + OH^{2} - 2AO \\cdot OH \\cdot \\cos \\angle AOH = 34$",
+            "进而 $AG = \\sqrt{AH^{2} + GH^{2}} = \\sqrt{38}$",
+            "直线 $AG$ 与底面 $ABCD$ 所成角的大小等于 $\\angle GAH$，故所求正弦值为",
+            "$\\sin \\angle GAH = \\frac{GH}{AG} = \\frac{2}{\\sqrt{38}} = \\frac{\\sqrt{38}}{19}$"
+        ],
+        "final_answer": ["$\\frac{\\sqrt{38}}{19}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210107,
+        "subfield": "Combinatorics",
+        "context": "2021年全国高中数学联合竞赛A1卷一试",
+        "question": "设 $a_{1}, a_{2}, \\dots, a_{21}$ 为 $1, 2, \\dots, 21$ 的排列，满足 $|a_{20} - a_{21}| \\geq |a_{19} - a_{21}| \\geq |a_{18} - a_{21}| \\geq \\dots \\geq |a_{1} - a_{21}|$，这样的排列的个数为______。",
+        "solution": [
+            "对给定的 $k \\in \\{1, 2, \\dots, 21\\}$，考虑使 $a_{21} = k$ 的满足条件的排列个数 $N_{k}$",
+            "当 $k \\in \\{1, 2, \\dots, 11\\}$ 时，对 $i = 1, 2, \\dots, k-1$，有 $a_{2i-1}, a_{2i}$ 为 $k-i, k+i$ 的排列（若 $k = 1$，则没有这样的 $i$），且 $a_{j} = j+1$ ($2k-1 \\leq j \\leq 20$)（若 $k = 11$，则没有这样的 $j$），因此 $N_{k} = 2^{k-1}$",
+            "当 $k \\in \\{12, 13, \\dots, 21\\}$ 时，类似地有 $N_{k} = 2^{21-k}$",
+            "因此，满足条件的排列个数为",
+            "$\\sum_{k=1}^{21}N_{k} = \\sum_{k=1}^{11}2^{k-1} + \\sum_{k=12}^{21}2^{21-k} = (2^{11} - 1) + (2^{10} - 1) = 3070$"
+        ],
+        "final_answer": ["3070"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210108,
+        "subfield": "Optimization",
+        "context": "2021年全国高中数学联合竞赛A1卷一试",
+        "question": "正实数 $x, y$ 满足如下条件：存在 $a\\in [0,x], b\\in [0,y]$，使得 $a^{2} + y^{2} = 2, b^{2} + x^{2} = 1, ax + by = 1$，则 $x + y$ 的最大值为______。<img_d88e1d0e4c4e3dd53c7dbaefc806caef76a8a138f877b0a1518dff1e584ddd9d>",
+        "solution": [
+            "对于满足条件的正实数对 $(x,y)$，在平面直角坐标系 $xOy$ 中取点 $L(x,0), M(x,y), N(0,y)$，则四边形OLMN为矩形，点 $P(x,b), Q(a,y)$ 分别在边 $LM, MN$ 上",
+            "由于 $a^{2} + y^{2} = 2$，$b^{2} + x^{2} = 1$，$ax + by = 1$，故",
+            "$|OP| = \\sqrt{x^{2} + b^{2}} = 1, |OQ| = \\sqrt{a^{2} + y^{2}} = \\sqrt{2}$",
+            "$|PQ| = \\sqrt{(a - x)^{2} + (b - y)^{2}} = \\sqrt{(a^{2} + y^{2}) + (b^{2} + x^{2}) - 2(ax + by)} = 1$",
+            "从而 $\\triangle OPQ$ 是以 $P$ 为直角顶点的等腰直角三角形",
+            "于是可设 $\\angle LOP = \\theta$，$\\angle QON = \\frac{\\pi}{4} - \\theta$，其中 $0 \\leq \\theta \\leq \\frac{\\pi}{4}$",
+            "则 $x + y = |OL| + |ON| = |OP| \\cdot \\cos \\angle LOP + |OQ| \\cdot \\cos \\angle QON$",
+            "$= \\cos \\theta + \\sqrt{2}\\cos(\\frac{\\pi}{4} - \\theta) = 2\\cos \\theta + \\sin \\theta$",
+            "当 $\\theta = \\arctan \\frac{1}{2}$（相应有 $x = \\frac{2\\sqrt{5}}{5}, y = \\frac{3\\sqrt{5}}{5}$）时，$x + y$ 取到最大值 $\\sqrt{5}$"
+        ],
+        "final_answer": ["$\\sqrt{5}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210109,
+        "subfield": "Function",
+        "context": "2021年全国高中数学联合竞赛A1卷解答题",
+        "question": "设函数 $f(x) = |2 - \\log_{3}x|$，正实数 $a, b, c$ 满足 $a < b < c$ 且 $f(a) = 2f(b) = 2f(c)$。求 $\\frac{ac}{b}$ 的值。",
+        "solution": [
+            "注意到 $f(x) = |\\log_{3}(\\frac{x}{9})|$ 在(0,9]上单调减，在 $[9, +\\infty)$ 上单调增",
+            "由 $a, b, c$ 所满足的条件，可知 $0 < a < b < 9 < c$，并且",
+            "$\\log_{3}(\\frac{9}{a}) = 2\\log_{3}(\\frac{9}{b}) = 2\\log_{3}(\\frac{c}{9})$",
+            "于是",
+            "$\\log_{3}(\\frac{ac}{b}) = \\log_{3}(9 \\cdot \\frac{a}{9} \\cdot \\frac{9}{b} \\cdot \\frac{c}{9}) = 2 - \\log_{3}(\\frac{9}{a}) + \\log_{3}(\\frac{9}{b}) + \\log_{3}(\\frac{c}{9}) = 2$",
+            "即有 $\\frac{ac}{b} = 3^{2} = 9$"
+        ],
+        "final_answer": ["9"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20210110,
+        "subfield": "Complex Numbers",
+        "context": "2021年全国高中数学联合竞赛A1卷解答题",
+        "question": "设 $a, b\\in \\mathbb{R}$。若关于 $z$ 的方程 $(z^{2} + az + b)(z^{2} + az + 2b) = 0$ 有4个互不相等的复数根 $z_{1}, z_{2}, z_{3}, z_{4}$，且它们在复平面上对应的点恰是一个边长为1的正方形的四个顶点，求 $|z_{1}| + |z_{2}| + |z_{3}| + |z_{4}|$ 的值。",
+        "solution": [
+            "记二次方程 $E_{1}: z^{2} + az + b = 0$，$E_{2}: z^{2} + az + 2b = 0$。不妨设 $z_{1}, z_{2}$ 为 $E_{1}$ 的解，$z_{3}, z_{4}$ 为 $E_{2}$ 的解",
+            "若 $z_{1}, z_{2}, z_{3}, z_{4}$ 均为实数，则它们在复平面上对应的点均在实轴上，不合题意。若 $z_{1}, z_{2}, z_{3}, z_{4}$ 均为虚数，则它们在复平面上对应的点均在直线 $\\text{Re}z = -\\frac{a}{2}$ 上，不合题意。因此 $z_{1}, z_{2}, z_{3}, z_{4}$ 中有两个实数，两个虚数",
+            "这表明方程 $E_{1}, E_{2}$ 的判别式 $a^{2} - 4b$ 与 $a^{2} - 8b$ 异号",
+            "此时必有 $b > 0$（若 $b \\leq 0$，则 $a^{2} - 4b \\geq 0$ 且 $a^{2} - 8b \\geq 0$，矛盾），故",
+            "$a^{2} - 4b \\geq 0 > a^{2} - 8b$",
+            "于是 $z_{1,2} = \\frac{-a \\pm \\sqrt{a^{2} - 4b}}{2}$，$z_{3,4} = \\frac{-a \\pm \\sqrt{8b - a^{2}}\\mathrm{i}}{2}$",
+            "显然 $\\frac{z_{1} + z_{2}}{2} = \\frac{z_{3} + z_{4}}{2} = -\\frac{a}{2}$。由于正方形的边长为1，所以",
+            "$|z_{1} - z_{2}| = \\sqrt{a^{2} - 4b} = \\sqrt{2}, |z_{3} - z_{4}| = \\sqrt{8b - a^{2}} = \\sqrt{2}$",
+            "即 $a^{2} - 4b = 8b - a^{2} = 2$，解得 $a^{2} = 6$，$b = 1$",
+            "注意到 $z_{1}, z_{2}$ 同号及 $|z_{3}| = |z_{4}|$，可知",
+            "$|z_{1}| + |z_{2}| + |z_{3}| + |z_{4}| = |z_{1} + z_{2}| + 2|z_{3}|$",
+            "$= |-a| + \\sqrt{a^{2} + (8b - a^{2})} = \\sqrt{6} + 2\\sqrt{2}$"
+        ],
+        "final_answer": ["$\\sqrt{6} + 2\\sqrt{2}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210111,
+        "subfield": "Analytic Geometry",
+        "context": "2021年全国高中数学联合竞赛A1卷解答题",
+        "question": "如图所示，在平面直角坐标系中，椭圆 $\\Gamma: \\frac{x^{2}}{2} + y^{2} = 1$ 的左、右焦点分别为 $F_{1}, F_{2}$，设 $P$ 是第一象限内 $\\Gamma$ 上一点，$PF_{1}, PF_{2}$ 的延长线分别交 $\\Gamma$ 于点 $Q_{1}, Q_{2}$。设 $r_{1}, r_{2}$ 分别为 $\\triangle PF_{1}Q_{2}$，$\\triangle PF_{2}Q_{1}$ 的内切圆半径。求 $r_{1} - r_{2}$ 的最大值。<img_db4322033e157520ac1b1ee66d4921c86887faad909f9d9f88cf9361c3932e77>",
+        "solution": [
+            "易知 $F_{1}(-1, 0), F_{2}(1, 0)$",
+            "设 $P(x_{0}, y_{0}), Q_{1}(x_{1}, y_{1}), Q_{2}(x_{2}, y_{2})$，由条件知 $x_{0}, y_{0} > 0, y_{1} < 0, y_{2} < 0$",
+            "由椭圆定义得 $|PF_{1}| + |PF_{2}| = |Q_{1}F_{1}| + |Q_{1}F_{2}| = |Q_{2}F_{1}| + |Q_{2}F_{2}| = 2\\sqrt{2}$，故 $\\triangle PF_{1}Q_{2}$ 与 $\\triangle PF_{2}Q_{1}$ 的周长均为 $l = 4\\sqrt{2}$",
+            "又 $|F_{1}F_{2}| = 2$，因此",
+            "$r_{1} = \\frac{2S_{\\triangle PF_{1}Q_{2}}}{l} = \\frac{(y_{0} - y_{2}) \\cdot |F_{1}F_{2}|}{l} = \\frac{y_{0} - y_{2}}{2\\sqrt{2}}$",
+            "同理得 $r_{2} = \\frac{y_{0} - y_{1}}{2\\sqrt{2}}$，所以 $r_{1} - r_{2} = \\frac{y_{1} - y_{2}}{2\\sqrt{2}}$",
+            "以下先求 $y_{1} - y_{2}$",
+            "直线 $PF_{1}$ 的方程为 $x = \\frac{(x_{0} + 1)y}{y_{0}} - 1$，将其代入 $\\frac{x^{2}}{2} + y^{2} = 1$ 并整理得",
+            "$(\\frac{(x_{0} + 1)^{2}}{2y_{0}^{2}} + 1)y^{2} - \\frac{x_{0} + 1}{y_{0}}y - \\frac{1}{2} = 0$",
+            "两边乘以 $2y_{0}^{2}$，并注意到 $x_{0}^{2} + 2y_{0}^{2} = 2$，可知",
+            "$(3 + 2x_{0})y^{2} - 2(x_{0} + 1)y_{0}y - y_{0}^{2} = 0$",
+            "该方程的两根为 $y_{0}, y_{1}$，由韦达定理得 $y_{0}y_{1} = -\\frac{y_{0}^{2}}{3 + 2x_{0}}$，于是 $y_{1} = -\\frac{y_{0}}{3 + 2x_{0}}$",
+            "同理可得 $y_{2} = -\\frac{y_{0}}{3 - 2x_{0}}$，因此",
+            "$y_{1} - y_{2} = \\frac{y_{0}}{3 - 2x_{0}} - \\frac{y_{0}}{3 + 2x_{0}} = \\frac{4x_{0}y_{0}}{9 - 4x_{0}^{2}}$",
+            "由于 $9 - 4x_{0}^{2} = \\frac{1}{2}x_{0}^{2} + 9y_{0}^{2} \\geq 2\\sqrt{\\frac{1}{2}x_{0}^{2} \\cdot 9y_{0}^{2}} = 3\\sqrt{2}x_{0}y_{0}$",
+            "故 $r_{1} - r_{2} = \\frac{y_{1} - y_{2}}{2\\sqrt{2}} = \\frac{\\sqrt{2}x_{0}y_{0}}{9 - 4x_{0}^{2}} \\leq \\frac{\\sqrt{2}x_{0}y_{0}}{3\\sqrt{2}x_{0}y_{0}} = \\frac{1}{3}$",
+            "其中，等号成立时要求 $\\frac{1}{2}x_{0}^{2} = 9y_{0}^{2}$，相应地有 $x_{0} = \\frac{3\\sqrt{5}}{5}, y_{0} = \\frac{\\sqrt{10}}{10}$",
+            "所以 $r_{1} - r_{2}$ 的最大值为 $\\frac{1}{3}$"
+        ],
+        "final_answer": ["$\\frac{1}{3}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210112,
+        "subfield": "Geometry",
+        "context": "2021年全国高中数学联合竞赛A1卷加试",
+        "question": "如图，在 $\\triangle ABC$ 中，$AB > AC$，$\\triangle ABC$ 内两点 $X, Y$ 均在 $\\angle BAC$ 的平分线上，且满足 $\\angle ABX = \\angle ACY$。设 $BX$ 的延长线与线段 $CY$ 交于点 $P$，$\\triangle BPY$ 的外接圆 $\\omega_{1}$ 与 $\\triangle CPX$ 的外接圆 $\\omega_{2}$ 交于 $P$ 及另一点 $Q$。证明：$A, P, Q$ 三点共线。<img_ec8041aed1d155f314512d8a1cf86c4e4f11ee7caa9a2c7bf4ab057d75768d50><img_44d84a22f6e2a910744d5e3a3e7ce65426839d5dc80c8f1cb1956318541da8c2>",
+        "solution": [
+            "由 $\\angle BAX = \\angle CAY$，$\\angle ABX = \\angle ACY$，可知 $\\triangle ABX \\sim \\triangle ACY$。所以",
+            "$\\frac{AB}{AC} = \\frac{AX}{AY}$",
+            "延长 $AX$，分别交圆 $\\omega_{1}, \\omega_{2}$ 于点 $U, V$，则",
+            "$\\angle AUB = \\angle YUB = \\angle YPB = \\angle YPX = \\angle XVC = \\angle AVC$",
+            "于是 $\\triangle ABU \\sim \\triangle ACV$。所以",
+            "$\\frac{AB}{AC} = \\frac{AU}{AV}$",
+            "由上述两式可得 $\\frac{AX}{AY} = \\frac{AU}{AV}$，即 $AU \\cdot AY = AV \\cdot AX$",
+            "上述等式两端分别为点 $A$ 到圆 $\\omega_{1}, \\omega_{2}$ 的幂，这意味着 $A$ 在圆 $\\omega_{1}, \\omega_{2}$ 的根轴（即直线 $PQ$）上，换言之，$A, P, Q$ 三点共线"
+        ],
+        "final_answer": ["见解析"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "String",
+        "error": null
+    },
+    {
+        "id": 20210113,
+        "subfield": "Number Theory",
+        "context": "2021年全国高中数学联合竞赛A1卷加试",
+        "question": "求正整数 $a, b, n$（其中 $n\\geq 2$）满足的充分必要条件，使得存在一个从集合 $S = \\{a + bt\\mid t = 0, 1, \\dots, n-1\\}$ 到自身的一一映射 $f: S\\to S$，满足：对任意 $x\\in S$，均有 $x$ 与 $f(x)$ 互素。",
+        "solution": [
+            "设 $a, b, n$ 符合题意。若 $(a, b) = d > 1$，则 $d$ 整除 $S$ 的所有元素，故对任意 $f: S\\to S$，取一个 $x\\in S$，则有 $(x, f(x)) \\geq d > 1$，矛盾",
+            "因此必有 $(a, b) = 1$",
+            "若 $n$ 为奇数且 $a$ 为偶数，则由于 $(a, b) = 1$，故 $b$ 为奇数，此时 $S$ 含有 $\\frac{n+1}{2}$ 个偶数及 $\\frac{n-1}{2}$ 个奇数。假如存在符合要求的 $f$，则对每个偶数 $x\\in S$，由 $(x, f(x)) = 1$ 知 $f(x)$ 必为奇数，因此 $S$ 含有至少 $\\frac{n+1}{2}$ 个奇数，这与前述结果违背",
+            "至此得 $a, b, n$ 需满足的必要条件："$(a, b) = 1$，且当 $n$ 为奇数时，$a$ 为奇数"",
+            "下证此条件也是充分的",
+            "假设此条件成立。首先注意，对任意 $t = 0, 1, \\dots, n-2$，有",
+            "$(a + bt, a + b(t+1)) = (a + bt, b) = (a, b) = 1$",
+            "当 $n$ 为偶数时，令 $f(a + bt) = a + b(t+1), f(a + b(t+1)) = a + bt$ ($t = 0, 2, \\dots, n-2$)，则这样定义的 $f: S\\to S$ 符合要求",
+            "当 $n$ 为奇数时，令 $f(a) = a + b$，$f(a + b) = a + 2b$，$f(a + 2b) = a$，并令 $f(a + bt) = a + b(t+1), f(a + b(t+1)) = a + bt$ ($t = 3, 5, \\dots, n-1$)。由于此时 $a$ 为奇数，故 $(a + 2b, a) = (a, 2b) = (a, b) = 1$，所以这样定义的 $f: S\\to S$ 符合要求",
+            "综上，"$(a, b) = 1$，且当 $n$ 为奇数时，$a$ 为奇数"是所求的充分必要条件"
+        ],
+        "final_answer": ["$(a, b) = 1$，且当 $n$ 为奇数时，$a$ 为奇数"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20210114,
+        "subfield": "Analysis",
+        "context": "2021年全国高中数学联合竞赛A1卷加试",
+        "question": "设正实数数列 $\\{a_{n}\\}, \\{b_{n}\\}$ 满足：对任意整数 $n\\geq 101$，有 $a_{n} = \\sqrt{\\frac{1}{100}\\sum_{j=1}^{100}b_{n-j}^{2}}, b_{n} = \\sqrt{\\frac{1}{100}\\sum_{j=1}^{100}a_{n-j}^{2}}$。证明：存在正整数 $m$，使得 $|a_{m} - b_{m}| < 0.001$。",
+        "solution": [
+            "设 $c_{n} = a_{n}^{2} - b_{n}^{2}$，$n = 1, 2, \\dots$，则对 $n \\geq 101$，有",
+            "$c_{n} = a_{n}^{2} - b_{n}^{2} = \\frac{1}{100}(\\sum_{j=1}^{100}b_{n-j}^{2} - \\sum_{j=1}^{100}a_{n-j}^{2}) = -\\frac{1}{100}\\sum_{j=1}^{100}c_{n-j}$",
+            "数列 $\\{c_{n}\\}$ 是一个100阶常系数齐次线性递推数列，特征方程为",
+            "$100x^{100} + x^{99} + x^{98} + \\dots + x + 1 = 0$",
+            "我们证明上述特征方程的根均为模小于1的复数。设 $z$ 是一个根，若 $|z| \\geq 1$，上式可改写为",
+            "$100 = -\\frac{1}{z} - \\frac{1}{z^{2}} - \\dots - \\frac{1}{z^{100}}$",
+            "两边取模，并由三角不等式得",
+            "$100 = |\\frac{1}{z} + \\frac{1}{z^{2}} + \\dots + \\frac{1}{z^{100}}| \\leq \\frac{1}{|z|} + \\frac{1}{|z|^{2}} + \\dots + \\frac{1}{|z|^{100}} \\leq 100$",
+            "等号成立当且仅当 $|z| = 1$，且 $z, z^{2}, \\dots, z^{100}$ 的辐角相同，即 $z = 1$，但 $z = 1$ 不满足方程，故特征方程的根均为模小于1的复数",
+            "设 $t_{1}, t_{2}, \\dots, t_{k}$ 是方程的所有不同的复根，重数分别为 $m_{1}, m_{2}, \\dots, m_{k}$，则数列 $\\{c_{n}\\}$ 的通项公式为",
+            "$c_{n} = P_{1}(n)t_{1}^{n} + P_{2}(n)t_{2}^{n} + \\dots + P_{k}(n)t_{k}^{n}$",
+            "其中 $P_{i}$ 是次数小于 $m_{i}$ 的复系数多项式",
+            "由于 $|t_{i}| < 1$，$i = 1, 2, \\dots, k$，故 $\\lim_{n\\to \\infty}P_{i}(n)t_{i}^{n} = 0$，从而当 $n\\to \\infty$ 时，$|c_{n}|\\to 0$",
+            "因此存在正整数 $m$，使得 $|c_{m}| < (0.001)^{2}$，又",
+            "$|c_{m}| = |a_{m}^{2} - b_{m}^{2}| = |(a_{m} - b_{m})(a_{m} + b_{m})| \\geq |a_{m} - b_{m}|^{2}$",
+            "故 $|a_{m} - b_{m}| < 0.001$"
+        ],
+        "final_answer": ["见解析"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "String",
+        "error": null
+    },
+    {
+        "id": 20210115,
+        "subfield": "Combinatorics",
+        "context": "2021年全国高中数学联合竞赛A1卷加试",
+        "question": "圆周上给定100个不同的点。试确定最大的正整数 $k$：将这100个点中任意 $k$ 个点任意染为红、蓝两色之一，均可将其余的点适当地染为红色或蓝色，使得可用这100个点为端点作50条线段，任意两条线段没有公共点，且每条线段的端点同色。",
+        "solution": [
+            "答案是50",
+            "将100个点换成 $2m$ 个点，按顺时针方向依次记为 $A_{1}, A_{2}, \\dots, A_{2m}$，将每个点染为红色或蓝色，如果可以用 $m$ 条线段将这 $2m$ 个点配对，满足题中所述条件，则称染色方法是美妙的",
+            "记 $S = \\{A_{1}, A_{3}, \\dots, A_{2m-1}\\}, T = \\{A_{2}, A_{4}, \\dots, A_{2m}\\}$",
+            "引理：将 $2m$ 个点染为红蓝两色，染色方法是美妙的当且仅当 $S$ 中红点数等于 $T$ 中红点数",
+            "引理的证明：先证明必要性。假设存在满足要求的配对连线，则 $S$ 中的红点必定与 $T$ 中红点配对（因为若一条线段 $l$ 两端均为 $S$ 中的点，那么 $l$ 两侧的弧上各有奇数个点，必有一条线段与线段 $l$ 相交）。同理，$T$ 中红点也必定与 $S$ 中红点配对，因此满足要求的配对连线给出了 $S$ 中红点与 $T$ 中红点的一一对应",
+            "再证明充分性。对 $m$ 归纳证明当 $S$ 中红点数与 $T$ 中红点数相等时，存在满足要求的配对连线。$m = 1$ 时，由假设可知两个点是同色的，可以按要求连一条线段",
+            "假设 $m \\geq 2$，且结论在 $m-1$ 时成立。考虑 $m$ 的情形，此时存在相邻两点是同色的，否则红蓝相间，这样 $S$ 中全为一种颜色，$T$ 中全为另一种颜色，与假设不符。不妨设 $A_{2m-1}, A_{2m}$ 同色。连线段 $A_{2m-1}A_{2m}$，其余 $2m-2$ 个点满足归纳假设中条件，且其中任意两点所连线段均不会与 $A_{2m-1}A_{2m}$ 相交。故由归纳假设，可连 $m-1$ 条线段将其配对满足要求，再加上 $A_{2m-1}A_{2m}$ 这条线段便得到了 $2m$ 个点的满足要求的配对连线",
+            "回到原问题。若 $k \\geq 51$，可将 $S$ 中50个点全部染为红色，$T$ 中 $k-50$ 个点染为蓝色，则其余点不论如何染色，无法得到引理中的充分必要条件。故 $k \\geq 51$ 不满足要求",
+            "若 $k = 50$。假设任意染了50个点的颜色，在 $S, T$ 中分别染了 $a$ 个和 $b$ 个红点，不妨设 $a \\geq b$，则 $T$ 中至少有 $a-b$ 个点未染色（否则，若 $T$ 中未染色点数少于 $a-b$，则染了颜色的点的个数不少于 $a + (50 - (a-b) + 1) = 51 + b > 50$，矛盾）。故可将 $T$ 中 $a-b$ 个未染色的点染为红色，其余未染色的点染为蓝色，这样 $S, T$ 中各有 $a$ 个红色的点，满足引理的条件，从而染色方法是美妙的",
+            "综上，所求 $k$ 的最大值等于50"
+        ],
+        "final_answer": ["50"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    }
+]

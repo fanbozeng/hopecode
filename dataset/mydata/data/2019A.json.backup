@@ -1,0 +1,308 @@
+[
+    {
+        "id": 20190101,
+        "subfield": "Logarithm",
+        "context": "2019年全国高中数学联合竞赛A卷一试",
+        "question": "已知正实数 $a$ 满足 $a^{a} = (9a)^{8a}$，则 $\\log_{a}3a$ 的值为______。",
+        "solution": [
+            "容易知道 $a\\neq 1$，故方程变为 $a = (9a)^{8}$，$a^{-7} = 3^{16}$",
+            "取对数可得 $\\log_{a}3 = -\\frac{7}{16}$",
+            "故 $\\log_{a}3a = -\\frac{7}{16} + 1 = \\frac{9}{16}$"
+        ],
+        "final_answer": ["$\\frac{9}{16}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190102,
+        "subfield": "Set Theory",
+        "context": "2019年全国高中数学联合竞赛A卷一试",
+        "question": "若实数集合 $\\{1,2,3,x\\}$ 的最大元素和最小元素之差等于该集合的所有元素之和，则 $x$ 的值为______。",
+        "solution": [
+            "容易得到集合中最小元素为 $x$，且 $x < 0$",
+            "故 $3 - x = 1 + 2 + 3 + x$，解得 $x = -\\frac{3}{2}$"
+        ],
+        "final_answer": ["$-\\frac{3}{2}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190103,
+        "subfield": "Vector",
+        "context": "2019年全国高中数学联合竞赛A卷一试",
+        "question": "平面直角坐标系中，$\\vec{e}$ 是单位向量，向量 $\\vec{a}$ 满足 $\\vec{a}\\cdot \\vec{e} = 2$，且 $|\\vec{a}|^{2}\\leq 5|\\vec{a} + t\\vec{e}|$ 对任意实数 $t$ 成立，则 $|\\vec{a}|$ 的取值范围是______。",
+        "solution": [
+            "容易得到，整个题目的计算与 $\\vec{e}$ 无关",
+            "于是可设 $\\vec{e} = (1,0)$，进而可设 $\\vec{a} = (2,y)$",
+            "由 $(\\vec{a} + t\\vec{e}) = (2 + t,y)$",
+            "容易得到 $|\\vec{a} + t\\vec{e}|\\geq |y|$（等号成立当且仅当 $t = -2$）",
+            "转化为 $4 + y^{2}\\leq 5|y|$，解得 $|y|\\in [1,4]$",
+            "$|\\vec{a}| = \\sqrt{4 + y^{2}}\\in [\\sqrt{5}, 2\\sqrt{5}]$"
+        ],
+        "final_answer": ["$[\\sqrt{5}, 2\\sqrt{5}]$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190104,
+        "subfield": "Analytic Geometry",
+        "context": "2019年全国高中数学联合竞赛A卷一试",
+        "question": "设 $A,B$ 为椭圆 $\\Gamma$ 的长轴顶点，$E,F$ 为 $\\Gamma$ 的两个焦点，$|AB| = 4$，$|AF| = 2 + \\sqrt{3}$，$P$ 为 $\\Gamma$ 上一点，满足 $|PE|\\cdot |PF| = 2$，则 $\\triangle PEF$ 的面积为______。",
+        "solution": [
+            "容易得到 $a = 2$，$c = \\sqrt{3}$",
+            "设 $|PE| = p$，$|PF| = q$",
+            "由题意可知 $pq = 2$，$p + q = 4$",
+            "进而可以求得 $p^{2} + q^{2} = 12 = 4c^{2}$",
+            "于是 $\\angle EPF = 90^{\\circ}$",
+            "$\\triangle PEF$ 的面积等于 $\\frac{1}{2}pq = 1$"
+        ],
+        "final_answer": ["1"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20190105,
+        "subfield": "Probability",
+        "context": "2019年全国高中数学联合竞赛A卷一试",
+        "question": "在 $1,2,3,\\dots,10$ 中随机选出一个数 $a$，在 $-1,-2,-3,\\dots,-10$ 中随机选取一个数 $b$，则 $a^{2} + b$ 被3整除的概率是______。",
+        "solution": [
+            "$p = \\frac{3}{10} \\cdot \\frac{3}{10} + \\frac{7}{10} \\cdot \\frac{4}{10} = \\frac{37}{100}$"
+        ],
+        "final_answer": ["$\\frac{37}{100}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190106,
+        "subfield": "Function",
+        "context": "2019年全国高中数学联合竞赛A卷一试",
+        "question": "对任意区间 $I$，用 $M_{I}$ 表示函数 $y = \\sin x$ 在 $I$ 上的最大值。若正实数 $a$ 满足 $M_{[0,a]} = 2M_{[a,2a]}$，则 $a$ 的值为______。",
+        "solution": [
+            "容易得到 $2a \\leq \\frac{13\\pi}{6}$ 即 $a \\leq \\frac{13\\pi}{12}$",
+            "另一方面 $a > \\frac{\\pi}{2}$，故 $M_{[0,a]} = 1$，进而 $M_{[a,2a]} = \\frac{1}{2}$",
+            "解得 $a = \\frac{5\\pi}{6}$ 或 $\\frac{13\\pi}{12}$"
+        ],
+        "final_answer": ["$\\frac{5\\pi}{6}$ 或 $\\frac{13\\pi}{12}$"],
+        "is_multiple_answer": true,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190107,
+        "subfield": "Solid Geometry",
+        "context": "2019年全国高中数学联合竞赛A卷一试",
+        "question": "如图，在正方体 $ABCD-EFGH$ 的一个截面经过顶点 $A,C$ 及棱 $EF$ 上一点 $K$，且将正方体分成体积比为 $3:1$ 的两部分，则 $\\frac{EK}{KF}$ 的值为______。",
+        "solution": [
+            "容易得到截面 $ACK$ 的两部分含 $B$ 的部分是一个棱台",
+            "不妨设正方体的棱长为1，设 $KF = x$",
+            "台体下底面积为 $\\frac{1}{2}$，上底为 $\\frac{1}{2}x^{2}$",
+            "解得 $x = \\frac{\\sqrt{3} - 1}{2}$",
+            "故 $\\frac{EK}{KF} = \\frac{3 - \\sqrt{3}}{\\sqrt{3} - 1} = \\sqrt{3}$"
+        ],
+        "final_answer": ["$\\sqrt{3}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190108,
+        "subfield": "Combinatorics",
+        "context": "2019年全国高中数学联合竞赛A卷一试",
+        "question": "将6个数 $2,0,1,9,20,19$ 按任意次序排成一行，拼成一个8位数（首位不为0），则产生的不同的8位数的个数为______。",
+        "solution": [
+            "容斥原理，首项为0也算进去的总数为 $A_{6}^{6} - \\frac{1}{2} \\times 2A_{5}^{5} + \\frac{1}{4} \\times A_{4}^{4} = 606$",
+            "首项为0的所有情况为 $A_{5}^{5} - \\frac{1}{2} \\times A_{4}^{4} = 108$",
+            "$606 - 108 = 498$"
+        ],
+        "final_answer": ["498"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    },
+    {
+        "id": 20190109,
+        "subfield": "Trigonometry",
+        "context": "2019年全国高中数学联合竞赛A卷解答题",
+        "question": "在 $\\triangle ABC$ 中，$BC = a, CA = b, AB = c$。若 $b$ 是 $a$ 与 $c$ 的等比中项，且 $\\sin A$ 是 $\\sin(B-A)$ 与 $\\sin C$ 的等差中项，求 $\\cos B$ 的值。",
+        "solution": [
+            "罗列条件 $b^{2} = ac$",
+            "$2\\sin A = \\sin(B-A) + \\sin C = \\sin(B-A) + \\sin(B+A) = 2\\sin B\\cos A$",
+            "$\\cos A = \\frac{a}{b} = \\frac{b^{2} + c^{2} - a^{2}}{2ac}$",
+            "即 $2ac = b^{2} + c^{2} - a^{2}$，由 $b^{2} = ac$ 可得 $c^{2} - ca - a^{2} = 0$",
+            "于是 $\\frac{c}{a} = \\frac{\\sqrt{5}+1}{2}$",
+            "于是 $b^{2} = \\frac{\\sqrt{5}+1}{2}a^{2}$，$c^{2} = \\frac{3+\\sqrt{5}}{2}a^{2}$",
+            "解得 $\\cos B = \\frac{a^{2} + c^{2} - b^{2}}{2ac} = \\frac{\\sqrt{5}-1}{2}$"
+        ],
+        "final_answer": ["$\\frac{\\sqrt{5}-1}{2}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190110,
+        "subfield": "Analytic Geometry",
+        "context": "2019年全国高中数学联合竞赛A卷解答题",
+        "question": "在平面直角坐标系 $xOy$ 中，圆 $\\Omega$ 与抛物线 $\\Gamma: y^{2} = 4x$ 恰有一个公共点，且圆 $\\Omega$ 与 $x$ 轴相切于 $\\Gamma$ 的焦点 $F$。求圆 $\\Omega$ 的半径。",
+        "solution": [
+            "设抛物线上的点为 $A(x_{0}, y_{0})$，则该点处的切线为 $y_{0}y = 2(x + x_{0})$",
+            "其法向量 $\\overrightarrow{n} = (2, -y_{0})$",
+            "则线段 $AF$ 的中垂线为 $(x_{0} - 1)(x - \\frac{x_{0}+1}{2}) + y_{0}(y - \\frac{y_{0}}{2}) = 0$",
+            "其与 $x = 1$ 的交点为 $\\Omega(1, \\frac{(x_{0}+1)^{2}}{2y_{0}})$",
+            "向量 $\\overrightarrow{A\\Omega} = (1 - x_{0}, \\frac{(x_{0}+1)^{2}}{2y_{0}} - y_{0})$",
+            "由 $\\overrightarrow{A\\Omega}$ 与 $\\overrightarrow{n}$ 共线解得 $x_{0} = \\frac{1}{3}$，$y_{0} = \\pm\\frac{2}{\\sqrt{3}}$",
+            "故 $r = \\frac{(x_{0}+1)^{2}}{2|y_{0}|} = \\frac{4\\sqrt{3}}{9}$"
+        ],
+        "final_answer": ["$\\frac{4\\sqrt{3}}{9}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190111,
+        "subfield": "Complex Numbers",
+        "context": "2019年全国高中数学联合竞赛A卷解答题",
+        "question": "称一个复数列 $\\{z_{n}\\}$ 是"有趣的"，若 $|z_{1}| = 1$，且对任意正整数 $n$，均有 $4z_{n+1}^{2} + 2z_{n}z_{n+1} + z_{n}^{2} = 0$。求最大的常数 $C$，使得对一切有趣的数列 $\\{z_{n}\\}$ 及任意正整数 $m$，均有 $|z_{1} + z_{2} + \\dots + z_{m}| \\geq C$。",
+        "solution": [
+            "根据题意，有 $z_{n+1} = \\frac{-1\\pm\\sqrt{3}\\mathrm{i}}{4}z_{n} \\iff z_{n+1} = (\\pm\\frac{2\\pi}{3}: \\frac{1}{2}) \\cdot z_{n}$",
+            "记 $q_{1} = (\\frac{2\\pi}{3}: \\frac{1}{2})$，$q_{2} = (-\\frac{2\\pi}{3}: \\frac{1}{2})$",
+            "取 $z_{1} = 1$，且 $z_{n+1} = \\begin{cases} q_{1}\\cdot z_{n}, & 2\\nmid n \\\\ q_{2}\\cdot z_{n}, & 2\\mid n \\end{cases}$",
+            "则 $\\lim_{m\\to+\\infty}(z_{1}+z_{2}+\\cdots+z_{m}) = (0:1) + (\\frac{2\\pi}{3}:\\frac{2}{3}) + (-\\frac{2\\pi}{3}:\\frac{1}{3}) = \\frac{1}{2} + \\frac{\\sqrt{3}}{6}\\mathrm{i}$",
+            "因此 $\\lim_{m\\to+\\infty}|z_{1}+z_{2}+\\dots+z_{m}| = \\frac{\\sqrt{3}}{3}$",
+            "接下来证明 $C = \\frac{\\sqrt{3}}{3}$ 符合题意",
+            "考虑 $|z_{n} + z_{n+1}| = |z_{n}| \\cdot |1 + \\frac{z_{n+1}}{z_{n}}| = \\frac{1}{2^{n-1}} \\cdot |1 + (\\pm\\frac{2\\pi}{3}:\\frac{1}{2})| = \\frac{\\sqrt{3}}{2^{n}}$",
+            "于是当 $m = 1$ 时，有 $|z_{1}| = 1 > \\frac{\\sqrt{3}}{3}$",
+            "当 $m$ 为偶数时，有 $|z_{1}+z_{2}+\\cdots+z_{m}| \\geq |z_{1}+z_{2}| - |z_{3}+z_{4}| - \\cdots - |z_{m-1}+z_{m}| > \\frac{\\sqrt{3}}{2} - (\\frac{\\sqrt{3}}{8} + \\frac{\\sqrt{3}}{32} + \\cdots) = \\frac{\\sqrt{3}}{3}$",
+            "当 $m$ 为不小于3的奇数时，有 $|z_{1}+z_{2}+\\cdots+z_{m}| \\geq |z_{1}+z_{2}| - |z_{3}+z_{4}| - \\cdots - |z_{m-2}+z_{m-1}| - |z_{m}| > \\frac{\\sqrt{3}}{3}$",
+            "综上所述，符合题意的最大常数为 $\\frac{\\sqrt{3}}{3}$"
+        ],
+        "final_answer": ["$\\frac{\\sqrt{3}}{3}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190112,
+        "subfield": "Geometry",
+        "context": "2019年全国高中数学联合竞赛A卷加试",
+        "question": "如图，在锐角 $\\triangle ABC$ 中，$M$ 是 $BC$ 边的中点，点 $P$ 在 $\\triangle ABC$ 内，使得 $AP$ 平分 $\\angle BAC$，直线 $MP$ 与 $\\triangle ABP$，$\\triangle ACP$ 的外接圆分别相交于不同于点 $P$ 的两点 $D,E$，证明：若 $DE = MP$，则 $BC = 2BP$。<img_2f1b85590ef784438cd28190a4799328f9a6e1ce33a03cb504dbb0e3ce12020d>",
+        "solution": [
+            "由于 $M$ 是中点，对 $\\triangle PBC$ 有 $\\frac{BP}{CP} = \\frac{\\sin\\angle BPM}{\\sin\\angle CPM}$",
+            "而对 $\\triangle BDP$ 由正弦定理有 $\\frac{BP}{BD} = \\frac{\\sin\\angle BDP}{\\sin\\angle BPD}$",
+            "同理也有 $\\frac{CE}{\\sin\\angle CPE} = \\frac{\\sin\\angle CEP}{\\sin\\angle CPE}$",
+            "故由 $\\angle BDP = \\angle BAP = \\angle CAP = \\angle CEP$ 有 $BD = BP \\cdot \\frac{\\sin\\angle BPD}{\\sin\\angle BDP} = CP \\cdot \\frac{\\sin\\angle CPM}{\\sin\\angle BPM} \\cdot \\frac{\\sin\\angle BPD}{\\sin\\angle BDP} = CP \\cdot \\frac{\\sin\\angle CPE}{\\sin\\angle CEP} = CE$",
+            "于是由 $\\angle BDP = \\angle CEP$ 且有条件可知 $DE = MP$，我们有 $\\triangle BDP \\cong \\triangle CEM$，即 $BP = CM$",
+            "故 $BC = 2BP$"
+        ],
+        "final_answer": ["见解析"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "String",
+        "error": null
+    },
+    {
+        "id": 20190113,
+        "subfield": "Number Theory",
+        "context": "2019年全国高中数学联合竞赛A卷加试",
+        "question": "设整数 $a_{1}, a_{2}, \\dots, a_{2019}$ 满足 $1 = a_{1} \\leq a_{2} \\leq \\dots \\leq a_{2019} = 99$，记 $f = (a_{1}^{2} + a_{2}^{2} + \\dots + a_{2019}^{2}) - (a_{1}a_{3} + a_{2}a_{4} + a_{3}a_{5} + \\dots + a_{2017}a_{2019})$，求 $f$ 的最小值 $f_{0}$，并确定使 $f = f_{0}$ 成立的数组 $(a_{1},a_{2},\\dots,a_{2019})$ 的个数。",
+        "solution": [
+            "$f = \\frac{1}{2}\\sum_{i=1}^{2017}(a_{i} - a_{i+2})^{2} + \\frac{a_{1}^{2}}{2} + \\frac{a_{2}^{2}}{2} + \\frac{a_{2018}^{2}}{2} + \\frac{a_{2019}^{2}}{2}$",
+            "$\\geq \\frac{1}{2}\\sum_{i=1}^{2015}(a_{i} - a_{i+2})^{2} + \\frac{(a_{2016} - a_{2017})^{2}}{2} + \\frac{(a_{2017} - a_{2019})^{2}}{2} + \\frac{a_{2}^{2}}{2} + \\frac{a_{2017}^{2}}{2} + 4901$",
+            "（因为 $a_{2017} \\leq a_{2018}$）",
+            "$\\geq \\frac{1}{2}\\sum_{i=1}^{2015}(a_{i+2} - a_{i}) + \\frac{(a_{2017} - a_{2016})}{2} + \\frac{(a_{2017} - a_{2019})^{2}}{2} + \\frac{a_{2}^{2}}{2} + \\frac{a_{2017}^{2}}{2} + 4901$",
+            "（因为整数平方大于等于自己）",
+            "$= a_{2017} - \\frac{a_{2}}{2} - \\frac{1}{2} + \\frac{(a_{2017} - 99)^{2}}{2} + \\frac{a_{2}^{2}}{2} + \\frac{a_{2017}^{2}}{2} + 4901$",
+            "$\\geq a_{2017}^{2} - 98a_{2017} + 9801$",
+            "$\\geq 7400$",
+            "第一个不等号取等在于 $(a_{2016} - a_{2018})^{2} + a_{2018}^{2} = (a_{2016} - a_{2017})^{2} + a_{2017}^{2}$，即我们有 $a_{2018} = a_{2017}$",
+            "第二个不等号取等在于 $a_{i} - a_{i+2} = 0$ 或 $-1$（$1 \\leq i \\leq 2015$）和 $a_{2016} - a_{2017} = 0$ 或 $-1$",
+            "第三个不等号取等在于 $a_{2}^{2} = a_{2}$，也就是 $a_{2} = 1$",
+            "第四个不等号取等条件在于 $a_{2017} = \\frac{98}{2} = 49$",
+            "所以综上，$f \\geq 7400$ 的取等条件是 $a_{2} = 1$，$a_{2017} = a_{2018} = 49$，而 $a_{2}$ 到 $a_{2017}$ 之间每两个相邻的数的差为0或 $-1$",
+            "所以取等的组数等于 $a_{i} - a_{i-2}$（$4 \\leq i \\leq 2017$）和 $a_{2017} - a_{2016}$ 中的1的个数",
+            "由于这些数可以分两组：2, 4, 6, ..., 2016, 2018 和 1, 3, 5, ..., 2015, 2017",
+            "并由于 $a_{1} = a_{2} = 1$，$a_{2017} = a_{2018} = 49$，所以显然对每一个 $i$ 而言，$a_{i-1}$ 和 $a_{i+1}$ 总有一个与 $a_{i}$ 相等",
+            "故我们设 $a_{i} = j$（$1 \\leq j \\leq 49$）的解数为 $b_{j} + 1$",
+            "则 $b_{j} \\geq 1$，且 $b_{1} + \\ldots + b_{49} = 2018 - 49 = 1969$",
+            "所以 $(b_{1}, \\ldots, b_{49})$ 的解数为 $C_{1968}^{48}$，即 $(a_{3}, \\ldots, a_{2016})$ 的取法有 $C_{1968}^{48}$ 种"
+        ],
+        "final_answer": ["$f_{0} = 7400$，数组个数为 $C_{1968}^{48}$"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Expression",
+        "error": null
+    },
+    {
+        "id": 20190114,
+        "subfield": "Number Theory",
+        "context": "2019年全国高中数学联合竞赛A卷加试",
+        "question": "设 $m$ 为整数，$|m| > 2$。整数数列 $a_{1}, a_{2}, \\ldots$ 满足：$a_{1}, a_{2}$ 不全为零，且对任意正整数 $n$，均有 $a_{n+2} = a_{n+1} - ma_{n}$。证明：若存在整数 $r, s$（$r > s \\geq 2$）使得 $a_{r} = a_{s} = a_{1}$，则 $r - s \\geq |m|$。",
+        "solution": [
+            "首先我们不妨设 $(a_{1}, a_{2}) = 1$，不然整个数列每一项都除以一个 $(a_{1}, a_{2})$ 可以得到同样的结果和结论",
+            "我们先证一个非常显然的引理：",
+            "引理：对任意 $a_{n}$，$n\\geq 3$，我们都可以将 $a_{n}$ 写成 $a_{n} = k_{n}a_{2} + l_{n}a_{1}$，其中 $m\\mid k_{n} - 1$，$m\\mid l_{n}$",
+            "引理的证明：$a_{3} = a_{2} - ma_{1}$，$a_{4} = a_{3} - ma_{2} = (1-m)a_{2} - ma_{1}$，所以 $n = 3,4$ 时显然",
+            "若 $n-2$ 和 $n-1$ 时都成立的话，则 $a_{n} = a_{n-1} - ma_{n-2} = (k_{n-1} - mk_{n-2})a_{2} + (l_{n-1} - ml_{n-2})a_{1}$ 所以还是显然",
+            "所以在模 $m$ 的时候我们总有 $a_{n} \\equiv a_{2} \\pmod{m}$，故 $a_{r} = a_{s} = a_{1}$ 就表明了 $a_{2} \\equiv a_{1} \\pmod{m}$",
+            "由 $(a_{1},a_{2}) = 1$ 可得 $(a_{1},m) = 1$",
+            "那么 $\\frac{a_{r} - a_{s}}{m} = \\sum_{i=s+1}^{r}\\frac{a_{i} - a_{i-1}}{m} = \\sum_{i=s+1}^{r}a_{i-2} \\equiv (r-s)a_{1} \\pmod{m}$",
+            "故 $m\\mid (r-s)a_{1}$，所以 $m\\mid r-s$，于是 $r-s \\geq |m|$"
+        ],
+        "final_answer": ["见解析"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "String",
+        "error": null
+    },
+    {
+        "id": 20190115,
+        "subfield": "Graph Theory",
+        "context": "2019年全国高中数学联合竞赛A卷加试",
+        "question": "设 $V$ 是空间中2019个点构成的集合，其中任意四点不共面。某些点之间连有线段，记 $E$ 为这些线段构成的集合。试求最小的正整数 $n$，满足条件：若 $E$ 至少有 $n$ 个元素，则 $E$ 一定含有908个二元子集，其中每个二元子集中的两条线段有公共端点，且任意两个二元子集的交为空集。",
+        "solution": [
+            "为了叙述方便，称一个图中的两条相邻的边构成一个"角"",
+            "先证明一个引理：设 $G = (V,E)$ 是一个简单图，且 $G$ 是连通的，则 $G$ 含有 $\\lfloor\\frac{|E|}{2}\\rfloor$ 个两两无公共边的角",
+            "引理的证明：对 $|E|$ 的元素个数归纳证明。当 $|E| = 0,1,2,3$ 时，结论显然成立",
+            "下面假设 $|E|\\geq 4$，并且结论在 $|E|$ 较小时均成立",
+            "只需证明，在 $G$ 中可以选取两条边 $a,b$ 构成一个角，在 $G$ 中删去 $a,b$ 这两条边后，剩下的图含有一个连通分支包含 $|E| - 2$ 条边",
+            "对这个连通分支应用归纳假设即得结论成立",
+            "考虑 $G$ 中的最长路 $P:v_{1}v_{2}\\ldots v_{k}$，其中 $v_{1},v_{2},\\ldots,v_{k}$ 是互不相同的顶点。因为 $G$ 连通，故 $k\\geq 3$",
+            "通过分情形讨论可以证明引理成立",
+            "回到原题，题中的 $V$ 和 $E$ 可看作一个图 $G = (V,E)$",
+            "首先证明 $n\\geq 2795$",
+            "设 $V = \\{v_{1},v_{2},\\ldots,v_{2019}\\}$。在 $v_{1},v_{2},\\ldots,v_{61}$ 中，首先两两连边，再删去其中15条边",
+            "共连了 $C_{61}^{2} - 15 = 1815$ 条边，则这61个点构成的图是连通图",
+            "再将剩余的 $2019 - 61 = 1958$ 个点配成979对，每对两点之间连一条边",
+            "则图 $G$ 中一共连了 $1815 + 979 = 2794$ 条线段",
+            "由上述构造可见，$G$ 中的任何一个角必须使用 $v_{1},v_{2},\\ldots,v_{61}$ 相连的边",
+            "因此至多有 $\\lfloor\\frac{1815}{2}\\rfloor = 907$ 个两两无公共边的角",
+            "故满足要求的 $n$ 不小于2795",
+            "另一方面，若 $|E|\\geq 2795$，可任意删去若干条边，只考虑 $|E| = 2795$ 的情形",
+            "设 $G$ 有 $k$ 个连通分支，分别有 $m_{1},\\ldots,m_{k}$ 个点，及 $e_{1},\\ldots,e_{k}$ 条边",
+            "通过分析可知 $e_{1},\\ldots,e_{k}$ 中至多有979个奇数",
+            "对每个连通分支应用引理，可知 $G$ 中含有 $N$ 个两两无公共边的角",
+            "其中 $N = \\sum_{i=1}^{k}\\lfloor\\frac{e_{i}}{2}\\rfloor \\geq \\frac{1}{2}(\\sum_{i=1}^{k}e_{i} - 979) = \\frac{1}{2}(2795 - 979) = 908$",
+            "综上，所求最小的 $n$ 是2795"
+        ],
+        "final_answer": ["2795"],
+        "is_multiple_answer": false,
+        "unit": null,
+        "answer_type": "Numerical",
+        "error": null
+    }
+]

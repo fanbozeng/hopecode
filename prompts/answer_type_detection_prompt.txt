@@ -1,0 +1,116 @@
+**ROLE:**
+You are an expert in analyzing mathematical and physics problems. Your task is to determine the answer type(s) that the problem expects.
+
+**CONTEXT:**
+Different problems require different answer formats. Identifying the correct answer type helps generate appropriate computation strategies.
+
+**ANSWER TYPES:**
+
+1. **Numerical**: Pure numbers (integers or decimals)
+   - Examples: "5", "3.14", "130"
+   - Keywords: "how many", "what is the value", "calculate the number"
+
+2. **Expression**: Mathematical expressions with symbols (π, √, fractions, variables)
+   - Examples: "$\frac{1}{2}$", "$\sqrt{5}$", "$\frac{\pi}{4}$", "2H"
+   - Keywords: "express in terms of", "symbolic form", "leave in exact form"
+
+3. **Interval**: Ranges or intervals (a, b) or [a, b]
+   - Examples: "(0, 10)", "[2, 5]", "($\frac{1}{3}H$, $2H$)"
+   - Keywords: "range", "interval", "between", "from...to"
+
+4. **Tuple**: Multiple separate values as coordinates or pairs
+   - Examples: "(3, 1.57)", "(r, θ)"
+   - Keywords: "in the form (a, b)", "coordinates", "pair"
+
+5. **Equation**: Answer is an equation itself
+   - Examples: "$x^2 + y^2 = 1$", "$F = ma$"
+   - Keywords: "equation", "relationship", "formula"
+
+6. **Mixed Types**: Multiple answers of different types
+   - Examples: "3, $\sqrt{5}$" (Numerical,Expression)
+   - Keywords: "and", "respectively", multiple sub-questions
+
+**INSTRUCTIONS:**
+Analyze the problem and determine the expected answer type(s). Return a JSON object:
+
+```json
+{{
+  "primary_answer_type": "Numerical|Expression|Interval|Tuple|Equation",
+  "secondary_answer_types": [],
+  "is_multiple_answer": false,
+  "reasoning": "Brief explanation of why this type was chosen",
+  "output_format_hint": "Specific format guidance (e.g., 'print as tuple', 'keep π symbolic')"
+}}
+```
+
+**EXAMPLES:**
+
+**Example 1:**
+Problem: "A car travels 100 km in 2 hours. What is its speed in km/h?"
+```json
+{{
+  "primary_answer_type": "Numerical",
+  "secondary_answer_types": [],
+  "is_multiple_answer": false,
+  "reasoning": "Problem asks for a numerical value (speed)",
+  "output_format_hint": "print(float(result))"
+}}
+```
+
+**Example 2:**
+Problem: "Express the area of a circle with radius r in terms of r."
+```json
+{{
+  "primary_answer_type": "Expression",
+  "secondary_answer_types": [],
+  "is_multiple_answer": false,
+  "reasoning": "Problem asks to express in terms of a variable (r), expects symbolic form",
+  "output_format_hint": "print(result)  # Keep π symbolic"
+}}
+```
+
+**Example 3:**
+Problem: "Convert point (0, 3) to polar coordinates in the form (r, θ)."
+```json
+{{
+  "primary_answer_type": "Tuple",
+  "secondary_answer_types": ["Expression"],
+  "is_multiple_answer": false,
+  "reasoning": "Problem asks for coordinates in (r, θ) form",
+  "output_format_hint": "print((r_val, theta_val))  # Keep π/2 symbolic for θ"
+}}
+```
+
+**Example 4:**
+Problem: "Find the range of positions where the insect can land on the x-axis."
+```json
+{{
+  "primary_answer_type": "Interval",
+  "secondary_answer_types": ["Expression"],
+  "is_multiple_answer": false,
+  "reasoning": "Problem asks for a range of positions",
+  "output_format_hint": "Calculate boundaries and print((min_val, max_val))"
+}}
+```
+
+**Example 5:**
+Problem: "Calculate the mass (in kg) and express the velocity in terms of g."
+```json
+{{
+  "primary_answer_type": "Numerical",
+  "secondary_answer_types": ["Expression"],
+  "is_multiple_answer": true,
+  "reasoning": "Two sub-questions: one numerical (mass), one symbolic (velocity)",
+  "output_format_hint": "print((mass_float, velocity_expression))"
+}}
+```
+
+**YOUR TASK:**
+Analyze the following problem and determine its answer type(s):
+
+Problem:
+{problem_text}
+
+**JSON Output:**
+
+

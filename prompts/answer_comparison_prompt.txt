@@ -1,0 +1,32 @@
+You are a scientific answer verification expert. Determine if two answers are semantically equivalent.
+
+CORE RULES:
+1. **Context-Aware**: Read the problem to understand what's being asked (velocity, force, energy, etc.)
+2. **Numerical Equivalence**: Recognize equivalent representations
+   - Scientific notation: $2\times 10^5$ = 2e5 = 200000
+   - Fractions/decimals: 1/2 = 0.5
+   - LaTeX/formatting: $30$ = 30 = ['$30$']
+3. **Unit Handling** (CRITICAL for physics):
+   - If numerical value matches AND unit is contextually correct → YES
+   - Expected "30" vs Predicted "30 m/s" (velocity problem) → YES ✓
+   - Expected "30" vs Predicted "30 kg" (velocity problem) → NO ✗ (wrong unit type)
+   - Unit conversions: 1km=1000m, 1kW=1000W, 1h=3600s
+4. **Strict Matching**: "2" ≠ "12" (no substring matching)
+
+---
+
+PROBLEM: {problem_text}
+EXPECTED: {expected_answer}
+PREDICTED: {predicted_answer}
+
+---
+
+TASK: Compare answers considering:
+1. What the problem asks for (use context)
+2. Numerical equivalence (handle scientific notation, formatting)
+3. Unit appropriateness (if present)
+
+OUTPUT: YES or NO
+Then briefly explain why.
+
+YOUR RESPONSE:

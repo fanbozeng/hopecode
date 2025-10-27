@@ -1,0 +1,85 @@
+[
+  {
+    "keywords": [
+      "wave",
+      "interference",
+      "amplitude",
+      "phase difference"
+    ],
+    "rule": "Wave Interference: A = 2A_0 |cos(Δφ/2)| - Describes the resultant amplitude (A) of two waves with the same frequency and amplitude (A_0) interfering constructively or destructively, depending on the phase difference (Δφ); used in wave mechanics to analyze interference patterns",
+    "category": "wave mechanics",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "wave",
+      "wavelength",
+      "wave speed",
+      "frequency"
+    ],
+    "rule": "Wave Speed: v = λ × f - Relates the speed of a wave (v in m/s), its wavelength (λ in m), and frequency (f in Hz); fundamental in wave mechanics for understanding wave propagation",
+    "category": "wave mechanics",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "wave",
+      "equation",
+      "displacement"
+    ],
+    "rule": "Wave Equation: y(x, t) = A_0 sin(kx - ωt + φ) - Describes the displacement (y in m) of a wave at position (x in m) and time (t in s), with amplitude (A_0 in m), wave number (k = 2π/λ in m⁻¹), angular frequency (ω = 2πf in s⁻¹), and phase constant (φ in radians); used in wave mechanics to model wave behavior",
+    "category": "wave mechanics",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "eggs",
+      "per day",
+      "total"
+    ],
+    "rule": "Total Production: P = r × t - Represents the total production (P) as the product of the rate of production (r) and the time (t); in this context, the total number of eggs laid per day",
+    "category": "algebra",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "eggs",
+      "consumption",
+      "per day"
+    ],
+    "rule": "Total Consumption: C = c_b + c_m - Represents the total consumption (C) as the sum of eggs consumed for breakfast (c_b) and eggs used for baking muffins (c_m); applies to daily consumption",
+    "category": "algebra",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "bolts",
+      "blue fiber",
+      "white fiber",
+      "total"
+    ],
+    "rule": "Addition of Quantities: total = blue_bolts + white_bolts - Combines the quantities of blue and white bolts to find the total number of bolts used; a basic arithmetic operation",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "amplitude",
+      "interference",
+      "superposition"
+    ],
+    "rule": "Principle of Superposition: y_total(x, t) = y_1(x, t) + y_2(x, t) - States that the total displacement (y_total) at any point in a medium is the sum of the displacements (y_1 and y_2) of individual waves; used to analyze wave interference patterns",
+    "category": "wave mechanics",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "half",
+      "blue fiber",
+      "white fiber"
+    ],
+    "rule": "Proportional Relationship: White = 0.5 × Blue - Describes the relationship where the amount of white fiber (White) is half the amount of blue fiber (Blue); used in ratio and proportion problems",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  }
+]
