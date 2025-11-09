@@ -46,15 +46,16 @@ class MultiAgentScaffolder:
         max_retries: int = 3,
         retry_delay: float = 2.0,
         experience_manager=None,  # 新增：GRPO经验管理器 / Added: GRPO experience manager
-        rollouts_per_generator: int = 1  # 新增：每个generator生成的rollout数量 / Added: Number of rollouts per generator (for GRPO training)
+        rollouts_per_generator: int = 1,  # 新增：每个generator生成的rollout数量 / Added: Number of rollouts per generator (for GRPO training)
+        use_separate_apis: bool = True  # 新增：是否为每个agent使用独立API / Added: Use separate API for each agent
     ):
         """
         Initialize multi-agent scaffolder.
         初始化多智能体脚手架器
 
         Args:
-            llm_client: Shared LLM client for all agents
-                        所有智能体共享的LLM客户端
+            llm_client: Shared LLM client (used only if use_separate_apis=False)
+                        共享的LLM客户端（仅在use_separate_apis=False时使用）
             num_generators: Number of parallel generator agents (default: 3)
                            并行生成器智能体的数量（默认：3）
             generator_temperature: Temperature for generator agents (for diversity)
@@ -69,19 +70,30 @@ class MultiAgentScaffolder:
                                GRPO经验管理器实例，用于注入学到的经验
             rollouts_per_generator: Number of rollouts each generator produces (for GRPO training)
                                    每个生成器产生的rollout数量（用于GRPO训练，默认1）
+            use_separate_apis: Use separate API for each generator and critic
+                              为每个生成器和批判者使用独立的API
         """
-        self.llm_client = llm_client or LLMClient()
         self.num_generators = num_generators
         self.generator_temperature = generator_temperature
         self.critic_temperature = critic_temperature
         self.max_retries = max_retries
         self.retry_delay = retry_delay
+        self.use_separate_apis = use_separate_apis
         
         # GRPO Experience Manager / GRPO经验管理器
         self.experience_manager = experience_manager
         
         # GRPO: Number of rollouts per generator / GRPO：每个生成器的rollout数量
         self.rollouts_per_generator = rollouts_per_generator
+
+        # Initialize LLM clients for each agent / 为每个智能体初始化LLM客户端
+        if use_separate_apis:
+            self._init_separate_clients()
+        else:
+            # Use shared client / 使用共享客户端
+            self.llm_client = llm_client or LLMClient()
+            self.generator_clients = {i: self.llm_client for i in range(1, num_generators + 1)}
+            self.critic_client = self.llm_client
 
         # Load prompts
         self.generator_prompt = self._load_prompt("prompts/scaffolding_prompt_v3.txt")
@@ -93,6 +105,8 @@ class MultiAgentScaffolder:
 
         print(f"🤖 Multi-Agent Scaffolder initialized:")
         print(f"   - {num_generators} parallel generators (T={generator_temperature})")
+        if use_separate_apis:
+            print(f"   - Using separate API for each generator ✓")
         if rollouts_per_generator > 1:
             print(f"   - {rollouts_per_generator} rollouts per generator (GRPO mode)")
         print(f"   - 1 critic agent (T={critic_temperature})")
@@ -100,25 +114,128 @@ class MultiAgentScaffolder:
             print(f"   - Training-Free GRPO enabled ✓")
         print(f"🤖 多智能体脚手架器已初始化：")
         print(f"   - {num_generators}个并行生成器（温度={generator_temperature}）")
+        if use_separate_apis:
+            print(f"   - 每个生成器使用独立API ✓")
         if rollouts_per_generator > 1:
             print(f"   - 每个生成器{rollouts_per_generator}个rollouts（GRPO模式）")
         print(f"   - 1个批判者智能体（温度={critic_temperature}）")
         if experience_manager:
             print(f"   - 训练自由GRPO已启用 ✓")
+    
+    def _init_separate_clients(self) -> None:
+        """
+        Initialize separate LLM clients for each generator and critic.
+        为每个生成器和批判者初始化独立的LLM客户端
+        """
+        from engine.api_manager import APIKeyManager
+        from engine.scaffolder import LLMClient
+        
+        try:
+            api_manager = APIKeyManager()
+            
+            # Initialize generator clients / 初始化生成器客户端
+            self.generator_clients = {}
+            for i in range(1, self.num_generators + 1):
+                role = f'generator_{i}'
+                try:
+                    api_key = api_manager.get_api_key(role)
+                    # Create client with API key
+                    client = LLMClient()
+                    # Override API key
+                    if hasattr(client, 'client'):
+                        client.client.api_key = api_key
+                    self.generator_clients[i] = client
+                    print(f"   ✓ Generator {i} API configured")
+                except Exception as e:
+                    print(f"   ⚠️  Generator {i} API config failed: {e}, using default")
+                    self.generator_clients[i] = LLMClient()
+            
+            # Initialize critic client / 初始化批判者客户端
+            try:
+                critic_key = api_manager.get_api_key('critic')
+                self.critic_client = LLMClient()
+                if hasattr(self.critic_client, 'client'):
+                    self.critic_client.client.api_key = critic_key
+                print(f"   ✓ Critic API configured")
+            except Exception as e:
+                print(f"   ⚠️  Critic API config failed: {e}, using default")
+                self.critic_client = LLMClient()
+                
+        except Exception as e:
+            print(f"   ⚠️  API Manager initialization failed: {e}")
+            print(f"   Using default LLM client for all agents")
+            # Fallback to shared client
+            default_client = LLMClient()
+            self.generator_clients = {i: default_client for i in range(1, self.num_generators + 1)}
+            self.critic_client = default_client
+    
+    def _load_agent_experiences(self, agent_id: str) -> str:
+        """
+        Load agent's own experiences from its experience file.
+        从agent自己的经验文件加载经验
+        
+        Args:
+            agent_id: Agent identifier (e.g., 'generator_1', 'generator_2', 'critic')
+            
+        Returns:
+            Formatted experiences string for prompt
+        """
+        import json
+        from pathlib import Path
+        
+        # Get absolute path to experience file
+        project_root = Path(__file__).parent.parent
+        exp_file = project_root / "data" / "grpo_experiences" / f"{agent_id}_experiences.json"
+        
+        if not exp_file.exists():
+            return "No prior experiences available."
+        
+        try:
+            with open(exp_file, 'r', encoding='utf-8') as f:
+                experiences = json.load(f)
+            
+            if not experiences:
+                return "No prior experiences available."
+            
+            # Format experiences as numbered list
+            experiences_str = "\n".join(
+                f"{i}. {exp['content']}" for i, exp in enumerate(experiences, 1)
+            )
+            
+            return experiences_str
+            
+        except Exception as e:
+            print(f"  ⚠️  Failed to load experiences for {agent_id}: {e}")
+            return "No prior experiences available."
 
     def _load_prompt(self, path: str) -> str:
         """Load prompt template from file."""
         prompt_path = Path(path)
+        
+        # Try relative path first
         if prompt_path.exists():
             with open(prompt_path, 'r', encoding='utf-8') as f:
                 return f.read()
-        else:
-            # Fallback to default if critic prompt doesn't exist
-            if "critic" in path:
-                return self._get_default_critic_prompt()
-            else:
-                # Use existing generator prompt
-                return CausalScaffolder()._get_default_prompt_template()
+        
+        # Try absolute path from project root
+        project_root = Path(__file__).parent.parent
+        absolute_path = project_root / prompt_path
+        
+        if absolute_path.exists():
+            with open(absolute_path, 'r', encoding='utf-8') as f:
+                return f.read()
+        
+        # Fallback to default only for critic prompt
+        if "critic" in path:
+            return self._get_default_critic_prompt()
+        
+        # For generator prompt, raise error (must use file)
+        raise FileNotFoundError(
+            f"Generator prompt template not found at:\n"
+            f"  - Relative path: {prompt_path}\n"
+            f"  - Absolute path: {absolute_path}\n"
+            f"Please ensure '{path}' exists in project root."
+        )
 
     def _get_default_critic_prompt(self) -> str:
         """Get default critic fusion prompt."""
@@ -146,8 +263,11 @@ Analyze all three proposals critically and generate a SINGLE REFINED JSON that:
 **ORIGINAL PROBLEM:**
 {problem_text}
 
-**RETRIEVED KNOWLEDGE:**
+**RETRIEVED KNOWLEDGE (from knowledge base):**
 {retrieved_knowledge}
+
+**PRIOR EXPERIENCES (learned from previous problems):**
+{prior_experiences}
 
 **PROPOSAL 1 (Agent 1):**
 ```json
@@ -209,20 +329,20 @@ Generate a SINGLE refined JSON object following the same schema as the proposals
         使用多智能体并行系统生成因果脚手架
 
         Process:
-        1. Launch 3 generator agents in parallel
+        1. Launch 3 generator agents in parallel (each loads its own experiences)
         2. Collect all proposals
-        3. Send to critic for fusion
+        3. Send to critic for fusion (critic loads its own experiences)
         4. Return refined result
 
         流程：
-        1. 并行启动3个生成器智能体
+        1. 并行启动3个生成器智能体（各自加载自己的经验）
         2. 收集所有提案
-        3. 发送给批判者进行融合
+        3. 发送给批判者进行融合（批判者加载自己的经验）
         4. 返回精炼结果
 
         Args:
             problem_text: Problem statement
-            retrieved_knowledge: List of relevant formulas/rules
+            retrieved_knowledge: List of relevant formulas/rules (from RAG)
 
         Returns:
             Refined causal scaffold JSON
@@ -441,19 +561,24 @@ Generate a SINGLE refined JSON object following the same schema as the proposals
         """
         Generate proposals in parallel using ThreadPoolExecutor.
         使用ThreadPoolExecutor并行生成提案
+        
+        Note: Each generator loads its own experiences internally.
+        注意：每个生成器在内部加载自己的经验。
 
         Returns:
             List of valid proposals
         """
         knowledge_str = "\n".join(
             f"{i}. {rule}" for i, rule in enumerate(retrieved_knowledge, 1)
-        )
+        ) if retrieved_knowledge else "No additional knowledge provided."
 
         proposals = []
 
         # Use ThreadPoolExecutor for parallel execution
         with ThreadPoolExecutor(max_workers=self.num_generators) as executor:
             # Submit all generator tasks
+            # Each agent will load its own experiences based on agent_id
+            # 每个agent将根据agent_id加载自己的经验
             future_to_agent = {
                 executor.submit(
                     self._single_agent_generate,
@@ -499,7 +624,7 @@ Generate a SINGLE refined JSON object following the same schema as the proposals
         Args:
             agent_id: Agent identifier (1, 2, or 3)
             problem_text: Problem statement
-            knowledge_str: Formatted knowledge string
+            knowledge_str: Formatted knowledge string (RAG)
 
         Returns:
             Generated scaffold or None
@@ -507,27 +632,17 @@ Generate a SINGLE refined JSON object following the same schema as the proposals
         print(f"\n🤖 Agent {agent_id} starting generation...")
         print(f"🤖 智能体 {agent_id} 开始生成...")
 
-        # Inject GRPO experiences if available / 如果可用，注入GRPO经验
-        experiences_text = ""
-        if self.experience_manager:
-            experiences_text = self.experience_manager.get_experiences_for_agent(
-                agent_type=f'generator_{agent_id}',
-                include_shared=True,
-                format_as_prompt=True
-            )
-        
-        # Construct prompt
-        full_prompt = self.generator_prompt.format(
+        # Load this agent's own experiences from its experience file
+        # 从该agent自己的经验文件加载经验
+        experiences_str = self._load_agent_experiences(f'generator_{agent_id}')
+
+        # Construct prompt with both knowledge and experiences
+        # 使用知识和经验构造提示
+        prompt = self.generator_prompt.format(
             retrieved_knowledge=knowledge_str,
+            prior_experiences=experiences_str,
             problem_text=problem_text
         )
-        
-        # Add experiences at the beginning if available
-        # 如果有经验，添加到提示开头
-        if experiences_text:
-            prompt = f"{experiences_text}\n\n{full_prompt}"
-        else:
-            prompt = full_prompt
 
         # Retry loop
         for attempt in range(1, self.max_retries + 1):
@@ -536,8 +651,9 @@ Generate a SINGLE refined JSON object following the same schema as the proposals
                     print(f"  🔄 Agent {agent_id} retry {attempt}/{self.max_retries}")
                     time.sleep(self.retry_delay)
 
-                # Call LLM
-                response = self.llm_client.complete(
+                # Call LLM with agent-specific client / 使用该智能体特定的客户端调用LLM
+                agent_client = self.generator_clients.get(agent_id, self.generator_clients[1])
+                response = agent_client.complete(
                     prompt,
                     temperature=self.generator_temperature
                 )
@@ -588,7 +704,7 @@ Generate a SINGLE refined JSON object following the same schema as the proposals
 
         Args:
             problem_text: Original problem
-            retrieved_knowledge: Knowledge base
+            retrieved_knowledge: Knowledge base (from RAG)
             proposals: List of proposals from generator agents
 
         Returns:
@@ -606,19 +722,14 @@ Generate a SINGLE refined JSON object following the same schema as the proposals
         print(f"\n🧠 Critic analyzing {len(proposals)} proposals...")
         print(f"🧠 批判者正在分析 {len(proposals)} 个提案...")
 
-        # Inject GRPO experiences for critic if available / 如果可用，为批判者注入GRPO经验
-        critic_experiences_text = ""
-        if self.experience_manager:
-            critic_experiences_text = self.experience_manager.get_experiences_for_agent(
-                agent_type='critic',
-                include_shared=True,
-                format_as_prompt=True
-            )
-
         # Format knowledge
         knowledge_str = "\n".join(
             f"{i}. {rule}" for i, rule in enumerate(retrieved_knowledge, 1)
-        )
+        ) if retrieved_knowledge else "No additional knowledge provided."
+        
+        # Load critic's own experiences from its experience file
+        # 从critic自己的经验文件加载经验
+        experiences_str = self._load_agent_experiences('critic')
 
         # Prepare proposals for prompt (pad with empty if less than 3)
         proposal_jsons = []
@@ -630,21 +741,15 @@ Generate a SINGLE refined JSON object following the same schema as the proposals
             else:
                 proposal_jsons.append("{}")  # Empty placeholder
 
-        # Construct critic prompt
-        full_prompt = self.critic_prompt.format(
+        # Construct critic prompt with knowledge and experiences
+        prompt = self.critic_prompt.format(
             problem_text=problem_text,
             retrieved_knowledge=knowledge_str,
+            prior_experiences=experiences_str,
             proposal_1=proposal_jsons[0],
             proposal_2=proposal_jsons[1],
             proposal_3=proposal_jsons[2]
         )
-        
-        # Add critic experiences at the beginning if available
-        # 如果有经验，添加到提示开头
-        if critic_experiences_text:
-            prompt = f"{critic_experiences_text}\n\n{full_prompt}"
-        else:
-            prompt = full_prompt
 
         # Retry loop for critic
         for attempt in range(1, self.max_retries + 1):
@@ -656,8 +761,8 @@ Generate a SINGLE refined JSON object following the same schema as the proposals
                 print(f"  📝 Critic processing (attempt {attempt})...")
                 print(f"  📝 批判者处理中（第 {attempt} 次尝试）...")
 
-                # Call LLM
-                response = self.llm_client.complete(
+                # Call LLM with critic-specific client / 使用批判者特定的客户端调用LLM
+                response = self.critic_client.complete(
                     prompt,
                     temperature=self.critic_temperature
                 )

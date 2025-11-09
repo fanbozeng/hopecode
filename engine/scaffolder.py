@@ -165,110 +165,32 @@ class CausalScaffolder:
             The prompt template string
             
         """
+        # Try relative path first
         if self.prompt_template_path.exists():
             with open(self.prompt_template_path, 'r', encoding='utf-8') as f:
                 return f.read()
-        else:
-            # Return default template if file doesn't exist
-            # 
-            return self._get_default_prompt_template()
-
-    def _get_default_prompt_template(self) -> str:
-        """
-        Get the default scaffolding prompt template.
         
-
-        Returns:
-            Default prompt template
-            
-        """
-        return """**ROLE:**
-You are a specialized Causal Reasoning Engine for science. Your task is to deconstruct a natural language problem into a structured JSON object representing a Structural Causal Model (SCM). This JSON must define all variables, the causal relationships between them, and a precise computational plan.
-
-**CONTEXT:**
-Here are the relevant physical laws and formulas for this problem:
----
-{retrieved_knowledge}
----
-
-**INSTRUCTIONS:**
-Analyze the user's problem and generate a single JSON object with the following schema. Do NOT solve the problem or output any other text.
-
-1. `target_variable`: (String) The final variable to be solved for.
-   - For single-value answers: use a descriptive name (e.g., "velocity", "density")
-   - For multi-value answers (tuples, coordinates, pairs): use a compound name (e.g., "polar_coordinates", "position_vector")
-   - **IMPORTANT**: If the problem asks for multiple values in a specific format (like "(r, θ)" or "[x, y]"), the target_variable should represent the COMBINED result
-
-2. `knowns`: (Object) A dictionary of all known variables and their numerical values from the problem text. Use snake_case for variable names.
-
-3. `causal_graph`: (Array of Objects) Represents the causal links. Each object must have:
-   - `cause`: (Array of Strings) The input variables.
-   - `effect`: (String) The output variable.
-   - `rule`: (String) The specific formula governing this link.
-
-4. `computation_plan`: (Array of Objects) A step-by-step logical plan. Each object must have:
-   - `id`: (String) A unique step identifier (e.g., "step1").
-   - `target`: (String) The variable to calculate in this step.
-   - `inputs`: (Array) Input variables for this step. Use strings for knowns or {{"ref": "step_id.output"}} to reference a previous step's result.
-   - `description`: (String) A brief natural language description of what this step calculates using which rule.
-   - **IMPORTANT FOR MULTI-VALUE OUTPUTS**: If the target_variable requires multiple components:
-     * Create separate steps to calculate each component
-     * Add a FINAL step to combine them into the required format
-     * The final step should have `target` equal to `target_variable` and reference all component steps
-     * Example: For polar coordinates (r, θ), have step1 calculate r, step2 calculate θ, step3 combine into (r, θ)
-
-**EXAMPLE 1 - Single Value Output:**
----
-Problem: "What is the density of an object with a mass of 20 kg and a volume of 2 cubic meters?"
-JSON Output:
-```json
-{{
-  "target_variable": "density",
-  "knowns": {{ "mass": 20, "volume": 2 }},
-  "causal_graph": [
-    {{ "cause": ["mass", "volume"], "effect": "density", "rule": "ρ = m/V" }}
-  ],
-  "computation_plan": [
-    {{ "id": "step1", "target": "density", "inputs": ["mass", "volume"], "description": "Calculate density using the formula ρ = m/V" }}
-  ]
-}}
-```
----
-
-**EXAMPLE 2 - Multi-Value Output (Polar Coordinates):**
----
-Problem: "Convert the point (0, 3) in rectangular coordinates to polar coordinates. Enter your answer in the form (r, θ), where r > 0 and 0 ≤ θ < 2π."
-JSON Output:
-```json
-{{
-  "target_variable": "polar_coordinates",
-  "knowns": {{ "x": 0, "y": 3 }},
-  "causal_graph": [
-    {{ "cause": ["x", "y"], "effect": "r", "rule": "r = sqrt(x**2 + y**2)" }},
-    {{ "cause": ["x", "y"], "effect": "theta", "rule": "theta = atan2(y, x)" }}
-  ],
-  "computation_plan": [
-    {{ "id": "step1", "target": "r", "inputs": ["x", "y"], "description": "Calculate the radial distance r" }},
-    {{ "id": "step2", "target": "theta", "inputs": ["x", "y"], "description": "Calculate the angle theta" }},
-    {{ "id": "step3", "target": "polar_coordinates", "inputs": [{{"ref": "step1"}}, {{"ref": "step2"}}], "description": "Combine r and theta into the polar coordinates tuple (r, θ)" }}
-  ]
-}}
-```
-Note: For multi-value outputs, create separate steps for each component and a final combination step.
----
-
-**YOUR TASK:**
-
-Problem:
-{problem_text}
-
-**JSON Output:**
-"""
+        # Try absolute path from project root
+        project_root = Path(__file__).parent.parent
+        absolute_path = project_root / self.prompt_template_path
+        
+        if absolute_path.exists():
+            with open(absolute_path, 'r', encoding='utf-8') as f:
+                return f.read()
+        
+        # If file not found, raise error (no fallback)
+        raise FileNotFoundError(
+            f"Prompt template not found at:\n"
+            f"  - Relative path: {self.prompt_template_path}\n"
+            f"  - Absolute path: {absolute_path}\n"
+            f"Please ensure 'prompts/scaffolding_prompt_v3.txt' exists in project root."
+        )
 
     def generate_scaffold(
         self,
         problem_text: str,
-        retrieved_knowledge: List[str]
+        retrieved_knowledge: List[str],
+        experiences: Optional[List[str]] = None
     ) -> Optional[Dict[str, Any]]:
         """
         Generate a structured causal scaffold from problem text with retry mechanism.
@@ -284,8 +206,10 @@ Problem:
         Args:
             problem_text: The problem statement
                           问题陈述
-            retrieved_knowledge: List of relevant formulas and rules
-                                 相关公式和规则列表
+            retrieved_knowledge: List of relevant formulas and rules (from RAG)
+                                 相关公式和规则列表（来自RAG）
+            experiences: List of prior experiences (from GRPO training)
+                        先前的经验列表（来自GRPO训练）
 
         Returns:
             Parsed JSON scaffold as a dictionary, or None if all retries fail
@@ -295,12 +219,21 @@ Problem:
         # 格式化知识为编号列表
         knowledge_str = "\n".join(
             f"{i}. {rule}" for i, rule in enumerate(retrieved_knowledge, 1)
-        )
+        ) if retrieved_knowledge else "No additional knowledge provided."
+        
+        # Format experiences as a numbered list
+        # 格式化经验为编号列表
+        if experiences is None:
+            experiences = []
+        experiences_str = "\n".join(
+            f"{i}. {exp}" for i, exp in enumerate(experiences, 1)
+        ) if experiences else "No prior experiences available."
 
         # Construct the full prompt
         # 构造完整的提示词
         prompt = self.prompt_template.format(
             retrieved_knowledge=knowledge_str,
+            prior_experiences=experiences_str,
             problem_text=problem_text
         )
 
@@ -613,6 +546,7 @@ Problem:
         print(f"{'='*80}\n")
 
 
+
 # Example usage / 
 if __name__ == "__main__":
     # Initialize scaffolder / 
@@ -632,7 +566,11 @@ if __name__ == "__main__":
     ]
 
     # Generate scaffold / 
-    scaffold = scaffolder.generate_scaffold(problem, knowledge)
+    scaffold = scaffolder.generate_scaffold(
+        problem_text=problem,
+        retrieved_knowledge=knowledge,
+        experiences=[]  # No experiences in test
+    )
 
     if scaffold:
         print("\n--- Generated Scaffold ---")

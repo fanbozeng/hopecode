@@ -1,0 +1,232 @@
+You are a Causal Structure Expert. Your task is to analyze and optimize the causal DAG structure for correctness and robustness.
+
+**Problem:**
+{problem}
+
+**Current Causal DAG:**
+{dag}
+
+**Core Philosophy:**
+The three causal patterns (Chain, Fork, Collider) are NOT just for identification - they are your **active tools** for restructuring and fixing messy DAGs. When you detect issues (skipped steps, unclear relationships, mixed-up dependencies), use these patterns as templates to rebuild the DAG correctly.
+
+**Your Tasks:**
+
+1. **Understand Causal Patterns (Your Toolkit):**
+   These are the building blocks for a well-structured causal DAG:
+   - **Chain**: A → B → C (B mediates the effect of A on C)
+     * Use this to fix skipped steps
+     * Example: `mass → force → acceleration` instead of `mass → acceleration`
+   
+   - **Fork**: A ← B → C (B is the common cause of A and C)
+     * Use this when one variable causes multiple effects
+     * Example: `temperature ← heating → pressure` (heating causes both)
+   
+   - **Collider**: A → B ← C (B is the common effect of A and C)
+     * Use this when multiple causes lead to one effect
+     * Example: `height → potential_energy ← mass` (PE depends on both)
+
+2. **Detect Structural Issues:**
+   - Cycles (loops) in the DAG
+   - Isolated nodes (not connected to other variables)
+   - **Skipped steps** (missing intermediate variables, should be a Chain)
+   - Incorrect computation order (dependencies not satisfied)
+   - Inconsistent or unclear causal patterns
+
+3. **Optimize the DAG Using Causal Patterns:**
+   - **Fix cycles**: Remove or reverse incorrect edges based on domain logic
+   - **Connect isolated nodes**: Determine if they fit into a Chain, Fork, or Collider
+   - **Fix skipped steps**: Insert intermediate variables to form proper Chains
+   - **Clarify relationships**: Restructure as explicit Fork or Collider if needed
+   - **Reorder computation_plan**: Follow topological order based on the patterns
+   - **Most Important**: Use Chain/Fork/Collider as templates to reconstruct messy DAGs
+
+**Guidelines:**
+
+- **Be Conservative**: Only make changes when you're confident they improve correctness
+- **Preserve Correctness**: Don't break working causal relationships
+- **Follow Physics/Math Logic**: Ensure causal directions match domain knowledge
+- **Maintain Consistency**: causal_graph and computation_plan must align
+
+**Common Issues to Check:**
+
+1. **Cycle Example:**
+   ```
+   A → B → C → A  (WRONG: circular dependency)
+   Fix: Remove weakest edge (e.g., C → A if it's not logically justified)
+   ```
+
+2. **Isolated Node Example:**
+   ```
+   Nodes: [A, B, C, D]
+   Edges: [A→B, B→C]
+   D is isolated
+   
+   If computation_plan shows D depends on C:
+   Fix: Add C → D
+   ```
+
+3. **Skipped Step Example (Use Chain Pattern):**
+   ```
+   Current: mass → acceleration (WRONG: skips intermediate step)
+   Pattern to Apply: Chain (A → B → C)
+   Fix: mass → force → acceleration
+   
+   Add to causal_graph:
+   - {{cause: ["mass", "g"], effect: "force", rule: "F = m * g"}}
+   - {{cause: ["force", "mass"], effect: "acceleration", rule: "a = F / m"}}
+   ```
+
+4. **Multiple Effects Example (Use Fork Pattern):**
+   ```
+   Current: 
+   - heating → temperature
+   - heating → pressure
+   Problem: Two separate edges, relationship not clear
+   
+   Pattern to Apply: Fork (A ← B → C)
+   Fix: Explicitly structure as Fork:
+   - temperature ← heating → pressure
+   
+   This clarifies: heating is the common cause of BOTH temperature and pressure
+   ```
+
+5. **Multiple Causes Example (Use Collider Pattern):**
+   ```
+   Current:
+   - mass → weight
+   - g → weight
+   Problem: Two causes but not structured clearly
+   
+   Pattern to Apply: Collider (A → B ← C)
+   Fix: Explicitly structure as Collider:
+   - mass → weight ← g
+   
+   This clarifies: weight is the common effect of BOTH mass and g
+   ```
+
+6. **Wrong Order Example:**
+   ```
+   computation_plan: [step1: calc C from A, step2: calc B from A, step3: calc D from B]
+   Problem: step3 needs B but B is calculated after C
+   Fix: Reorder to [step2, step1, step3] (topological order)
+   ```
+
+**Output Format (JSON only, no other text):**
+
+```json
+{{
+  "issues_detected": [
+    {{"type": "cycle", "description": "...", "severity": "high"}},
+    {{"type": "isolated_node", "description": "...", "severity": "medium"}},
+    {{"type": "skipped_step", "description": "...", "severity": "medium"}},
+    {{"type": "unclear_pattern", "description": "...", "severity": "low"}}
+  ],
+  "modifications_made": [
+    "Removed edge A→B to break cycle",
+    "Added edge C→D to connect isolated node D",
+    "Applied Chain pattern: Inserted intermediate variable F (mass → force → acceleration)",
+    "Applied Fork pattern: Restructured heating as common cause of temperature and pressure",
+    "Applied Collider pattern: Identified weight as common effect of mass and g"
+  ],
+  "optimized_dag": {{
+    "target_variable": "...",
+    "expected_answer_type": "...",
+    "knowns": {{...}},
+    "causal_graph": [
+      {{"cause": ["..."], "effect": "...", "rule": "..."}},
+      ...
+    ],
+    "computation_plan": [
+      {{"id": "step1", "target": "...", "inputs": [...], "description": "..."}},
+      ...
+    ],
+    "constraints_and_premises": [...],
+    "problem_model": "...",
+    "chosen_strategy": "..."
+  }},
+  "causal_patterns": {{
+    "chains": [
+      {{"path": ["A", "B", "C"], "interpretation": "B mediates A→C", "applied": "Used to fix skipped step"}}
+    ],
+    "forks": [
+      {{"common_cause": "B", "effects": ["A", "C"], "applied": "Used to clarify B causes both A and C"}}
+    ],
+    "colliders": [
+      {{"common_effect": "B", "causes": ["A", "C"], "applied": "Used to show B depends on both A and C"}}
+    ]
+  }},
+  "validation": {{
+    "is_dag": true,
+    "is_connected": true,
+    "computation_order_valid": true
+  }},
+  "reasoning": "Brief explanation of main changes and why they improve the DAG"
+}}
+```
+
+**Example:**
+
+**Problem:** "A 2kg mass falls under gravity. Find acceleration."
+
+**Current DAG (has issue):**
+```json
+{{
+  "causal_graph": [
+    {{"cause": ["mass"], "effect": "acceleration", "rule": "a = F/m"}}
+  ],
+  "computation_plan": [
+    {{"id": "step1", "target": "acceleration", "inputs": ["mass"], "description": "Calculate acceleration"}}
+  ]
+}}
+```
+
+**Your Analysis:**
+- Issue: Skipped step (mass directly to acceleration, missing force)
+- Pattern to Apply: **Chain** (mass → force → acceleration)
+- Modification: Insert intermediate variable "gravitational_force"
+
+**Your Output:**
+```json
+{{
+  "issues_detected": [
+    {{"type": "skipped_step", "description": "Missing force F between mass and acceleration", "severity": "high"}}
+  ],
+  "modifications_made": [
+    "Applied Chain pattern: mass → force → acceleration",
+    "Added intermediate variable 'gravitational_force' with rule F=mg",
+    "Updated acceleration to depend on force: a=F/m",
+    "Reordered computation_plan to follow Chain structure"
+  ],
+  "optimized_dag": {{
+    "target_variable": "acceleration",
+    "knowns": {{"mass": 2, "g": 9.8}},
+    "causal_graph": [
+      {{"cause": ["mass", "g"], "effect": "gravitational_force", "rule": "F = m * g"}},
+      {{"cause": ["gravitational_force", "mass"], "effect": "acceleration", "rule": "a = F / m"}}
+    ],
+    "computation_plan": [
+      {{"id": "step1", "target": "gravitational_force", "inputs": ["mass", "g"], "description": "Calculate gravitational force F=mg"}},
+      {{"id": "step2", "target": "acceleration", "inputs": [{{"ref": "step1"}}, "mass"], "description": "Calculate acceleration a=F/m"}}
+    ]
+  }},
+  "causal_patterns": {{
+    "chains": [
+      {{
+        "path": ["mass", "gravitational_force", "acceleration"], 
+        "interpretation": "Force mediates mass→acceleration",
+        "applied": "Used Chain pattern to fix skipped step - added force as intermediate variable"
+      }}
+    ],
+    "forks": [],
+    "colliders": []
+  }},
+  "validation": {{
+    "is_dag": true,
+    "is_connected": true,
+    "computation_order_valid": true
+  }},
+  "reasoning": "Applied Chain pattern to fix skipped step. Original DAG jumped from mass directly to acceleration, which is physically incorrect. Using the Chain pattern (mass → force → acceleration), I inserted the missing 'gravitational_force' variable. Now: mass and g cause force (F=mg), then force and mass determine acceleration (a=F/m). This is the correct causal structure."
+}}
+```
+
+Now analyze and optimize the DAG provided above. Output ONLY the JSON.

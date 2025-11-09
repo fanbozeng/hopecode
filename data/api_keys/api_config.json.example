@@ -1,0 +1,51 @@
+{
+  "generator_1": {
+    "api_key": "sk-rdsiwea...",
+    "description": "提取层1",
+    "role": "generator",
+    "notes": "Generator 1 for causal graph generation"
+  },
+  "generator_2": {
+    "api_key": "sk-zklibux...",
+    "description": "提取层2",
+    "role": "generator",
+    "notes": "Generator 2 for causal graph generation"
+  },
+  "generator_3": {
+    "api_key": "sk-bitxwpy...",
+    "description": "提取层3",
+    "role": "generator",
+    "notes": "Generator 3 for causal graph generation"
+  },
+  "critic": {
+    "api_key": "sk-xjpphrbph...",
+    "description": "critic层",
+    "role": "critic",
+    "notes": "Critic agent for fusion and refinement"
+  },
+  "reward_evaluator": {
+    "api_key": "sk-owtlzsf...",
+    "description": "顶级审批家",
+    "role": "evaluator",
+    "notes": "For reward evaluation (logic, graph quality)"
+  },
+  "math_expert": {
+    "api_key": "sk-pmvpzzi...",
+    "description": "数学家",
+    "role": "expert",
+    "notes": "Math domain expert (optional, for future use)"
+  },
+  "physics_expert": {
+    "api_key": "sk-hapbvfv...",
+    "description": "物理学家",
+    "role": "expert",
+    "notes": "Physics domain expert (optional, for future use)"
+  },
+  "causal_knowledge": {
+    "api_key": "sk-hcxaymu...",
+    "description": "因果知识家",
+    "role": "knowledge",
+    "notes": "For knowledge retrieval and rule generation (optional)"
+  }
+}
+

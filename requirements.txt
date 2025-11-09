@@ -2,6 +2,7 @@
 openai>=1.0.0           # OpenAI API client / OpenAI API 客户端
 sympy>=1.12             # Symbolic mathematics / 符号数学库
 python-dotenv>=1.0.0    # Environment variable management / 环境变量管理
+networkx>=3.0           # Graph analysis for causal structures / 图分析用于因果结构
 
 # Optional Dependencies / 可选依赖
 anthropic>=0.18.0       # Anthropic API client (alternative to OpenAI) / Anthropic API 客户端（OpenAI 替代）
