@@ -85,6 +85,7 @@ class CausalReasoningEngine:
         generator_temperature: float = 0.3,  # 新增：生成器温度
         critic_temperature: float = 0.0,  # 新增：批判者温度
         use_vector_retriever: bool = False,  # 新增：向量检索（语义相似度RAG）
+        use_grpo_experience: bool = True,  # 新增：是否加载GRPO经验（用于消融实验）
         # Step2 Enhancement options / Step2增强选项
         enable_step2_enhancement: bool = True,  # 是否启用Step2增强
         use_expert_review: bool = True,  # 是否使用专家审查
@@ -131,6 +132,7 @@ class CausalReasoningEngine:
         self.min_rules_threshold = min_rules_threshold
         self.knowledge_base_path = knowledge_base_path
         self.use_multi_agent = use_multi_agent
+        self.use_grpo_experience = use_grpo_experience  # 新增：存储是否使用GRPO经验
         self.use_vector_retriever = use_vector_retriever
         
         # Step2 Enhancement options / Step2增强选项
@@ -175,10 +177,26 @@ class CausalReasoningEngine:
             # Other components /
             # 新增：根据选项初始化单智能体或多智能体脚手架器
             if use_multi_agent:# 这个地方就是加载因果多智能体系统 其实就是加载对应的prompt
+                # 如果启用GRPO经验，加载经验管理器
+                experience_manager = None
+                if use_grpo_experience:
+                    try:
+                        from engine import GRPOExperienceManager
+                        experience_manager = GRPOExperienceManager(
+                            experience_dir="data/grpo_experiences",
+                            verbose=False
+                        )
+                        self._print(" ✓ GRPO Experience loaded")
+                        self._print(" ✓ GRPO经验已加载")
+                    except Exception as e:
+                        self._print(f" ⚠️  Failed to load GRPO experiences: {e}")
+                        self._print(f" ⚠️  GRPO经验加载失败：{e}")
+                
                 self.scaffolder = MultiAgentScaffolder(
                     num_generators=num_generators,
                     generator_temperature=generator_temperature,
                     critic_temperature=critic_temperature,
+                    experience_manager=experience_manager,  # 传递经验管理器（可能为None）
                     use_separate_apis=True  # Use separate API for each generator and critic
                 )
                 self._print(f" 🤖 Using Multi-Agent Scaffolder ({num_generators} generators + 1 critic)")

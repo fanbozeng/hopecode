@@ -1,0 +1,20 @@
+{examples}
+
+Now solve this problem:
+
+Problem: {problem}
+
+Let's think step by step:
+
+IMPORTANT: You MUST format your response as follows:
+
+\reasoningbox{{
+[Put your reasoning here]
+}}
+
+\answerbox{{
+[Put your final answer here]
+}}
+
+Now solve the problem above.
+

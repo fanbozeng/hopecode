@@ -81,5 +81,102 @@
     "rule": "Proportional Relationship: White = 0.5 × Blue - Describes the relationship where the amount of white fiber (White) is half the amount of blue fiber (Blue); used in ratio and proportion problems",
     "category": "arithmetic",
     "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "initial cost",
+      "repairs",
+      "total cost"
+    ],
+    "rule": "Total Cost: C_total = C_initial + C_repairs - Represents the total cost (C_total) as the sum of the initial cost (C_initial) and the cost of repairs (C_repairs); used in financial calculations",
+    "category": "finance",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "value increase",
+      "percentage increase"
+    ],
+    "rule": "Percentage Increase: ΔV = V_initial × (P / 100) - Calculates the increase in value (ΔV) based on the initial value (V_initial) and the percentage increase (P in %); used to determine the new value after a percentage increase",
+    "category": "finance",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "profit",
+      "selling price",
+      "total cost"
+    ],
+    "rule": "Profit: P = V_selling - C_total - Calculates the profit (P) as the difference between the selling price (V_selling) and the total cost (C_total); a fundamental concept in business and finance",
+    "category": "finance",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "distance",
+      "sprints",
+      "weekly"
+    ],
+    "rule": "Total Distance Formula: D_total = n × d × w - Calculates the total distance (D_total in meters) run over a week by multiplying the number of sprints per session (n), the distance per sprint (d in meters), and the number of sessions per week (w).",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "sprints",
+      "session"
+    ],
+    "rule": "Sprints per Session: n_session = n - Indicates the number of sprints (n_session) performed in each session, which is a constant value (n) for each session.",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "sessions",
+      "week"
+    ],
+    "rule": "Sessions per Week: w_sessions = w - Represents the number of sessions (w_sessions) conducted in a week, which is a constant value (w) for the weekly routine.",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "feed per meal",
+      "total feed",
+      "meals"
+    ],
+    "rule": "Feed per Meal: F_i = T / k - Describes the amount of feed (F_i in cups) given in each meal, where T is the total daily feed (in cups) and k is the number of meals per day; used to distribute the total feed evenly across meals",
+    "category": "algebra",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "discount",
+      "percentage",
+      "price"
+    ],
+    "rule": "Percentage Discount: Discounted Price = Original Price × (1 - Discount Percentage) - Calculates the price after a percentage discount (Discount Percentage) is applied to the original price (Original Price in dollars); used in pricing and sales",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "sequence",
+      "alternating",
+      "pattern"
+    ],
+    "rule": "Alternating Sequence: a_1, a_2, a_3, ... where a_2n = k × a_1 - Describes a sequence where every second term (a_2n) is a constant multiple (k) of the first term (a_1); used in pattern recognition and series summation",
+    "category": "algebra",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "sum",
+      "series",
+      "arithmetic"
+    ],
+    "rule": "Arithmetic Series Sum: S_n = (n/2) × (a_1 + a_n) - Formula for the sum of the first n terms of an arithmetic series, where S_n is the sum, a_1 is the first term, a_n is the nth term, and n is the number of terms; used in summing sequences",
+    "category": "algebra",
+    "source": "ai_retriever"
   }
 ]
