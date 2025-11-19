@@ -258,36 +258,46 @@ class CausalReasoningEngine:
                 try:
                     # Try to get expert API key (use math_expert as unified expert)
                     expert_key = api_manager.get_api_key('math_expert')
+                    self._print(f"   🔑 Retrieved expert API key: {expert_key[:20]}..." if expert_key else "   ⚠️  No expert key found")
                     
                     # Create LLM client for unified expert
                     from engine.scaffolder import LLMClient
+                    import os
                     if expert_key:
-                        expert_client = LLMClient()  # Unified expert (Math+Physics)
-                    
-                    self._print("   ✓ Unified expert client initialized (Math+Physics)")
+                        # Set API key to environment variable (LLMClient reads from env)
+                        os.environ['SILICONFLOW_API_KEY'] = expert_key
+                        expert_client = LLMClient()  # No api_key parameter
+                        self._print("   ✓ Unified expert client initialized (Math+Physics)")
+                    else:
+                        self._print("   ⚠️  No 'math_expert' API key found, expert review will be skipped")
                 except Exception as e:
-                    self._print(f"   ⚠️  Expert client initialization skipped: {e}")
+                    self._print(f"   ⚠️  Expert client initialization failed: {e}")
+                    import traceback
+                    traceback.print_exc()
             
             # Initialize causal expert client
             if self.use_structure_optimization:
                 try:
                     causal_key = api_manager.get_api_key('causal_knowledge')
+                    self._print(f"   🔑 Retrieved causal API key: {causal_key[:20]}..." if causal_key else "   ⚠️  No causal key found")
+                    
                     if causal_key:
                         from engine.scaffolder import LLMClient
-                        causal_expert_client = LLMClient()
-                        # Set API key
-                        if hasattr(causal_expert_client, 'client'):
-                            causal_expert_client.client.api_key = causal_key
+                        import os
+                        # Set API key to environment variable (LLMClient reads from env)
+                        os.environ['SILICONFLOW_API_KEY'] = causal_key
+                        causal_expert_client = LLMClient()  # No api_key parameter
                         self._print("   ✓ Causal expert client initialized")
                     else:
                         self._print("   ⚠️  No 'causal_knowledge' API key found, structure optimization will be skipped")
-                        self._print("   ⚠️  Tip: Add CAUSAL_KNOWLEDGE_API=your_key to .env file")
                 except Exception as e:
                     self._print(f"   ⚠️  Causal expert client initialization failed: {e}")
+                    import traceback
+                    traceback.print_exc()
             
             # Initialize Stage 1: Domain Expert Reviewer (Unified Math+Physics Expert)
             expert_reviewer = None
-            if self.use_expert_review:
+            if self.use_expert_review and expert_client is not None:
                 expert_reviewer = DomainExpertReviewer(
                     math_expert_client=expert_client,
                     physics_expert_client=expert_client,  # Same client for both
@@ -307,7 +317,7 @@ class CausalReasoningEngine:
             
             # Initialize Stage 3: Causal Structure Optimizer
             structure_optimizer = None
-            if self.use_structure_optimization:
+            if self.use_structure_optimization and causal_expert_client is not None:
                 structure_optimizer = CausalStructureOptimizer(
                     causal_expert_client=causal_expert_client,
                     verbose=self.verbose

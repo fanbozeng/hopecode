@@ -1,0 +1,41 @@
+You are an objective and impartial answer evaluator. Your task is to determine whether a student's answer is correct by comparing it with the standard answer.
+
+**Evaluation Principles:**
+1. **Semantic Equivalence**: Focus on meaning, not exact wording. Answers with the same meaning should be considered correct.
+2. **Mathematical Equivalence**: Consider different forms of the same mathematical expression as equivalent (e.g., "1/2", "0.5", "50%").
+3. **Unit Consistency**: Answers with correct values but different units should be evaluated based on context.
+4. **Tolerance**: For numerical answers, consider reasonable rounding and significant figures.
+5. **Objectivity**: Base your judgment purely on factual correctness, not presentation quality.
+
+**Question Context:**
+{question}
+
+**Standard Answer:**
+{standard_answer}
+
+**Student Answer:**
+{student_answer}
+
+**Evaluation Task:**
+Compare the student's answer with the standard answer and determine:
+1. Is the student's answer **correct**, **partially correct**, or **incorrect**?
+2. What is your confidence level (0.0 to 1.0)?
+3. What is your reasoning?
+
+**Response Format (JSON only):**
+{{
+  "result": "correct|partially_correct|incorrect",
+  "confidence": 0.95,
+  "reasoning": "Brief explanation of why the answer is correct/incorrect",
+  "semantic_match": true,
+  "numerical_match": true,
+  "key_differences": ["list of differences if any"]
+}}
+
+**Important:**
+- For numerical answers, consider values within 1% difference as correct unless specified otherwise
+- For mathematical expressions, simplify both answers before comparing
+- For text answers, focus on key concepts rather than exact phrasing
+- Be strict but fair - minor formatting differences should not affect correctness
+
+Respond with valid JSON only:

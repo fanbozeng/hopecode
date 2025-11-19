@@ -48,8 +48,8 @@ class ResultSummarizer:
     
     def __init__(
         self,
-        results_dir: str = "comparasion/results",
-        output_dir: str = "comparasion/summary",
+        results_dir: str = "results",
+        output_dir: str = "summary",
         verbose: bool = True
     ):
         """
@@ -666,14 +666,14 @@ Examples / 示例:
     parser.add_argument(
         '--results-dir',
         type=str,
-        default='comparasion/results',
+        default='results',
         help='结果目录路径 / Results directory path'
     )
     
     parser.add_argument(
         '--output-dir',
         type=str,
-        default='comparasion/summary',
+        default='summary',
         help='输出目录路径 / Output directory path'
     )
     

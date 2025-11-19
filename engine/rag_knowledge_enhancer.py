@@ -313,15 +313,16 @@ Output JSON with: analysis, injections, knowledge_enhanced_dag, summary.
             try:
                 # Combine problem + gaps for context-aware retrieval
                 query = f"{problem_text}\n\nKnowledge needed: {', '.join(gap_queries)}"
-                rules = self.ai_retriever.retrieve_rules(query, max_rules=5)
+                # Correct method is extract_knowledge, which returns a list of strings
+                rules = self.ai_retriever.extract_knowledge(query)
                 
                 # Convert to standard format
-                for rule in rules:
+                for rule_text in rules:
                     knowledge_rules.append({
-                        'rule': rule.rule if hasattr(rule, 'rule') else str(rule),
+                        'rule': rule_text,
                         'source': 'AI_retriever',
-                        'confidence': rule.confidence if hasattr(rule, 'confidence') else 0.8,
-                        'category': rule.category if hasattr(rule, 'category') else 'general'
+                        'confidence': 0.85,  # Assign a default confidence
+                        'category': 'ai_generated'
                     })
             except Exception as e:
                 self._print(f"  ⚠️  AI retrieval failed: {e}")
@@ -804,15 +805,16 @@ Output JSON with: analysis, injections, knowledge_enhanced_dag, summary.
             try:
                 # Combine problem + gaps for context-aware retrieval
                 query = f"{problem_text}\n\nKnowledge needed: {', '.join(gap_queries)}"
-                rules = self.ai_retriever.retrieve_rules(query, max_rules=5)
+                # Correct method is extract_knowledge, which returns a list of strings
+                rules = self.ai_retriever.extract_knowledge(query)
                 
                 # Convert to standard format
-                for rule in rules:
+                for rule_text in rules:
                     knowledge_rules.append({
-                        'rule': rule.rule if hasattr(rule, 'rule') else str(rule),
+                        'rule': rule_text,
                         'source': 'AI_retriever',
-                        'confidence': rule.confidence if hasattr(rule, 'confidence') else 0.8,
-                        'category': rule.category if hasattr(rule, 'category') else 'general'
+                        'confidence': 0.85,  # Assign a default confidence
+                        'category': 'ai_generated'
                     })
             except Exception as e:
                 self._print(f"  ⚠️  AI retrieval failed: {e}")

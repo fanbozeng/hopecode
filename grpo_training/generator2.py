@@ -40,8 +40,9 @@ def load_training_problems(dataset: str = "aime2024", max_problems: int = None) 
     Load training problems from dataset.
     
     Args:
-        dataset: Dataset name ('aime2024', 'aime2025', 'physics')
+        dataset: Dataset name ('aime2024', 'aime2025', 'physics', 'mixed')
         max_problems: Maximum number of problems to load
+                     For 'mixed': total problems across all datasets
     
     Returns:
         List of problems with format: [{"id": str, "text": str, "answer": str}, ...]
@@ -51,7 +52,66 @@ def load_training_problems(dataset: str = "aime2024", max_problems: int = None) 
     # Get absolute path to project root
     project_root = Path(__file__).parent.parent
     
-    if dataset == "aime2024":
+    if dataset == "mixed":
+        # Mixed dataset: AIME2024 + AIME2025 + Physics
+        # Distribute evenly across all three datasets
+        problems_per_dataset = max_problems // 3 if max_problems else None
+        
+        # Load from AIME 2024
+        aime2024_path = project_root / "dataset" / "AIME_2024" / "aime_2024_problems.jsonl"
+        if aime2024_path.exists():
+            with open(aime2024_path, 'r', encoding='utf-8') as f:
+                for i, line in enumerate(f):
+                    if problems_per_dataset and i >= problems_per_dataset:
+                        break
+                    data = json.loads(line.strip())
+                    problems.append({
+                        'id': f"aime2024_{i+1:03d}",
+                        'text': data.get('Problem', data.get('problem', '')),
+                        'answer': str(data.get('Answer', data.get('answer', '')))
+                    })
+        
+        # Load from AIME 2025
+        aime2025_paths = [
+            project_root / "dataset" / "AIME2025" / "aime_2025_problems.jsonl",
+            project_root / "dataset" / "AIME2025" / "aime2025-I.jsonl"
+        ]
+        aime2025_count = 0
+        for dataset_path in aime2025_paths:
+            if dataset_path.exists():
+                with open(dataset_path, 'r', encoding='utf-8') as f:
+                    for i, line in enumerate(f):
+                        if problems_per_dataset and aime2025_count >= problems_per_dataset:
+                            break
+                        data = json.loads(line.strip())
+                        problems.append({
+                            'id': f"aime2025_{aime2025_count+1:03d}",
+                            'text': data.get('question', data.get('problem', '')),
+                            'answer': str(data.get('answer', ''))
+                        })
+                        aime2025_count += 1
+                break
+        
+        # Load from Physics
+        physics_path = project_root / "dataset" / "physics_problems.json"
+        if physics_path.exists():
+            with open(physics_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                for i, item in enumerate(data):
+                    if problems_per_dataset and i >= problems_per_dataset:
+                        break
+                    problems.append({
+                        'id': f"physics_{i+1:03d}",
+                        'text': item.get('problem', ''),
+                        'answer': str(item.get('answer', ''))
+                    })
+        
+        print(f"  ✓ Mixed dataset loaded: {len(problems)} problems")
+        print(f"    - AIME 2024: ~{problems_per_dataset if problems_per_dataset else 'all'} problems")
+        print(f"    - AIME 2025: ~{problems_per_dataset if problems_per_dataset else 'all'} problems")
+        print(f"    - Physics: ~{problems_per_dataset if problems_per_dataset else 'all'} problems")
+    
+    elif dataset == "aime2024":
         dataset_path = project_root / "dataset" / "AIME_2024" / "aime_2024_problems.jsonl"
         if dataset_path.exists():
             with open(dataset_path, 'r', encoding='utf-8') as f:
@@ -247,8 +307,8 @@ def main():
     parser = argparse.ArgumentParser(description='Train Generator 2 independently')
     
     parser.add_argument('--dataset', type=str, default='aime2024',
-                       choices=['aime2024', 'aime2025', 'physics'],
-                       help='Training dataset')
+                       choices=['aime2024', 'aime2025', 'physics', 'mixed'],
+                       help='Training dataset (use "mixed" for AIME2024+AIME2025+Physics)')
     
     parser.add_argument('--max-problems', type=int, default=None,
                        help='Maximum number of problems (None for all)')

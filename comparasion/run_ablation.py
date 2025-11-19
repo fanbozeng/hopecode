@@ -56,7 +56,7 @@ class AblationRunner:
     
     VALID_ABLATIONS = ['full', 'woGRPO', 'woMultiAgent', 'woEnhancement']
     
-    def __init__(self, ablation_type: str, output_dir: str = "comparasion/results/ablation", verbose: bool = True):
+    def __init__(self, ablation_type: str, output_dir: str = "results/ablation", verbose: bool = True):
         """
         初始化消融实验运行器
         
@@ -501,7 +501,7 @@ def main():
     parser.add_argument(
         '--output-dir',
         type=str,
-        default='comparasion/results/ablation',
+        default='results/ablation',
         help='Output directory for results'
     )
     

@@ -77,12 +77,9 @@ class StructuredAnswerExtractor:
         Returns:
             提取的答案，如果没找到返回None
         """
-        # 尝试匹配 \answerbox{...}
-        pattern = r'\\answerbox\s*\{([^}]*)\}'
-        match = re.search(pattern, response, re.DOTALL | re.IGNORECASE)
-        
-        if match:
-            answer = match.group(1).strip()
+        # 尝试匹配 \answerbox{...}，使用平衡括号匹配
+        answer = StructuredAnswerExtractor._extract_latex_box(response, 'answerbox')
+        if answer:
             return answer
         
         # 回退：尝试旧的提取方法
@@ -99,33 +96,106 @@ class StructuredAnswerExtractor:
         Returns:
             提取的推理过程，如果没找到返回None
         """
-        # 尝试匹配 \reasoningbox{...}
-        pattern = r'\\reasoningbox\s*\{([^}]*)\}'
-        match = re.search(pattern, response, re.DOTALL | re.IGNORECASE)
-        
-        if match:
-            reasoning = match.group(1).strip()
+        # 尝试匹配 \reasoningbox{...}，使用平衡括号匹配
+        reasoning = StructuredAnswerExtractor._extract_latex_box(response, 'reasoningbox')
+        if reasoning:
             return reasoning
         
         # 回退：返回整个response（去除answerbox部分）
-        answer_pattern = r'\\answerbox\s*\{[^}]*\}'
-        reasoning = re.sub(answer_pattern, '', response, flags=re.DOTALL | re.IGNORECASE)
-        return reasoning.strip()
+        # 使用平衡括号匹配来移除answerbox
+        cleaned = StructuredAnswerExtractor._remove_latex_box(response, 'answerbox')
+        return cleaned.strip() if cleaned else response.strip()
     
     @staticmethod
     def extract_both(response: str) -> Tuple[Optional[str], Optional[str]]:
         """
-        同时提取答案和推理过程
+        同时提取推理过程和答案
         
         Args:
             response: LLM响应
         
         Returns:
-            Tuple of (answer, reasoning)
+            Tuple of (reasoning, answer)
         """
-        answer = StructuredAnswerExtractor.extract_answer(response)
         reasoning = StructuredAnswerExtractor.extract_reasoning(response)
-        return answer, reasoning
+        answer = StructuredAnswerExtractor.extract_answer(response)
+        return reasoning, answer
+    
+    @staticmethod
+    def _extract_latex_box(text: str, box_name: str) -> Optional[str]:
+        """
+        提取LaTeX box内容，支持嵌套的大括号
+        
+        Args:
+            text: 文本内容
+            box_name: box名称（如 'answerbox', 'reasoningbox'）
+            
+        Returns:
+            提取的内容，如果没找到返回None
+        """
+        # 查找 \boxname{ 的位置
+        pattern = rf'\\{box_name}\s*\{{'
+        match = re.search(pattern, text, re.IGNORECASE)
+        
+        if not match:
+            return None
+        
+        # 从匹配位置开始，手动匹配平衡的大括号
+        start = match.end()
+        brace_count = 1
+        i = start
+        
+        while i < len(text) and brace_count > 0:
+            if text[i] == '{':
+                brace_count += 1
+            elif text[i] == '}':
+                brace_count -= 1
+            i += 1
+        
+        if brace_count == 0:
+            # 找到了匹配的闭合括号
+            content = text[start:i-1]
+            return content.strip()
+        
+        return None
+    
+    @staticmethod
+    def _remove_latex_box(text: str, box_name: str) -> str:
+        """
+        从文本中移除LaTeX box
+        
+        Args:
+            text: 文本内容
+            box_name: box名称
+            
+        Returns:
+            移除box后的文本
+        """
+        # 查找 \boxname{ 的位置
+        pattern = rf'\\{box_name}\s*\{{'
+        match = re.search(pattern, text, re.IGNORECASE)
+        
+        if not match:
+            return text
+        
+        # 从匹配位置开始，手动匹配平衡的大括号
+        box_start = match.start()
+        start = match.end()
+        brace_count = 1
+        i = start
+        
+        while i < len(text) and brace_count > 0:
+            if text[i] == '{':
+                brace_count += 1
+            elif text[i] == '}':
+                brace_count -= 1
+            i += 1
+        
+        if brace_count == 0:
+            # 移除整个box
+            return text[:box_start] + text[i:]
+        
+        return text
     
     @staticmethod
     def _fallback_extract(response: str) -> Optional[str]:

@@ -178,5 +178,159 @@
     "rule": "Arithmetic Series Sum: S_n = (n/2) × (a_1 + a_n) - Formula for the sum of the first n terms of an arithmetic series, where S_n is the sum, a_1 is the first term, a_n is the nth term, and n is the number of terms; used in summing sequences",
     "category": "algebra",
     "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "electric potential",
+      "voltage",
+      "internal resistance",
+      "current"
+    ],
+    "rule": "Internal Resistance Formula: r = (E - V) / I - Relates the internal resistance (r in ohms) of a power source to the electromotive force (E in volts), terminal voltage (V in volts), and current (I in amperes); used to determine the internal resistance of a power source",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "current",
+      "charge",
+      "time"
+    ],
+    "rule": "Current Definition: I = Q / t - Defines current (I in amperes) as the rate of flow of electric charge (Q in coulombs) over time (t in seconds); fundamental in electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "electric potential",
+      "voltage",
+      "current",
+      "resistance"
+    ],
+    "rule": "Ohm's Law: V = I × R - Relates voltage (V in volts), current (I in amperes), and resistance (R in ohms); fundamental in electrical circuits for relating these quantities",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "energy",
+      "charge",
+      "voltage"
+    ],
+    "rule": "Electrical Energy: W = Q × V - Calculates the electrical energy (W in joules) transferred by a charge (Q in coulombs) through a potential difference (V in volts); used to determine the energy conversion in circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "electromotive force",
+      "voltage",
+      "current",
+      "internal resistance"
+    ],
+    "rule": "Terminal Voltage: V = E - I × r - Relates the terminal voltage (V in volts) of a power source to the electromotive force (E in volts), current (I in amperes), and internal resistance (r in ohms); used to understand voltage drop in circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "electric potential",
+      "voltage",
+      "emf",
+      "terminal voltage"
+    ],
+    "rule": "Electromotive Force and Terminal Voltage: ε = V + Ir - Relates the electromotive force (ε in volts) of a power source to the terminal voltage (V in volts) and the voltage drop across the internal resistance (Ir in volts); used to analyze the behavior of real power sources",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "energy",
+      "charge",
+      "voltage"
+    ],
+    "rule": "Electrical Energy: W = Q × V - Describes the electrical energy (W in joules) transferred by a charge (Q in coulombs) through a potential difference (V in volts); applies to the calculation of energy in electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "current",
+      "charge",
+      "time"
+    ],
+    "rule": "Relationship between Charge, Current, and Time: Q = I × t - Relates the charge (Q in coulombs) that flows through a conductor to the current (I in amperes) and the time (t in seconds); fundamental in electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "power",
+      "current",
+      "resistance"
+    ],
+    "rule": "Power Dissipation in Resistors: P = I² × R - Describes the power (P in watts) dissipated in a resistor as heat, given the current (I in amperes) through the resistor and its resistance (R in ohms); applies to the analysis of power loss in circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "voltage",
+      "current",
+      "resistance"
+    ],
+    "rule": "Ohm's Law: V = I × R - Relates the voltage (V in volts) across a resistor to the current (I in amperes) through it and its resistance (R in ohms); fundamental in the analysis of electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "voltage",
+      "current",
+      "resistance"
+    ],
+    "rule": "Ohm's Law: V = I × R - Relates voltage (V in volts), current (I in amperes), and resistance (R in ohms); fundamental in electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "voltage",
+      "internal resistance",
+      "emf"
+    ],
+    "rule": "Terminal Voltage: V_t = E - I × r - Describes the voltage across the terminals of a real battery (V_t in volts) in terms of the electromotive force (E in volts), current (I in amperes), and internal resistance (r in ohms); accounts for voltage drop due to internal resistance",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "energy",
+      "charge",
+      "voltage"
+    ],
+    "rule": "Electrical Energy: W = Q × V - Relates the electrical energy (W in joules) transferred to the work done by a charge (Q in coulombs) moving through a potential difference (V in volts); used to calculate energy conversion in circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "voltage",
+      "current",
+      "loop"
+    ],
+    "rule": "Kirchhoff's Voltage Law (KVL): ΣV = 0 - States that the sum of all voltages around a closed loop in a circuit is zero; used to analyze circuits and solve for unknown voltages or currents",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "internal resistance",
+      "emf",
+      "voltage"
+    ],
+    "rule": "Internal Resistance Calculation: r = (E - V_t) / I - Formula to calculate the internal resistance (r in ohms) of a battery using the electromotive force (E in volts), terminal voltage (V_t in volts), and current (I in amperes); useful for understanding battery behavior",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
   }
 ]

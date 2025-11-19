@@ -2,13 +2,19 @@
 Causal Evaluation Module for Step3
 Step3 因果评估模块
 
-This module implements Counterfactual Faithfulness (CF) evaluation:
-本模块实现反事实忠诚度（CF）评估：
+This module implements two independent evaluation metrics:
+本模块实现两个独立的评估指标：
 
-CF = (Causal Intervention Score + Logic Quality + Graph Quality) / 3
+1. CF (Counterfactual Faithfulness) - 反事实忠诚度
+   CF = (Causal Intervention Score + Logic Quality + Graph Quality) / 3
+   
+2. AF (Abductive Faithfulness) - 溯因忠诚度
+   AF = Abductive Reasoning Score
 
 Components:
 组件：
+
+【CF Components - CF组件】
 1. Causal Intervention Evaluator - 因果干预评估器
    - Uses do-calculus to evaluate node importance
    - 使用do算子评估节点重要性
@@ -18,8 +24,13 @@ Components:
    - 借鉴自RewardEvaluator
    
 3. Graph Quality Evaluator - DAG图质量评估
-   - Borrowed from RewardEvaluator  
+   - Borrowed from RewardEvaluator
    - 借鉴自RewardEvaluator
+
+【AF Component - AF组件】
+4. Abductive Reasoning Evaluator - 溯因推理评估器
+   - Tests reasoning reversibility (from effect to cause)
+   - 测试推理可逆性（从果到因）
 """
 
 import json
@@ -104,14 +115,16 @@ If we perform a causal intervention do({node_name} | other_variables) in this DA
 3. Evaluate the impact: How critical is this node for reaching the correct result?
 4. **Do NOT calculate actual numbers** - only think about the causal influence magnitude
 
-**Scoring Guidelines:**
-- **High impact** (score near {max_score}): Node is critical, removing it would break the reasoning chain or significantly alter the result
-- **Medium impact** (score around {max_score}/2): Node contributes meaningfully but result could be approximated without it
-- **Low impact** (score near 0): Node is peripheral or redundant, minimal effect on final result
+**Scoring Guidelines (5-level scale):**
+- **critical** (score: 0.8-{max_score}): Node is absolutely essential, removing it would completely break the reasoning chain or make the result impossible to determine
+- **high** (score: 0.6-0.8): Node is very important, removing it would significantly alter the result or require major adjustments
+- **medium** (score: 0.4-0.6): Node contributes meaningfully, but the result could still be approximated or derived through alternative paths
+- **low** (score: 0.2-0.4): Node has minor influence, removing it would have limited impact on the final result
+- **minimal** (score: 0.0-0.2): Node is peripheral or redundant, negligible effect on the final result
 
 **Output JSON Format:**
 {{
-  "impact_level": "high" | "medium" | "low",
+  "impact_level": "critical" | "high" | "medium" | "low" | "minimal",
   "score": 0.0 to {max_score},
   "reasoning": "Explain why this node has this level of impact on the causal chain",
   "causal_path": "Describe the causal path from this node to the target (if exists)"
@@ -360,7 +373,7 @@ class AbductiveReasoningEvaluator:
     
     def _get_default_abductive_prompt(self) -> str:
         """Default abductive reasoning evaluation prompt"""
-        return """You are a causal reasoning expert. Evaluate if the reasoning chain is reversible (abductive reasoning).
+        return """You are a causal reasoning expert evaluating abductive reasoning capabilities.
 
 **Problem:**
 {problem}
@@ -368,28 +381,38 @@ class AbductiveReasoningEvaluator:
 **Causal DAG:**
 {dag}
 
-**Target Variable (Result):**
-{target_variable}
+**EVALUATION SETUP:**
+This is a hypothetical scenario to test backward reasoning from effects to causes.
 
-**Removed Cause Node:**
+**Hidden Variable (to be inferred):**
 {removed_node}
 
-**Given Information:**
-- Result: {target_variable} = {target_value}
-- Other nodes: {other_nodes}
+**Available Information:**
+- Target Variable (Result): {target_variable} = {target_value}
+- Other Known Nodes: {other_nodes}
 
-**Question:**
-Can the reasoning chain still hold if we remove {removed_node} and try to work backwards from the result?
+**Task:**
+Using ONLY the following information:
+1. The causal DAG structure
+2. The value of the target variable (result)
+3. The values of other nodes (excluding {removed_node})
 
-In other words: Given the result and all other nodes EXCEPT {removed_node}, can we logically infer or verify the reasoning chain?
+Determine whether you can logically infer or deduce the value of "{removed_node}".
 
-**Output JSON Format:**
+**Critical Instructions:**
+- Treat "{removed_node}" as UNKNOWN, even if it appears in the original problem statement
+- This is a counterfactual reasoning test: assume the value of "{removed_node}" was never provided
+- Attempt to work backwards from the observed result and intermediate nodes to deduce "{removed_node}"
+- Only mark "can_infer: true" if you can definitively determine the value through logical deduction
+
+**Output Format (JSON only):**
 {{
-  "holds": true | false,
-  "reasoning": "Explain why the reasoning chain holds or doesn't hold when {removed_node} is removed"
+  "can_infer": true | false,
+  "inferred_value": "the deduced value of {removed_node}, or null if cannot infer",
+  "reasoning": "detailed explanation of the deduction process or why inference is impossible"
 }}
 
-Output ONLY the JSON.
+Output ONLY valid JSON.
 """
     
     def evaluate_abductive(
@@ -441,21 +464,21 @@ Output ONLY the JSON.
         for i, removed_node in enumerate(cause_nodes, 1):
             self._print(f"\n[{i}/{len(cause_nodes)}] Testing with {removed_node} removed...")
             
-            holds, test_report = self._test_single_cause(
+            can_infer, test_report = self._test_single_cause(
                 dag, problem_text, removed_node, target_variable, cause_nodes
             )
             
-            score = 1.0 if holds else 0.0
+            score = 1.0 if can_infer else 0.0
             total_score += score
             
             node_tests.append({
                 'removed_node': removed_node,
-                'holds': holds,
+                'can_infer': can_infer,
                 'score': score,
                 'report': test_report
             })
             
-            status = "✓ Holds" if holds else "✗ Doesn't hold"
+            status = "✓ Can infer" if can_infer else "✗ Cannot infer"
             self._print(f"  {status} (score: {score})")
         
         # Calculate average
@@ -492,10 +515,10 @@ Output ONLY the JSON.
         Returns:
             Tuple of (holds, test_report)
         """
-        # If no LLM, use default (assume holds)
+        # If no LLM, return failure (cannot evaluate without LLM)
         if not self.llm_client:
-            self._print("  ⚠️  No LLM available, assuming holds")
-            return True, {'method': 'default', 'reason': 'no_llm'}
+            self._print("  ⚠️  No LLM available, cannot evaluate")
+            return False, {'method': 'default', 'reason': 'no_llm'}
         
         try:
             # Prepare other nodes (all causes except removed one)
@@ -522,15 +545,16 @@ Output ONLY the JSON.
             result = self._parse_abductive_response(response)
             
             if result:
-                holds = result.get('holds', True)
-                return holds, result
+                # Use the new 'can_infer' field from updated prompt
+                can_infer = result.get('can_infer', False)
+                return can_infer, result
             else:
-                self._print("  ⚠️  Failed to parse LLM response, assuming holds")
-                return True, {'method': 'default', 'reason': 'parse_failed'}
+                self._print("  ⚠️  Failed to parse LLM response")
+                return False, {'method': 'default', 'reason': 'parse_failed', 'raw_response': response[:200]}
         
         except Exception as e:
             self._print(f"  ⚠️  Error testing abductive reasoning: {e}")
-            return True, {'method': 'default', 'reason': f'error: {str(e)}'}
+            return False, {'method': 'default', 'reason': f'error: {str(e)}'}
     
     def _extract_target_value(self, dag: Dict[str, Any]) -> str:
         """Extract target value from computation_plan if available"""
@@ -614,10 +638,10 @@ class CausalFaithfulnessEvaluator:
         dag: Dict[str, Any],
         problem_text: str,
         reasoning_trajectory: str = ""
-    ) -> Tuple[float, Dict[str, Any]]:
+    ) -> Tuple[float, float, Dict[str, Any]]:
         """
-        Evaluate Counterfactual Faithfulness (CF) for a single problem
-        评估单个问题的反事实忠诚度（CF）
+        Evaluate Counterfactual Faithfulness (CF) and Abductive Faithfulness (AF) for a single problem
+        评估单个问题的反事实忠诚度（CF）和溯因忠诚度（AF）
         
         Args:
             dag: Causal DAG structure
@@ -625,28 +649,29 @@ class CausalFaithfulnessEvaluator:
             reasoning_trajectory: Reasoning steps (optional, for logic evaluation)
         
         Returns:
-            Tuple of (cf_score, detailed_report)
-            - cf_score: 0.0-1.0
-            - detailed_report: Breakdown of three components
+            Tuple of (cf_score, af_score, detailed_report)
+            - cf_score: 0.0-1.0 (Counterfactual Faithfulness)
+            - af_score: 0.0-1.0 (Abductive Faithfulness)
+            - detailed_report: Breakdown of all components
         """
         self._print("\n" + "="*80)
-        self._print("COUNTERFACTUAL FAITHFULNESS (CF) EVALUATION")
-        self._print("反事实忠诚度（CF）评估")
+        self._print("CAUSAL EVALUATION: CF & AF")
+        self._print("因果评估：反事实忠诚度（CF）& 溯因忠诚度（AF）")
         self._print("="*80)
         
-        # 1. Causal Intervention Score
+        # 1. Causal Intervention Score (for CF)
         self._print("\n[1/4] Evaluating Causal Intervention...")
         intervention_score, intervention_report = self.intervention_evaluator.evaluate_intervention(
             dag, problem_text
         )
         
-        # 2. Abductive Reasoning Score
+        # 2. Abductive Reasoning Score (for AF)
         self._print("\n[2/4] Evaluating Abductive Reasoning...")
         abductive_score, abductive_report = self.abductive_evaluator.evaluate_abductive(
             dag, problem_text
         )
         
-        # 3. Logic Quality Score
+        # 3. Logic Quality Score (for CF)
         self._print("\n[3/4] Evaluating Logic Quality...")
         if reasoning_trajectory:
             logic_score = self.reward_evaluator.evaluate_logic(
@@ -657,26 +682,33 @@ class CausalFaithfulnessEvaluator:
             logic_score = 0.5
         self._print(f"  Logic Score: {logic_score:.4f}")
         
-        # 4. Graph Quality Score
+        # 4. Graph Quality Score (for CF)
         self._print("\n[4/4] Evaluating Graph Quality...")
         graph_score = self.reward_evaluator.evaluate_graph(dag)
         self._print(f"  Graph Score: {graph_score:.4f}")
         
-        # Compute CF (now only 3 components)
+        # Compute CF (3 components: intervention + logic + graph)
         cf_score = (intervention_score + logic_score + graph_score) / 3.0
         
+        # AF is the abductive score itself
+        af_score = abductive_score
+        
         self._print("\n" + "="*80)
-        self._print("CF SCORE BREAKDOWN:")
+        self._print("EVALUATION RESULTS:")
+        self._print("\n【CF - Counterfactual Faithfulness】")
         self._print(f"  Causal Intervention:  {intervention_score:.4f} (33.3%)")
         self._print(f"  Logic Quality:        {logic_score:.4f} (33.3%)")
         self._print(f"  Graph Quality:        {graph_score:.4f} (33.3%)")
         self._print(f"  ─────────────────────────────────────")
-        self._print(f"  CF Total:             {cf_score:.4f}")
+        self._print(f"  CF Score:             {cf_score:.4f}")
+        self._print("\n【AF - Abductive Faithfulness】")
+        self._print(f"  AF Score:             {af_score:.4f}")
         self._print("="*80)
         
         detailed_report = {
             'cf_score': cf_score,
-            'components': {
+            'af_score': af_score,
+            'cf_components': {
                 'causal_intervention': {
                     'score': intervention_score,
                     'weight': 1/3,
@@ -691,21 +723,24 @@ class CausalFaithfulnessEvaluator:
                     'weight': 1/3
                 }
             },
-            'abductive_reasoning': {
-                'score': abductive_score,
-                'details': abductive_report
+            'af_component': {
+                'abductive_reasoning': {
+                    'score': abductive_score,
+                    'weight': 1.0,
+                    'details': abductive_report
+                }
             }
         }
         
-        return cf_score, detailed_report
+        return cf_score, af_score, detailed_report
     
     def evaluate_cf_batch(
         self,
         problems: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """
-        Evaluate CF for a batch of problems
-        评估一批问题的CF
+        Evaluate CF and AF for a batch of problems
+        评估一批问题的CF和AF
         
         Args:
             problems: List of problem dictionaries, each containing:
@@ -716,15 +751,18 @@ class CausalFaithfulnessEvaluator:
         Returns:
             Batch evaluation report with:
             - average_cf: Average CF score across all problems (0-1)
-            - individual_scores: List of CF scores for each problem
+            - average_af: Average AF score across all problems (0-1)
+            - individual_cf_scores: List of CF scores for each problem
+            - individual_af_scores: List of AF scores for each problem
             - detailed_reports: Detailed reports for each problem
         """
         self._print("\n" + "="*80)
-        self._print("BATCH CF EVALUATION")
+        self._print("BATCH CF & AF EVALUATION")
         self._print(f"Total problems: {len(problems)}")
         self._print("="*80)
         
-        individual_scores = []
+        individual_cf_scores = []
+        individual_af_scores = []
         detailed_reports = []
         
         for i, problem_data in enumerate(problems, 1):
@@ -736,30 +774,46 @@ class CausalFaithfulnessEvaluator:
             problem_text = problem_data.get('problem_text', '')
             reasoning_trajectory = problem_data.get('reasoning_trajectory', '')
             
-            cf_score, report = self.evaluate_cf(dag, problem_text, reasoning_trajectory)
+            cf_score, af_score, report = self.evaluate_cf(dag, problem_text, reasoning_trajectory)
             
-            individual_scores.append(cf_score)
+            individual_cf_scores.append(cf_score)
+            individual_af_scores.append(af_score)
             detailed_reports.append(report)
         
-        # Compute average
-        average_cf = sum(individual_scores) / len(individual_scores) if individual_scores else 0.0
+        # Compute averages
+        average_cf = sum(individual_cf_scores) / len(individual_cf_scores) if individual_cf_scores else 0.0
+        average_af = sum(individual_af_scores) / len(individual_af_scores) if individual_af_scores else 0.0
         
         self._print("\n" + "="*80)
         self._print("BATCH RESULTS:")
+        self._print("\n【CF - Counterfactual Faithfulness】")
         self._print(f"  Average CF Score: {average_cf:.4f}")
-        self._print(f"  Min CF Score:     {min(individual_scores):.4f}")
-        self._print(f"  Max CF Score:     {max(individual_scores):.4f}")
+        self._print(f"  Min CF Score:     {min(individual_cf_scores):.4f}")
+        self._print(f"  Max CF Score:     {max(individual_cf_scores):.4f}")
+        self._print("\n【AF - Abductive Faithfulness】")
+        self._print(f"  Average AF Score: {average_af:.4f}")
+        self._print(f"  Min AF Score:     {min(individual_af_scores):.4f}")
+        self._print(f"  Max AF Score:     {max(individual_af_scores):.4f}")
         self._print("="*80)
         
         return {
             'average_cf': average_cf,
-            'individual_scores': individual_scores,
+            'average_af': average_af,
+            'individual_cf_scores': individual_cf_scores,
+            'individual_af_scores': individual_af_scores,
             'detailed_reports': detailed_reports,
             'total_problems': len(problems),
             'summary': {
-                'min': min(individual_scores) if individual_scores else 0.0,
-                'max': max(individual_scores) if individual_scores else 0.0,
-                'avg': average_cf
+                'cf': {
+                    'min': min(individual_cf_scores) if individual_cf_scores else 0.0,
+                    'max': max(individual_cf_scores) if individual_cf_scores else 0.0,
+                    'avg': average_cf
+                },
+                'af': {
+                    'min': min(individual_af_scores) if individual_af_scores else 0.0,
+                    'max': max(individual_af_scores) if individual_af_scores else 0.0,
+                    'avg': average_af
+                }
             }
         }
 
@@ -802,11 +856,12 @@ def example_usage():
     reasoning_trajectory = "At max height, velocity = 0. Using v = v0 - gt, solve for t: t = v0/g = 20/9.8 = 2.04 seconds."
     
     # Evaluate single problem
-    cf_score, report = cf_evaluator.evaluate_cf(
+    cf_score, af_score, report = cf_evaluator.evaluate_cf(
         example_dag, problem_text, reasoning_trajectory
     )
     
     print(f"\nFinal CF Score: {cf_score:.4f}")
+    print(f"Final AF Score: {af_score:.4f}")
     print(f"\nDetailed Report:")
     print(json.dumps(report, indent=2, ensure_ascii=False))
     
@@ -822,6 +877,7 @@ def example_usage():
     
     batch_results = cf_evaluator.evaluate_cf_batch(problems)
     print(f"\nBatch Average CF: {batch_results['average_cf']:.4f}")
+    print(f"Batch Average AF: {batch_results['average_af']:.4f}")
 
 
 if __name__ == "__main__":
