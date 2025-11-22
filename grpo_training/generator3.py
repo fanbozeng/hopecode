@@ -35,14 +35,14 @@ from engine.reward_evaluator import RewardEvaluator
 GENERATOR_ID = "generator_3"
 
 
-def load_training_problems(dataset: str = "aime2024", max_problems: int = None) -> List[Dict[str, Any]]:
+def load_training_problems(dataset: str = "full", max_problems: int = None) -> List[Dict[str, Any]]:
     """
     Load training problems from dataset.
     
     Args:
-        dataset: Dataset name ('aime2024', 'aime2025', 'physics', 'mixed')
+        dataset: Dataset name ('full', 'aime2024', 'aime2025', 'physics', 'mixed')
+                 'full' loads the complete 90-problem dataset
         max_problems: Maximum number of problems to load
-                     For 'mixed': total problems across all datasets
     
     Returns:
         List of problems with format: [{"id": str, "text": str, "answer": str}, ...]
@@ -52,7 +52,71 @@ def load_training_problems(dataset: str = "aime2024", max_problems: int = None) 
     # Get absolute path to project root
     project_root = Path(__file__).parent.parent
     
-    if dataset == "mixed":
+    if dataset == "full":
+        # Load complete 90-problem dataset from configuration
+        config_path = project_root / "grpo_training" / "dataset_config.json"
+
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+
+            dataset_config = config.get('full_dataset', {})
+            dataset_sources = dataset_config.get('datasets', [])
+
+            for source in dataset_sources:
+                dataset_path = project_root / source['path']
+                if not dataset_path.exists():
+                    print(f"⚠️ Dataset file not found: {dataset_path}")
+                    continue
+
+                limit = source.get('limit', None) if max_problems is None else min(source.get('limit', float('inf')), max_problems - len(problems))
+                if max_problems and len(problems) >= max_problems:
+                    break
+
+                try:
+                    if source['format'] == 'jsonl':
+                        with open(dataset_path, 'r', encoding='utf-8') as f:
+                            for i, line in enumerate(f):
+                                if limit and i >= limit:
+                                    break
+                                if max_problems and len(problems) >= max_problems:
+                                    break
+
+                                data = json.loads(line.strip())
+                                problems.append({
+                                    'id': f"{source['id_prefix']}_{i+1:03d}",
+                                    'text': data.get(source['problem_field'], data.get('problem', '')),
+                                    'answer': str(data.get(source['answer_field'], data.get('answer', '')))
+                                })
+
+                    elif source['format'] == 'json':
+                        with open(dataset_path, 'r', encoding='utf-8') as f:
+                            data = json.load(f)
+                            for i, item in enumerate(data):
+                                if limit and i >= limit:
+                                    break
+                                if max_problems and len(problems) >= max_problems:
+                                    break
+
+                                problems.append({
+                                    'id': f"{source['id_prefix']}_{i+1:03d}",
+                                    'text': item.get(source['problem_field'], ''),
+                                    'answer': str(item.get(source['answer_field'], ''))
+                                })
+
+                except Exception as e:
+                    print(f"⚠️ Error loading {source['name']}: {e}")
+                    continue
+
+            print(f"  ✓ Full dataset loaded: {len(problems)} problems")
+            for source in dataset_sources:
+                count = len([p for p in problems if p['id'].startswith(source['id_prefix'])])
+                print(f"    - {source['name']}: {count} problems")
+
+        else:
+            print(f"⚠️ Dataset config file not found: {config_path}")
+
+    elif dataset == "mixed":
         # Mixed dataset: AIME2024 + AIME2025 + Physics
         # Distribute evenly across all three datasets
         problems_per_dataset = max_problems // 3 if max_problems else None
@@ -306,9 +370,9 @@ def save_rollouts(problem: Dict[str, Any], rollouts: List[Dict[str, Any]], outpu
 def main():
     parser = argparse.ArgumentParser(description='Train Generator 3 independently')
     
-    parser.add_argument('--dataset', type=str, default='aime2024',
-                       choices=['aime2024', 'aime2025', 'physics', 'mixed'],
-                       help='Training dataset (use "mixed" for AIME2024+AIME2025+Physics)')
+    parser.add_argument('--dataset', type=str, default='full',
+                       choices=['full', 'aime2024', 'aime2025', 'physics', 'mixed'],
+                       help='Training dataset (use "full" for complete 90-problem dataset, "mixed" for AIME2024+AIME2025+Physics)')
     
     parser.add_argument('--max-problems', type=int, default=None,
                        help='Maximum number of problems (None for all)')

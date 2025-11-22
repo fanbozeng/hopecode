@@ -324,33 +324,75 @@ class DomainExpertReviewer:
         """Parse expert review response to extract JSON report"""
         import re
         
-        # Try to find JSON in response
+        # Try multiple parsing strategies
+        
+        # Strategy 1: Look for JSON code blocks (```json ... ```)
+        json_block_match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', response, re.DOTALL)
+        if json_block_match:
+            try:
+                parsed = json.loads(json_block_match.group(1))
+                if isinstance(parsed, dict):
+                    return self._ensure_required_keys(parsed)
+            except json.JSONDecodeError as e:
+                if self.verbose:
+                    print(f"   ⚠️  JSON code block decode error: {e}")
+        
+        # Strategy 2: Find JSON object with balanced braces
+        # This is more robust than greedy matching
+        brace_count = 0
+        start_pos = -1
+        for i, char in enumerate(response):
+            if char == '{':
+                if start_pos == -1:
+                    start_pos = i
+                brace_count += 1
+            elif char == '}':
+                brace_count -= 1
+                if brace_count == 0 and start_pos != -1:
+                    # Found a complete JSON object
+                    json_str = response[start_pos:i+1]
+                    try:
+                        parsed = json.loads(json_str)
+                        if isinstance(parsed, dict) and 'problem_domain' in parsed:
+                            return self._ensure_required_keys(parsed)
+                    except json.JSONDecodeError:
+                        # Continue searching for next JSON object
+                        start_pos = -1
+                        brace_count = 0
+        
+        # Strategy 3: Greedy match as fallback
         json_match = re.search(r'\{.*\}', response, re.DOTALL)
         if json_match:
             try:
                 parsed = json.loads(json_match.group(0))
                 if isinstance(parsed, dict):
-                    # Ensure required keys exist
-                    if 'problem_domain' not in parsed:
-                        parsed['problem_domain'] = 'unknown'
-                    if 'issues' not in parsed:
-                        parsed['issues'] = []
-                    if 'corrections' not in parsed:
-                        parsed['corrections'] = []
-                    return parsed
+                    return self._ensure_required_keys(parsed)
             except json.JSONDecodeError as e:
                 if self.verbose:
-                    print(f"   ⚠️  JSON decode error: {e}")
+                    print(f"   ⚠️  Greedy JSON decode error: {e}")
         
         # Fallback: create empty report
         if self.verbose:
             print(f"   ⚠️  Could not parse expert review, using fallback")
+            print(f"   Response preview: {response[:200]}...")
         return {
             'problem_domain': 'unknown',
             'issues': [],
             'corrections': [],
             'overall_assessment': 'Could not parse expert review'
         }
+    
+    def _ensure_required_keys(self, parsed: Dict[str, Any]) -> Dict[str, Any]:
+        """Ensure parsed JSON has all required keys"""
+        if 'problem_domain' not in parsed:
+            parsed['problem_domain'] = 'unknown'
+        if 'issues' not in parsed:
+            parsed['issues'] = []
+        if 'corrections' not in parsed:
+            parsed['corrections'] = []
+        if 'overall_assessment' not in parsed:
+            parsed['overall_assessment'] = ''
+        return parsed
     
     def _apply_corrections(
         self,
