@@ -17,20 +17,33 @@ from .retriever import KnowledgeRetriever
 from .ai_retriever import AIKnowledgeRetriever
 from .vector_retriever import VectorKnowledgeRetriever
 from .scaffolder import CausalScaffolder
-from .executor import SymbolicExecutor
-from .synthesizer import CausalSynthesizer
+# from .executor import SymbolicExecutor  # Removed: never used (zombie code)
+# from .synthesizer import CausalSynthesizer  # Removed: synthesis/validation not needed
 from .llm_computer import LLMComputer
 from .grpo_experience_manager import GRPOExperienceManager
 from .grpo_trainer import TrainingFreeGRPOTrainer
+from .api_manager import APIKeyManager
+# Step2 Enhancement modules
+from .domain_expert_reviewer import DomainExpertReviewer, ProblemType
+from .rag_knowledge_enhancer import RAGKnowledgeEnhancer
+from .causal_structure_optimizer import CausalStructureOptimizer
+from .dag_enhancement_pipeline import DAGEnhancementPipeline
 
 __all__ = [
     "KnowledgeRetriever",
     "AIKnowledgeRetriever",
     "VectorKnowledgeRetriever",
     "CausalScaffolder",
-    "SymbolicExecutor",
-    "CausalSynthesizer",
+    # "SymbolicExecutor",  # Removed: zombie code
+    # "CausalSynthesizer",  # Removed
     "LLMComputer",
     "GRPOExperienceManager",
     "TrainingFreeGRPOTrainer",
+    "APIKeyManager",
+    # Step2 Enhancement
+    "DomainExpertReviewer",
+    "ProblemType",
+    "RAGKnowledgeEnhancer",
+    "CausalStructureOptimizer",
+    "DAGEnhancementPipeline",
 ]

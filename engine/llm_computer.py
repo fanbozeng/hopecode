@@ -1,46 +1,30 @@
 """
-LLM-Based Computer (Alternative to Symbolic Executor)
-基于LLM的计算器（符号执行器的替代方案）
-
-This module provides an alternative to symbolic execution by using LLM to compute
-results based on the causal scaffold. This is useful for ablation studies comparing
-symbolic execution vs. LLM-based computation.
-
-此模块提供了符号执行的替代方案，使用LLM基于因果脚手架计算结果。
-这对于比较符号执行与基于LLM的计算的消融研究很有用。
+LLM计算器 - 简化版
+使用LLM基于因果脚手架计算答案，替代符号执行
 """
 
 import json
+import re
 from typing import Dict, Any, Optional
 from .scaffolder import LLMClient
 
 
 class LLMComputer:
-    """
-    LLM-based computation alternative to symbolic executor.
-    基于LLM的计算器，作为符号执行器的替代方案。
+    """基于LLM的计算器，使用因果脚手架执行计算"""
 
-    This class takes a causal scaffold and uses LLM to perform computations,
-    instead of generating and executing Python code.
-
-    该类接收因果脚手架并使用LLM执行计算，而不是生成和执行Python代码。
-    """
-
-    def __init__(self, llm_client: Optional[LLMClient] = None, verbose: bool = True):
+    def __init__(self, llm_client: Optional[LLMClient] = None, verbose: bool = False):
         """
-        Initialize LLM Computer / 初始化LLM计算器
+        初始化LLM计算器
 
         Args:
-            llm_client: LLM client instance (optional)
-                       LLM客户端实例（可选）
-            verbose: Print detailed output
-                    打印详细输出
+            llm_client: LLM客户端实例
+            verbose: 是否打印详细输出
         """
         self.llm_client = llm_client or LLMClient()
         self.verbose = verbose
 
     def _print(self, message: str) -> None:
-        """Print message if verbose / 如果verbose则打印消息"""
+        """只在verbose模式下打印消息"""
         if self.verbose:
             print(message)
 
@@ -50,48 +34,31 @@ class LLMComputer:
         problem_text: str
     ) -> Dict[str, Any]:
         """
-        Compute answer using LLM based on causal scaffold.
-        使用LLM基于因果脚手架计算答案。
-
-        This method takes the causal scaffold (which outlines the logical structure
-        and computation steps) and asks LLM to perform the actual computation.
-
-        此方法接收因果脚手架（概述逻辑结构和计算步骤），并要求LLM执行实际计算。
+        使用LLM基于因果脚手架计算答案
 
         Args:
-            causal_scaffold: The causal scaffold containing computation plan
-                           包含计算计划的因果脚手架
-            problem_text: Original problem text
-                         原始问题文本
+            causal_scaffold: 包含计算计划的因果脚手架
+            problem_text: 原始问题文本
 
         Returns:
-            Dictionary with computation results:
-            包含计算结果的字典：
+            计算结果字典:
             {
                 'success': bool,
-                'result': final answer,
-                'reasoning': computation steps,
-                'error': error message if failed
+                'result': 最终答案,
+                'reasoning': 计算步骤,
+                'error': 错误信息（失败时）
             }
         """
-        self._print("\n--- LLM-BASED COMPUTATION (Alternative to Symbolic Execution) ---")
-        self._print("--- 基于LLM的计算（符号执行的替代方案）---\n")
-
         try:
-            # Extract key information from scaffold
-            # 从脚手架中提取关键信息
+            # 从脚手架提取信息
             variables = causal_scaffold.get('variables', {})
             dependencies = causal_scaffold.get('dependencies', {})
             computation_plan = causal_scaffold.get('computation_plan', [])
             target_variable = causal_scaffold.get('target_variable', '')
 
-            self._print(f"Target variable to compute: {target_variable}")
-            self._print(f"要计算的目标变量: {target_variable}")
-            self._print(f"Number of computation steps: {len(computation_plan)}")
-            self._print(f"计算步骤数: {len(computation_plan)}\n")
+            self._print(f"计算目标变量: {target_variable}，共{len(computation_plan)}个步骤")
 
-            # Create a structured prompt for LLM
-            # 为LLM创建结构化提示
+            # 创建计算提示词
             prompt = self._create_computation_prompt(
                 problem_text=problem_text,
                 causal_scaffold=causal_scaffold,
@@ -101,41 +68,29 @@ class LLMComputer:
                 target_variable=target_variable
             )
 
-            self._print("Calling LLM for computation...")
-            self._print("调用LLM进行计算...\n")
-
-            # Call LLM to compute
             # 调用LLM计算
             response = self.llm_client.complete(prompt, temperature=0.0)
-            print( response);
 
             if not response:
                 return {
                     'success': False,
                     'result': None,
                     'reasoning': None,
-                    'error': 'LLM returned empty response'
+                    'error': 'LLM返回空响应'
                 }
 
-            self._print(f"✓ LLM response received ({len(response)} characters)")
-            self._print(f"✓ 已收到LLM响应 ({len(response)} 字符)\n")
-
-            # Extract final answer from response
-            # 从响应中提取最终答案
+            # 提取最终答案
             final_answer = self._extract_final_answer(response)
 
             if final_answer is None:
-                self._print("⚠ Warning: Could not extract final answer from LLM response")
-                self._print("⚠ 警告: 无法从LLM响应中提取最终答案")
                 return {
                     'success': False,
                     'result': None,
                     'reasoning': response,
-                    'error': 'Could not extract final answer'
+                    'error': '无法提取最终答案'
                 }
 
-            self._print(f"✓ Final answer computed: {final_answer}")
-            self._print(f"✓ 计算出的最终答案: {final_answer}\n")
+            self._print(f"计算完成，答案: {final_answer}")
 
             return {
                 'success': True,
@@ -145,9 +100,6 @@ class LLMComputer:
             }
 
         except Exception as e:
-            self._print(f"\n❌ Error during LLM computation: {e}")
-            self._print(f"❌ LLM计算过程中出错: {e}\n")
-
             return {
                 'success': False,
                 'result': None,
@@ -164,119 +116,104 @@ class LLMComputer:
         computation_plan: list,
         target_variable: str
     ) -> str:
-        """
-        Create a structured prompt for LLM computation.
-        为LLM计算创建结构化提示。
-        """
-        # Format variables
+        """为LLM计算创建结构化提示"""
+
         # 格式化变量
         variables_str = "\n".join([
             f"  - {name}: {info.get('description', 'N/A')}"
             for name, info in variables.items()
         ])
 
-        # Format dependencies
         # 格式化依赖关系
         dependencies_str = "\n".join([
-            f"  - {var} depends on: {', '.join(deps)}"
+            f"  - {var} 依赖于: {', '.join(deps)}"
             for var, deps in dependencies.items()
         ])
 
-        # Format computation plan
         # 格式化计算计划
         computation_steps_str = "\n".join([
             f"  {i+1}. {step.get('description', step.get('operation', 'N/A'))}"
             for i, step in enumerate(computation_plan)
         ])
 
-        prompt = f"""You are a mathematical computation assistant. Given a causal scaffold that outlines the logical structure of a problem, perform the actual numerical computation step by step.
+        prompt = f"""你是一个数学计算助手。根据因果脚手架描述的逻辑结构，逐步执行实际的数值计算。
 
-**Problem:**
+**问题:**
 {problem_text}
 
-**Causal Scaffold:**
+**因果脚手架:**
 
-**Variables:**
+**变量:**
 {variables_str}
 
-**Dependencies:**
+**依赖关系:**
 {dependencies_str}
 
-**Computation Plan:**
+**计算计划:**
 {computation_steps_str}
 
-**Target Variable:** {target_variable}
+**目标变量:** {target_variable}
 
 ---
 
-**Instructions:**
-1. Follow the computation plan step by step
-2. Show your work for each step
-3. Compute intermediate values as needed
-4. Extract numerical values from the problem text
-5. Perform all arithmetic operations carefully
-6. Provide the final answer for the target variable: {target_variable}
+**说明:**
+1. 按照计算计划逐步执行
+2. 展示每一步的计算过程
+3. 计算需要的中间值
+4. 从问题文本中提取数值
+5. 仔细进行所有算术运算
+6. 提供目标变量 {target_variable} 的最终答案
 
-**Output Format:**
+**输出格式:**
 ```
-Step 1: [description]
-  Calculation: [show calculation]
-  Result: [intermediate result]
+步骤 1: [描述]
+  计算: [展示计算过程]
+  结果: [中间结果]
 
-Step 2: [description]
-  Calculation: [show calculation]
-  Result: [intermediate result]
+步骤 2: [描述]
+  计算: [展示计算过程]
+  结果: [中间结果]
 
 ...
 
-Final Answer: [numerical value for {target_variable}]
+最终答案: [{target_variable}的数值]
 ```
 
-**Important:**
-- Your final line MUST be in the format: "Final Answer: [value]"
-- Be precise with numerical calculations
-- Show all intermediate steps clearly
+**重要:**
+- 最后一行必须是: "最终答案: [数值]"
+- 精确进行数值计算
+- 清晰展示所有中间步骤
 
-Now, perform the computation:
+现在开始计算:
 """
         return prompt
 
     def _extract_final_answer(self, response: str) -> Optional[Any]:
         """
-        Extract final answer from LLM response.
-        从LLM响应中提取最终答案。
+        从LLM响应中提取最终答案
 
         Args:
-            response: LLM response text
-                     LLM响应文本
+            response: LLM响应文本
 
         Returns:
-            Final answer (number or string), or None if not found
-            最终答案（数字或字符串），如果未找到则返回None
+            最终答案（数字或字符串），未找到则返回None
         """
-        import re
+        # 查找 "最终答案:" 或 "Final Answer:" 模式
+        patterns = [
+            r'最终答案:\s*([^\n]+)',
+            r'Final Answer:\s*([^\n]+)'
+        ]
 
-        # Only look for "Final Answer:" pattern - simple and reliable
-        # 只查找 "Final Answer:" 模式 - 简单可靠
-        pattern = r'Final Answer:\s*([^\n]+)'
-        match = re.search(pattern, response, re.IGNORECASE)
+        for pattern in patterns:
+            match = re.search(pattern, response, re.IGNORECASE)
+            if match:
+                answer_text = match.group(1).strip()
+                self._print(f"找到答案: {answer_text}")
+                return answer_text
 
-        if match:
-            answer_text = match.group(1).strip()
-
-            if self.verbose:
-                print(f"[DEBUG] Found Final Answer: '{answer_text}'")
-
-            # Return the answer as-is, let _compare_answers handle the comparison
-            # 直接返回答案，让 _compare_answers 处理比较
-            return answer_text
-
-        # Could not find Final Answer pattern
-        # 无法找到 Final Answer 模式
-        if self.verbose:
-            print(f"[DEBUG] No 'Final Answer:' pattern found in response")
+        self._print("未找到答案模式")
         return None
 
 
-# Export class / 导出类
+# 导出类
 __all__ = ['LLMComputer']

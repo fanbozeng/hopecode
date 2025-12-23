@@ -319,7 +319,7 @@ def main():
     print("Step 1: Initializing Experience Manager")
     print("步骤1：初始化经验管理器")
     print("─"*80)
-    
+    # 加载历史经验 可以理解加载历史经验库 没什么实际意义在这里
     experience_manager = GRPOExperienceManager(
         experience_dir=args.experience_dir,
         verbose=True
@@ -343,7 +343,7 @@ def main():
     
     # Inject experience manager and rollouts_per_generator into the multi-agent scaffolder
     if hasattr(engine, 'scaffolder') and hasattr(engine.scaffolder, '__class__'):
-        # Check if it's a MultiAgentScaffolder
+        # Check if it's a MultiAgentScaffolder 给multiagent加载数据
         if 'MultiAgent' in engine.scaffolder.__class__.__name__:
             engine.scaffolder.experience_manager = experience_manager
             engine.scaffolder.rollouts_per_generator = args.group_size  # Set rollouts per generator

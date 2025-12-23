@@ -81,5 +81,704 @@
     "rule": "Proportional Relationship: White = 0.5 × Blue - Describes the relationship where the amount of white fiber (White) is half the amount of blue fiber (Blue); used in ratio and proportion problems",
     "category": "arithmetic",
     "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "initial cost",
+      "repairs",
+      "total cost"
+    ],
+    "rule": "Total Cost: C_total = C_initial + C_repairs - Represents the total cost (C_total) as the sum of the initial cost (C_initial) and the cost of repairs (C_repairs); used in financial calculations",
+    "category": "finance",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "value increase",
+      "percentage increase"
+    ],
+    "rule": "Percentage Increase: ΔV = V_initial × (P / 100) - Calculates the increase in value (ΔV) based on the initial value (V_initial) and the percentage increase (P in %); used to determine the new value after a percentage increase",
+    "category": "finance",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "profit",
+      "selling price",
+      "total cost"
+    ],
+    "rule": "Profit: P = V_selling - C_total - Calculates the profit (P) as the difference between the selling price (V_selling) and the total cost (C_total); a fundamental concept in business and finance",
+    "category": "finance",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "distance",
+      "sprints",
+      "weekly"
+    ],
+    "rule": "Total Distance Formula: D_total = n × d × w - Calculates the total distance (D_total in meters) run over a week by multiplying the number of sprints per session (n), the distance per sprint (d in meters), and the number of sessions per week (w).",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "sprints",
+      "session"
+    ],
+    "rule": "Sprints per Session: n_session = n - Indicates the number of sprints (n_session) performed in each session, which is a constant value (n) for each session.",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "sessions",
+      "week"
+    ],
+    "rule": "Sessions per Week: w_sessions = w - Represents the number of sessions (w_sessions) conducted in a week, which is a constant value (w) for the weekly routine.",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "feed per meal",
+      "total feed",
+      "meals"
+    ],
+    "rule": "Feed per Meal: F_i = T / k - Describes the amount of feed (F_i in cups) given in each meal, where T is the total daily feed (in cups) and k is the number of meals per day; used to distribute the total feed evenly across meals",
+    "category": "algebra",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "discount",
+      "percentage",
+      "price"
+    ],
+    "rule": "Percentage Discount: Discounted Price = Original Price × (1 - Discount Percentage) - Calculates the price after a percentage discount (Discount Percentage) is applied to the original price (Original Price in dollars); used in pricing and sales",
+    "category": "arithmetic",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "sequence",
+      "alternating",
+      "pattern"
+    ],
+    "rule": "Alternating Sequence: a_1, a_2, a_3, ... where a_2n = k × a_1 - Describes a sequence where every second term (a_2n) is a constant multiple (k) of the first term (a_1); used in pattern recognition and series summation",
+    "category": "algebra",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "sum",
+      "series",
+      "arithmetic"
+    ],
+    "rule": "Arithmetic Series Sum: S_n = (n/2) × (a_1 + a_n) - Formula for the sum of the first n terms of an arithmetic series, where S_n is the sum, a_1 is the first term, a_n is the nth term, and n is the number of terms; used in summing sequences",
+    "category": "algebra",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "electric potential",
+      "voltage",
+      "internal resistance",
+      "current"
+    ],
+    "rule": "Internal Resistance Formula: r = (E - V) / I - Relates the internal resistance (r in ohms) of a power source to the electromotive force (E in volts), terminal voltage (V in volts), and current (I in amperes); used to determine the internal resistance of a power source",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "current",
+      "charge",
+      "time"
+    ],
+    "rule": "Current Definition: I = Q / t - Defines current (I in amperes) as the rate of flow of electric charge (Q in coulombs) over time (t in seconds); fundamental in electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "electric potential",
+      "voltage",
+      "current",
+      "resistance"
+    ],
+    "rule": "Ohm's Law: V = I × R - Relates voltage (V in volts), current (I in amperes), and resistance (R in ohms); fundamental in electrical circuits for relating these quantities",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "energy",
+      "charge",
+      "voltage"
+    ],
+    "rule": "Electrical Energy: W = Q × V - Calculates the electrical energy (W in joules) transferred by a charge (Q in coulombs) through a potential difference (V in volts); used to determine the energy conversion in circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "electromotive force",
+      "voltage",
+      "current",
+      "internal resistance"
+    ],
+    "rule": "Terminal Voltage: V = E - I × r - Relates the terminal voltage (V in volts) of a power source to the electromotive force (E in volts), current (I in amperes), and internal resistance (r in ohms); used to understand voltage drop in circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "electric potential",
+      "voltage",
+      "emf",
+      "terminal voltage"
+    ],
+    "rule": "Electromotive Force and Terminal Voltage: ε = V + Ir - Relates the electromotive force (ε in volts) of a power source to the terminal voltage (V in volts) and the voltage drop across the internal resistance (Ir in volts); used to analyze the behavior of real power sources",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "energy",
+      "charge",
+      "voltage"
+    ],
+    "rule": "Electrical Energy: W = Q × V - Describes the electrical energy (W in joules) transferred by a charge (Q in coulombs) through a potential difference (V in volts); applies to the calculation of energy in electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "current",
+      "charge",
+      "time"
+    ],
+    "rule": "Relationship between Charge, Current, and Time: Q = I × t - Relates the charge (Q in coulombs) that flows through a conductor to the current (I in amperes) and the time (t in seconds); fundamental in electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "power",
+      "current",
+      "resistance"
+    ],
+    "rule": "Power Dissipation in Resistors: P = I² × R - Describes the power (P in watts) dissipated in a resistor as heat, given the current (I in amperes) through the resistor and its resistance (R in ohms); applies to the analysis of power loss in circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "voltage",
+      "current",
+      "resistance"
+    ],
+    "rule": "Ohm's Law: V = I × R - Relates the voltage (V in volts) across a resistor to the current (I in amperes) through it and its resistance (R in ohms); fundamental in the analysis of electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "voltage",
+      "current",
+      "resistance"
+    ],
+    "rule": "Ohm's Law: V = I × R - Relates voltage (V in volts), current (I in amperes), and resistance (R in ohms); fundamental in electrical circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "voltage",
+      "internal resistance",
+      "emf"
+    ],
+    "rule": "Terminal Voltage: V_t = E - I × r - Describes the voltage across the terminals of a real battery (V_t in volts) in terms of the electromotive force (E in volts), current (I in amperes), and internal resistance (r in ohms); accounts for voltage drop due to internal resistance",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "energy",
+      "charge",
+      "voltage"
+    ],
+    "rule": "Electrical Energy: W = Q × V - Relates the electrical energy (W in joules) transferred to the work done by a charge (Q in coulombs) moving through a potential difference (V in volts); used to calculate energy conversion in circuits",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "voltage",
+      "current",
+      "loop"
+    ],
+    "rule": "Kirchhoff's Voltage Law (KVL): ΣV = 0 - States that the sum of all voltages around a closed loop in a circuit is zero; used to analyze circuits and solve for unknown voltages or currents",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "internal resistance",
+      "emf",
+      "voltage"
+    ],
+    "rule": "Internal Resistance Calculation: r = (E - V_t) / I - Formula to calculate the internal resistance (r in ohms) of a battery using the electromotive force (E in volts), terminal voltage (V_t in volts), and current (I in amperes); useful for understanding battery behavior",
+    "category": "electrical circuits",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "friction",
+      "acceleration",
+      "gravity",
+      "energy",
+      "horizontal",
+      "density",
+      "angle",
+      "power",
+      "diameter",
+      "force",
+      "constant",
+      "efficiency",
+      "velocity"
+    ],
+    "rule": "**Power and Force Relationship**: \\( P = F \\times v \\) - This formula relates power, force, and velocity. It is used to determine the force required to move the material on the conveyor belt when the power and velocity are known.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "friction",
+      "acceleration",
+      "gravity",
+      "energy",
+      "horizontal",
+      "density",
+      "angle",
+      "power",
+      "diameter",
+      "force",
+      "constant",
+      "efficiency",
+      "velocity"
+    ],
+    "rule": "**Mass Flow Rate and Density Relationship**: \\( \\dot{m} = \\rho \\times Q \\) - This formula relates mass flow rate (\\( \\dot{m} \\)), density (\\( \\rho \\)), and volumetric flow rate (\\( Q \\)). It is used to find the mass flow rate of the material given its density and volumetric flow rate.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "friction",
+      "acceleration",
+      "gravity",
+      "energy",
+      "horizontal",
+      "density",
+      "angle",
+      "power",
+      "diameter",
+      "force",
+      "constant",
+      "efficiency",
+      "velocity"
+    ],
+    "rule": "**Inclination Angle Consideration**: \\( F_{\\text{gravity}} = \\dot{m} \\times g \\times \\sin(\\theta) \\) - This formula calculates the component of the gravitational force that acts along the incline of the conveyor belt, where \\( g \\) is the acceleration due to gravity and \\( \\theta \\) is the angle of inclination. This is important if the conveyor belt is not horizontal.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "density",
+      "force",
+      "diameter",
+      "efficiency",
+      "rate",
+      "flow",
+      "constant",
+      "power",
+      "mass",
+      "friction",
+      "velocity",
+      "variable"
+    ],
+    "rule": "**Role of Wheel Diameter**: The diameter of the wheels (\\(2 \\mathrm{~m}\\)) is provided but is not directly used in the primary calculations. However, it can affect the efficiency of the conveyor belt system, particularly in terms of the mechanical advantage and the power transmission. For this problem, it is assumed that the wheel diameter does not significantly impact the power required to move the material at the given velocity.\n\n**Relevant Formulas and Principles:**",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "friction",
+      "velocity",
+      "density",
+      "force",
+      "particle",
+      "flow",
+      "efficiency",
+      "diameter",
+      "rate",
+      "factor",
+      "power",
+      "constant"
+    ],
+    "rule": "Gravitational Force Component: \\( F_g = m \\times g \\) - This formula calculates the gravitational force acting on the material. It is used to account for the gravitational component in the force required to move the material, where \\( m \\) is the mass of the material and \\( g \\) is the acceleration due to gravity.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "conductivity",
+      "simplification",
+      "density",
+      "probability",
+      "neutrino",
+      "heat",
+      "magnetic",
+      "volume",
+      "light",
+      "energy",
+      "absorption",
+      "sphere",
+      "radius",
+      "factor",
+      "thermal"
+    ],
+    "rule": "**Volume of a Sphere**: \\( V = \\frac{4}{3} \\pi r^3 \\) - Used to calculate the volume of the Earth's inner core. The radius \\( r \\) must be converted from kilometers to centimeters (1 km = 100,000 cm) before using this formula.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "conductivity",
+      "simplification",
+      "density",
+      "probability",
+      "neutrino",
+      "heat",
+      "magnetic",
+      "volume",
+      "light",
+      "energy",
+      "absorption",
+      "sphere",
+      "radius",
+      "factor",
+      "thermal"
+    ],
+    "rule": "**Heat Capacity Formula**: \\( Q = m \\cdot c \\cdot \\Delta T \\) - Relates the heat energy \\( Q \\) required to change the temperature of a substance by \\( \\Delta T \\). Here, \\( m \\) is the mass of the inner core, \\( c \\) is the specific heat capacity, and \\( \\Delta T \\) is the temperature change (1°C in this case).",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "conductivity",
+      "simplification",
+      "density",
+      "probability",
+      "neutrino",
+      "heat",
+      "magnetic",
+      "volume",
+      "light",
+      "energy",
+      "absorption",
+      "sphere",
+      "radius",
+      "factor",
+      "thermal"
+    ],
+    "rule": "**Neutrino Flux and Energy**: \\( P = \\Phi \\cdot E \\cdot A \\) - Calculates the total power \\( P \\) delivered by neutrinos. \\( \\Phi \\) is the neutrino flux (number of neutrinos per unit area per unit time), \\( E \\) is the energy of each neutrino, and \\( A \\) is the surface area of the inner core.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "pressure",
+      "fluid",
+      "density",
+      "force",
+      "function",
+      "battery",
+      "heat",
+      "constant",
+      "equation",
+      "resistance",
+      "velocity",
+      "motion",
+      "efficiency",
+      "current",
+      "power"
+    ],
+    "rule": "**Thrust Equation for Propellers**: \\( F = k \\cdot P \\cdot \\sqrt{\\rho} \\) - This equation relates the thrust (force) generated by a propeller to the power delivered by the battery, the density of the medium, and a constant \\( k \\) that depends on the propeller's characteristics. It is used to find the force generated by the propeller in both air and water.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "pressure",
+      "fluid",
+      "density",
+      "force",
+      "function",
+      "battery",
+      "heat",
+      "constant",
+      "equation",
+      "resistance",
+      "velocity",
+      "motion",
+      "efficiency",
+      "current",
+      "power"
+    ],
+    "rule": "**Power Delivered by the Battery**: \\( P \\) - The power delivered by the battery is assumed to be the same in both media. This assumption is crucial for comparing the forces generated in air and water, as it ensures that the only variable affecting the force is the density of the medium.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "pressure",
+      "fluid",
+      "density",
+      "force",
+      "function",
+      "battery",
+      "heat",
+      "constant",
+      "equation",
+      "resistance",
+      "velocity",
+      "motion",
+      "efficiency",
+      "current",
+      "power"
+    ],
+    "rule": "**Constant Propeller Efficiency**: \\( \\eta \\) - The efficiency of the propeller is assumed to be constant in both media. This assumption simplifies the problem by allowing the direct comparison of forces based on density alone, without considering changes in propeller performance due to different operating conditions.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "weight",
+      "fluid",
+      "stress",
+      "tau",
+      "force",
+      "strain",
+      "width",
+      "viscosity",
+      "equation",
+      "velocity",
+      "equilibrium",
+      "rate",
+      "momentum",
+      "speed"
+    ],
+    "rule": "**Shear Stress Equation**: $\\tau = \\eta \\times \\frac{dv}{dy}$ - This equation relates the shear stress $\\tau$ to the viscosity $\\eta$ and the rate of strain (velocity gradient) $\\frac{dv}{dy}$. It is used to determine the shear stress in the chocolate syrup and caramel layers when the top and bottom sheets are moved.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "weight",
+      "fluid",
+      "stress",
+      "tau",
+      "force",
+      "strain",
+      "width",
+      "viscosity",
+      "equation",
+      "velocity",
+      "equilibrium",
+      "rate",
+      "momentum",
+      "speed"
+    ],
+    "rule": "**Equilibrium of Forces**: $\\sum F = 0$ - For the middle sheet to remain stationary, the net force acting on it must be zero. This means the shear forces from the top and bottom layers must balance each other out. This principle is crucial for determining the required velocity of the bottom sheet.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "weight",
+      "fluid",
+      "stress",
+      "tau",
+      "force",
+      "strain",
+      "width",
+      "viscosity",
+      "equation",
+      "velocity",
+      "equilibrium",
+      "rate",
+      "momentum",
+      "speed"
+    ],
+    "rule": "**Rate of Strain (Velocity Gradient)**: $\\frac{dv}{dy} = \\frac{v_{\\text{top}} - v_{\\text{middle}}}{d_1} = \\frac{v_{\\text{middle}} - v_{\\text{bottom}}}{d_2}$ - The rate of strain is the change in velocity per unit distance. For the top and bottom gaps, this equation helps us relate the velocities of the sheets to the gaps and viscosities.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "mass",
+      "velocity",
+      "force",
+      "function",
+      "position",
+      "optimization",
+      "magnetic",
+      "angle",
+      "constant",
+      "ellipse",
+      "charge",
+      "distance",
+      "perpendicular",
+      "range",
+      "speed"
+    ],
+    "rule": "**Lorentz Force Law**: \\(\\mathbf{F} = Q (\\mathbf{v} \\times \\mathbf{B})\\) - This law describes the force experienced by a charged particle moving in a magnetic field. The force is perpendicular to both the velocity of the particle and the magnetic field. It is crucial for calculating the magnetic force on the car.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "mass",
+      "velocity",
+      "force",
+      "function",
+      "position",
+      "optimization",
+      "magnetic",
+      "angle",
+      "constant",
+      "ellipse",
+      "charge",
+      "distance",
+      "perpendicular",
+      "range",
+      "speed"
+    ],
+    "rule": "**Magnetic Field Expression**: \\(\\mathbf{B}(x, y) = k_b e^{c_b x y} \\hat{z}\\) - This formula gives the magnetic field as a function of the position on the island. It is essential for determining the magnetic field at any point on the elliptical path of the car.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "mass",
+      "velocity",
+      "force",
+      "function",
+      "position",
+      "optimization",
+      "magnetic",
+      "angle",
+      "constant",
+      "ellipse",
+      "charge",
+      "distance",
+      "perpendicular",
+      "range",
+      "speed"
+    ],
+    "rule": "**Equation of the Ellipse**: \\(\\frac{x^2}{a^2} + \\frac{y^2}{b^2} = 1\\) - This equation describes the boundary of the elliptical island. It is necessary to ensure that the car's position is always on the ellipse and to parameterize the position of the car as it moves.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "mass",
+      "velocity",
+      "force",
+      "function",
+      "position",
+      "optimization",
+      "magnetic",
+      "angle",
+      "constant",
+      "ellipse",
+      "charge",
+      "distance",
+      "perpendicular",
+      "range",
+      "speed"
+    ],
+    "rule": "**Lagrange Multipliers**: \\(\\nabla f = \\lambda \\nabla g\\) - This method is used to find the maximum or minimum of a function subject to constraints. In this problem, it can be used to find the point on the ellipse where the magnetic force is maximized, given the constraint that the car must stay on the ellipse.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "radius",
+      "charge",
+      "multiple",
+      "sphere"
+    ],
+    "rule": "**Charge Conservation Law**: Q_total = Q_large + Q_small - The total charge before and after contact remains constant. This principle is used to determine the charge distribution between the large and small spheres after each contact.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "triangle",
+      "solution",
+      "angle",
+      "mirror",
+      "light",
+      "beam",
+      "reflection"
+    ],
+    "rule": "**Law of Reflection**: θ_i = θ_r - The angle of incidence (θ_i) is equal to the angle of reflection (θ_r). This law is essential for understanding how light bounces off the walls of the triangular room.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "triangle",
+      "solution",
+      "angle",
+      "mirror",
+      "light",
+      "beam",
+      "reflection"
+    ],
+    "rule": "**Properties of Equilateral Triangles**: All sides are equal (a = b = c) and all angles are 60° (A = B = C = 60°) - These properties are crucial for understanding the geometry of the room and the angles involved in the reflection paths.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "triangle",
+      "solution",
+      "angle",
+      "mirror",
+      "light",
+      "beam",
+      "reflection"
+    ],
+    "rule": "**Circumcircle of an Equilateral Triangle**: The circumcircle is the circle that passes through all three vertices of the triangle. The radius (R) of the circumcircle is given by R = a / √3, where a is the side length of the triangle. This concept helps in understanding the maximum distance light can travel within the room and the angles at which it can reach any point.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
+  },
+  {
+    "keywords": [
+      "triangle",
+      "solution",
+      "angle",
+      "mirror",
+      "light",
+      "beam",
+      "reflection"
+    ],
+    "rule": "**Geometric Proof of Minimum Beam Angle**: To ensure that any point in the room can be illuminated with at most one bounce, the flashlight beam must cover the necessary angles. The minimum beam angle can be derived by considering the angles formed by the light paths and the symmetry of the triangle. Specifically, the minimum beam angle is 30°, which can be proven by analyzing the angles formed by the light paths and the properties of the equilateral triangle.",
+    "category": "ai_generated",
+    "source": "ai_retriever"
   }
 ]

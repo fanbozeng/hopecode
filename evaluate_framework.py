@@ -745,23 +745,37 @@ class FrameworkEvaluator:
 
     # Full pipeline: retrieval → scaffold → compute (LLM) → synthesis
     def _run_full_framework(self, problem: str, problem_id: str = None, method: str = None) -> Any:
-        """Run full causal reasoning framework /
-
-        """
+        """Run full causal reasoning framework with GRPO experiences"""
         try:
-            #
             from main import CausalReasoningEngine
+            from engine import GRPOExperienceManager
 
-            #
+            # Initialize engine
             engine = CausalReasoningEngine(
                 knowledge_base_path="data/knowledge_base.json",
-                verbose=self.verbose,           #
-                use_ai_retriever=True,          #  AI
-                auto_enrich_kb=True,            # ✅ 启用动态学习：AI生成的规则自动保存到知识库
-                min_rules_threshold=5           #
+                verbose=self.verbose,
+                use_ai_retriever=True,
+                auto_enrich_kb=True,
+                min_rules_threshold=5,
+                use_multi_agent=True  # Enable multi-agent for experience injection
             )
 
-            #
+            # Load and inject GRPO experiences
+            try:
+                experience_manager = GRPOExperienceManager(
+                    experience_dir="data/grpo_experiences",
+                    verbose=False
+                )
+                
+                if hasattr(engine, 'scaffolder') and experience_manager:
+                    engine.scaffolder.experience_manager = experience_manager
+                    if self.verbose:
+                        print(f"  ✓ Loaded GRPO experiences for evaluation")
+            except Exception as e:
+                if self.verbose:
+                    print(f"  ⚠️ Could not load GRPO experiences: {e}")
+
+            # Solve problem
             results = engine.solve_problem(
                 problem,
                 include_validation=False,
@@ -769,21 +783,18 @@ class FrameworkEvaluator:
                 method_name=method
             )
 
-            # 🆕 保存 causal_scaffold 用于可视化
+            # Save causal_scaffold for visualization
             self._last_causal_scaffold = results.get('causal_scaffold')
 
-            # 
             if results.get('success'):
                 return results.get('final_answer')
             else:
-                # 
                 error_msg = results.get('error', 'Unknown error')
                 if self.verbose:
                     print(f"  Framework error: {error_msg}")
                 raise Exception(error_msg)
 
         except Exception as e:
-            # 
             raise Exception(f"Full framework failed: {e}")
 
     # Ablation: disable both traditional and AI retrievers
@@ -833,16 +844,30 @@ class FrameworkEvaluator:
 
     # Ablation: use only traditional retriever (no AI rule generation)
     def _run_without_ai_retriever(self, problem: str, problem_id: str = None, method: str = None) -> Any:
-        """Run with traditional retriever only /
-
-        """
+        """Run with traditional retriever only (no AI rule generation)"""
         try:
-            #
             from main import CausalReasoningEngine
+            from engine import GRPOExperienceManager
 
-            #
-            engine = CausalReasoningEngine(verbose=self.verbose)
-            #
+            # Initialize engine without AI retriever
+            engine = CausalReasoningEngine(
+                verbose=self.verbose,
+                use_multi_agent=True
+            )
+
+            # Load and inject GRPO experiences (still useful even without AI retriever)
+            try:
+                experience_manager = GRPOExperienceManager(
+                    experience_dir="data/grpo_experiences",
+                    verbose=False
+                )
+                
+                if hasattr(engine, 'scaffolder') and experience_manager:
+                    engine.scaffolder.experience_manager = experience_manager
+            except Exception:
+                pass  # Silently continue without experiences
+
+            # Solve problem
             results = engine.solve_problem(
                 problem,
                 include_validation=False,
@@ -850,15 +875,12 @@ class FrameworkEvaluator:
                 method_name=method
             )
 
-            # 
             if results.get('success'):
                 return results.get('final_answer')
             else:
-                # 
                 raise Exception(results.get('error', 'Unknown error'))
 
         except Exception as e:
-            # 
             raise Exception(f"No AI retriever ablation failed: {e}")
 
     # Ablation: compute via LLM (no symbolic execution)
@@ -878,21 +900,33 @@ class FrameworkEvaluator:
         这测试符号执行是否必要，或者LLM计算是否足够。
         """
         try:
-            # Import CausalReasoningEngine with computation_mode='llm'
-            # 使用computation_mode='llm'导入CausalReasoningEngine
             from main import CausalReasoningEngine
+            from engine import GRPOExperienceManager
 
-            # Initialize engine with LLM computation mode / 使用LLM计算模式初始化引擎
+            # Initialize engine with LLM computation mode
             engine = CausalReasoningEngine(
                 knowledge_base_path="data/knowledge_base.json",
                 verbose=self.verbose,
                 use_ai_retriever=True,
-                auto_enrich_kb=True,            # ✅ 启用动态学习：AI生成的规则自动保存到知识库
+                auto_enrich_kb=True,
                 min_rules_threshold=2,
-                computation_mode="llm"  # KEY: Use LLM computation instead of symbolic execution / 关键：使用LLM计算而非符号执行
+                computation_mode="llm",  # KEY: Use LLM computation instead of symbolic execution
+                use_multi_agent=True
             )
 
-            # Solve problem using LLM computation / 使用LLM计算求解问题
+            # Load and inject GRPO experiences
+            try:
+                experience_manager = GRPOExperienceManager(
+                    experience_dir="data/grpo_experiences",
+                    verbose=False
+                )
+                
+                if hasattr(engine, 'scaffolder') and experience_manager:
+                    engine.scaffolder.experience_manager = experience_manager
+            except Exception:
+                pass  # Silently continue without experiences
+
+            # Solve problem using LLM computation
             results = engine.solve_problem(
                 problem,
                 include_validation=False,
@@ -900,7 +934,6 @@ class FrameworkEvaluator:
                 method_name=method
             )
 
-            # Return result / 返回结果
             if results.get('success'):
                 return results.get('final_answer')
             else:
@@ -910,7 +943,6 @@ class FrameworkEvaluator:
                 raise Exception(error_msg)
 
         except Exception as e:
-            # Raise exception with details / 抛出带详细信息的异常
             raise Exception(f"No symbolic execution ablation failed: {e}")
 
     # Ablation: skip synthesis/validation stage
@@ -1167,15 +1199,19 @@ YOUR RESPONSE:"""
                 # Update counters and per‑problem status symbol
                 if result.is_correct:
                     correct_count += 1
-                    print("", end="")
+                    print("✓", end="")  # Correct
                 elif result.error:
                     error_count += 1
-                    print("", end="")
+                    print("❌", end="")  # Error
                 else:
-                    print("", end="")
+                    print("✗", end="")  # Incorrect
 
                 # Show time per problem
                 print(f" ({result.execution_time:.2f}s)")
+                
+                # Show current accuracy in real-time
+                current_accuracy = (correct_count / i) * 100
+                print(f"    Current: {correct_count}/{i} correct ({current_accuracy:.1f}%)")
 
                 # Aggregate total time for method stats
                 total_time += result.execution_time

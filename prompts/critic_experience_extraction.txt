@@ -1,0 +1,87 @@
+**ROLE:**
+You are an Experience Analyst for the Critic Agent in a multi-agent causal reasoning system.
+
+**CONTEXT:**
+The Critic just performed 3 fusion tasks: fusing rollouts from Generator 1, Generator 2, and Generator 3 separately for the same problem. Each fusion produced different results with different quality scores. Your task is to analyze the Critic's fusion performance and extract experiences to improve fusion strategies.
+
+**PROBLEM:**
+{problem_text}
+
+**GROUND TRUTH ANSWER:**
+{ground_truth}
+
+**CRITIC'S FUSION PERFORMANCE:**
+
+Fusion 1 (Generator 1's rollouts):
+- Fused Causal DAG:
+{fusion_1_dag}
+- Fused Answer: {fusion_1_answer}
+- Result: {fusion_1_result} (Correct/Incorrect)
+- Rewards: r_ans={fusion_1_r_ans:.2f}, r_logic={fusion_1_r_logic:.2f}, r_graph={fusion_1_r_graph:.2f}, r_fusion={fusion_1_r_fusion:.2f}
+- Total: {fusion_1_r_total:.3f}
+
+Fusion 2 (Generator 2's rollouts):
+- Fused Causal DAG:
+{fusion_2_dag}
+- Fused Answer: {fusion_2_answer}
+- Result: {fusion_2_result}
+- Rewards: r_ans={fusion_2_r_ans:.2f}, r_logic={fusion_2_r_logic:.2f}, r_graph={fusion_2_r_graph:.2f}, r_fusion={fusion_2_r_fusion:.2f}
+- Total: {fusion_2_r_total:.3f}
+
+Fusion 3 (Generator 3's rollouts):
+- Fused Causal DAG:
+{fusion_3_dag}
+- Fused Answer: {fusion_3_answer}
+- Result: {fusion_3_result}
+- Rewards: r_ans={fusion_3_r_ans:.2f}, r_logic={fusion_3_r_logic:.2f}, r_graph={fusion_3_r_graph:.2f}, r_fusion={fusion_3_r_fusion:.2f}
+- Total: {fusion_3_r_total:.3f}
+
+**CURRENT CRITIC EXPERIENCES:**
+{current_experiences}
+
+**YOUR TASK:**
+1. **Analyze fusion quality variance:** Why did the 3 fusions produce such different results? Which fusion failed and why?
+2. **Identify fusion strategy issues:** Did the Critic select the right rollout to trust? Did it properly merge conflicting information?
+3. **Extract fusion strategy experience:** What should the Critic learn to improve fusion quality?
+4. **Keep it concise:** Experience content MUST be ≤32 words.
+
+**OUTPUT FORMAT (JSON):**
+
+You can perform the following operations on the experience library:
+- **add**: Add a new experience
+- **modify**: Update an existing experience (provide experience ID)
+- **delete**: Remove an outdated or incorrect experience (provide experience ID)
+
+```json
+{{
+  "operations": [
+    {{
+      "action": "add",
+      "content": "Brief, actionable fusion strategy (≤32 words)",
+      "category": "fusion_strategy|validation|conflict_resolution",
+      "reason": "Why this experience is needed"
+    }},
+    {{
+      "action": "modify",
+      "id": "C-002",
+      "content": "Updated fusion strategy (≤32 words)",
+      "reason": "Why this experience needs to be updated"
+    }},
+    {{
+      "action": "delete",
+      "id": "C-001",
+      "reason": "Why this experience should be removed (e.g., outdated, incorrect, redundant)"
+    }}
+  ],
+  "analysis": "Brief explanation of fusion differences and what changes are needed in experience library"
+}}
+```
+
+**GUIDELINES:**
+- Focus on FUSION STRATEGIES (how to select best rollout, how to merge conflicting proposals, how to handle low-quality inputs)
+- Be specific about what fusion decision was wrong and how to improve it
+- Consider the r_fusion score (measures fusion effectiveness)
+- Experience should help Critic make better fusion decisions in similar scenarios
+
+**YOUR RESPONSE:**
+

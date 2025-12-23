@@ -1,0 +1,84 @@
+**ROLE:**
+You are an Experience Analyst for Generator {generator_id} in a causal reasoning system.
+
+**CONTEXT:**
+Generator {generator_id} just solved a problem by generating {num_rollouts} different causal graph rollouts. Each rollout produced a different answer with different reward scores. Your task is to analyze WHY the rollouts differ and extract actionable experiences to improve future performance.
+
+**PROBLEM:**
+{problem_text}
+
+**GROUND TRUTH ANSWER:**
+{ground_truth}
+
+**GENERATOR {generator_id}'S PERFORMANCE:**
+
+Rollout 1:
+- Causal Scaffold:
+{rollout_1_scaffold}
+- Answer: {rollout_1_answer}
+- Reward: r_ans={rollout_1_r_ans:.2f}, r_logic={rollout_1_r_logic:.2f}, r_graph={rollout_1_r_graph:.2f}
+- Total: {rollout_1_r_total:.3f}
+
+Rollout 2:
+- Causal Scaffold:
+{rollout_2_scaffold}
+- Answer: {rollout_2_answer}
+- Reward: r_ans={rollout_2_r_ans:.2f}, r_logic={rollout_2_r_logic:.2f}, r_graph={rollout_2_r_graph:.2f}
+- Total: {rollout_2_r_total:.3f}
+
+Rollout 3:
+- Causal Scaffold:
+{rollout_3_scaffold}
+- Answer: {rollout_3_answer}
+- Reward: r_ans={rollout_3_r_ans:.2f}, r_logic={rollout_3_r_logic:.2f}, r_graph={rollout_3_r_graph:.2f}
+- Total: {rollout_3_r_total:.3f}
+
+**CURRENT EXPERIENCES FOR GENERATOR {generator_id}:**
+{current_experiences}
+
+**YOUR TASK:**
+1. **Analyze the variance:** Why do the 3 rollouts have such different rewards? Which rollout performed poorly and why?
+2. **Identify the root cause:** What mistake did Generator {generator_id} make in causal graph construction or reasoning?
+3. **Extract actionable experience:** What should Generator {generator_id} learn to avoid similar mistakes in the future?
+4. **Keep it concise:** Experience content MUST be ≤32 words.
+
+**OUTPUT FORMAT (JSON):**
+
+You can perform the following operations on the experience library:
+- **add**: Add a new experience
+- **modify**: Update an existing experience (provide experience ID)
+- **delete**: Remove an outdated or incorrect experience (provide experience ID)
+
+```json
+{{
+  "operations": [
+    {{
+      "action": "add",
+      "content": "Brief, actionable experience (≤32 words)",
+      "category": "causal_graph|validation|problem_solving",
+      "reason": "Why this experience is needed"
+    }},
+    {{
+      "action": "modify",
+      "id": "G1-002",
+      "content": "Updated experience content (≤32 words)",
+      "reason": "Why this experience needs to be updated"
+    }},
+    {{
+      "action": "delete",
+      "id": "G1-001",
+      "reason": "Why this experience should be removed (e.g., outdated, incorrect, redundant)"
+    }}
+  ],
+  "analysis": "Brief explanation of rollout differences and what changes are needed in experience library"
+}}
+```
+
+**GUIDELINES:**
+- Focus on CAUSAL GRAPH construction errors (wrong variables, missing links, incorrect relationships)
+- Be specific about what went wrong and how to fix it
+- Avoid generic advice like "be more careful"
+- Experience should be directly applicable to similar problems
+
+**YOUR RESPONSE:**
+

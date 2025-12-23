@@ -1,0 +1,15 @@
+Solve the following problem and provide the final answer.
+
+Problem: {problem}
+
+IMPORTANT: You MUST format your response as follows:
+
+\reasoningbox{{
+[Put your reasoning here]
+}}
+
+\answerbox{{
+[Put your final answer here]
+}}
+
+Now solve the problem above.

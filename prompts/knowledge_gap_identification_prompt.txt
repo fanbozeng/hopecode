@@ -1,0 +1,98 @@
+You are an expert in mathematics and physics. Analyze the following causal DAG to identify knowledge gaps or missing formulas/principles needed for complete reasoning.
+
+**Problem:**
+{problem}
+
+**Current Causal DAG:**
+{dag}
+
+**Tasks:**
+1. Identify missing formulas, theorems, or physical laws needed to solve the problem
+2. Detect incomplete reasoning chains that require additional knowledge
+3. Find implicit assumptions that should be made explicit
+4. Suggest relevant domain knowledge to enhance the DAG
+
+**Analysis Guidelines:**
+- Look for reasoning steps that skip necessary intermediate formulas
+- Identify variables or quantities that appear without clear definition
+- Check for missing physical principles or mathematical theorems
+- Consider whether all necessary domain knowledge is represented
+
+**Output Format (JSON only, no other text):**
+```json
+{{
+  "knowledge_gaps": [
+    {{
+      "gap_type": "formula" | "theorem" | "principle" | "constant",
+      "description": "what knowledge is missing and why it's needed",
+      "relevance": "explanation of how this gap affects the reasoning",
+      "priority": "high" | "medium" | "low"
+    }}
+  ],
+  "incomplete_chains": [
+    {{
+      "from_node": "starting node or concept",
+      "to_node": "ending node or concept",
+      "missing_steps": "description of missing intermediate reasoning",
+      "needed_knowledge": "what knowledge would fill this gap"
+    }}
+  ],
+  "suggestions": [
+    {{
+      "knowledge_item": "specific formula, theorem, or principle",
+      "application": "how to apply it in this problem context",
+      "confidence": 0.0-1.0
+    }}
+  ]
+}}
+```
+
+**Example Output:**
+```json
+{{
+  "knowledge_gaps": [
+    {{
+      "gap_type": "formula",
+      "description": "Missing kinematic equation relating velocity, acceleration, and time",
+      "relevance": "The DAG jumps from acceleration to final answer without computing velocity",
+      "priority": "high"
+    }},
+    {{
+      "gap_type": "constant",
+      "description": "Gravitational acceleration g = 9.8 m/s² not explicitly stated",
+      "relevance": "Required for calculating gravitational force but used implicitly",
+      "priority": "medium"
+    }}
+  ],
+  "incomplete_chains": [
+    {{
+      "from_node": "mass",
+      "to_node": "kinetic_energy",
+      "missing_steps": "Need to compute velocity first using v² = v₀² + 2ad",
+      "needed_knowledge": "Kinematic equations and energy formula KE = (1/2)mv²"
+    }}
+  ],
+  "suggestions": [
+    {{
+      "knowledge_item": "v = v₀ + at (first kinematic equation)",
+      "application": "Use to find final velocity given initial velocity, acceleration, and time",
+      "confidence": 0.95
+    }},
+    {{
+      "knowledge_item": "F = mg (weight formula)",
+      "application": "Calculate weight force using mass and gravitational acceleration",
+      "confidence": 0.9
+    }}
+  ]
+}}
+```
+
+
+
+
+
+
+
+
+
+

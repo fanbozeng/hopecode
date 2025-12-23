@@ -1,0 +1,203 @@
+You are a rigorous expert in both mathematics and physics. Your task is to **review and actively correct** the following causal DAG.
+
+**Problem:**
+{problem}
+
+**Causal DAG:**
+{dag}
+
+**Your Tasks:**
+
+1. **Automatically identify** if this is a math, physics, or mixed problem
+2. **Verify formulas, theorems, and physical laws** are correctly applied
+3. **Check logical validity** and unit consistency (for physics problems)
+4. **Identify errors** and provide specific corrections
+5. **Generate a corrected DAG** with all fixes applied 
+
+**Review Guidelines:**
+
+- Be thorough and critical from both math and physics perspectives
+- Identify actual errors, not stylistic preferences
+- Provide specific corrections with clear explanations
+- Categorize severity: **high** (wrong answer), **medium** (misleading), **low** (minor issue)
+- If the DAG is correct, state so explicitly in overall_assessment
+
+**Common Math Errors to Check:**
+- Arithmetic mistakes
+- Incorrect algebraic manipulation
+- Wrong application of formulas (e.g., quadratic formula, logarithm rules)
+- Sign errors
+- Domain/range violations
+
+**Common Physics Errors to Check:**
+- Using wrong constant (e.g., g = 10 instead of 9.8, or arbitrary acceleration instead of gravitational)
+- Unit inconsistency
+- Violating physical laws (e.g., energy conservation, Newton's laws)
+- Wrong formula for the scenario (e.g., F = ma vs F = mg)
+- Missing initial conditions or boundary conditions
+
+**Output Format (JSON only, no other text):**
+
+```json
+{{
+  "problem_domain": "math" | "physics" | "mixed",
+  "issues": [
+    {{
+      "node": "node name or edge description",
+      "issue": "detailed description of the problem",
+      "severity": "high" | "medium" | "low",
+      "category": "formula_error" | "logic_error" | "unit_error" | "physics_violation" | "missing_step" | "other"
+    }}
+  ],
+  "corrections": [
+    {{
+      "node": "node name or edge description",
+      "original": "original incorrect content",
+      "corrected": "corrected content",
+      "reason": "detailed explanation of why this correction is needed and what principle it follows"
+    }}
+  ],
+  "corrected_dag": {{
+    "target_variable": "...",
+    "expected_answer_type": "...",
+    "knowns": {{...}},
+    "causal_graph": [
+      {{"cause": ["..."], "effect": "...", "rule": "..."}}
+    ],
+    "computation_plan": [
+      {{"id": "step1", "target": "...", "inputs": [...], "description": "..."}}
+    ],
+    "constraints_and_premises": [...],
+    "problem_model": "...",
+    "chosen_strategy": "..."
+  }},
+  "overall_assessment": "summary of the review: overall quality, main issues found, and whether the reasoning chain is sound"
+}}
+```
+
+**Critical Requirements:** 
+- **Always** provide `corrected_dag` 
+- If no errors found: `corrected_dag` = input DAG (unchanged)
+- If errors found: `corrected_dag` = fully corrected DAG with all fixes applied to knowns, causal_graph, computation_plan, etc.
+- The `corrected_dag` should be **complete and ready to use** - not just descriptions of changes
+
+**Example 1 - Physics Problem:**
+
+Problem: "A 2kg object falls freely under gravity. What is the force?"
+
+Causal DAG has: F = ma with a=5 (WRONG!)
+
+Your review:
+```json
+{{
+  "problem_domain": "physics",
+  "issues": [
+    {{
+      "node": "gravitational_force",
+      "issue": "Used general acceleration 'a' instead of gravitational acceleration 'g'",
+      "severity": "high",
+      "category": "physics_violation"
+    }},
+    {{
+      "node": "gravitational_force",
+      "issue": "Acceleration value 5 m/s² is incorrect for Earth's gravity",
+      "severity": "high",
+      "category": "formula_error"
+    }}
+  ],
+  "corrections": [
+    {{
+      "node": "gravitational_force",
+      "original": "F = ma = 2 kg × 5 m/s² = 10 N",
+      "corrected": "F = mg = 2 kg × 9.8 m/s² = 19.6 N",
+      "reason": "For gravitational force near Earth's surface, must use g = 9.8 m/s² (gravitational acceleration), not arbitrary acceleration. The correct formula is F = mg, not F = ma in this context."
+    }}
+  ],
+  "corrected_dag": {{
+    "target_variable": "gravitational_force",
+    "expected_answer_type": "Numerical",
+    "knowns": {{"mass": 2, "g": 9.8}},
+    "causal_graph": [
+      {{"cause": ["mass", "g"], "effect": "gravitational_force", "rule": "F = m * g"}}
+    ],
+    "computation_plan": [
+      {{"id": "step1", "target": "gravitational_force", "inputs": ["mass", "g"], "description": "Calculate gravitational force using F = mg = 2 kg × 9.8 m/s² = 19.6 N"}}
+    ]
+  }},
+  "overall_assessment": "Critical error: confused general acceleration with gravitational acceleration. The DAG uses incorrect formula and value, leading to wrong answer. Corrected to use F = mg with g = 9.8 m/s²."
+}}
+```
+
+**Example 2 - Math Problem:**
+
+Problem: "Solve the quadratic equation x² - 5x + 6 = 0"
+
+Causal DAG shows correct factorization but arithmetic error: (x-2)(x-3) = 0, so x = 2 or x = 4 (WRONG!)
+
+Your review:
+```json
+{{
+  "problem_domain": "math",
+  "issues": [
+    {{
+      "node": "solution_x2",
+      "issue": "Arithmetic error in solving (x-3) = 0",
+      "severity": "high",
+      "category": "formula_error"
+    }}
+  ],
+  "corrections": [
+    {{
+      "node": "solution_x2",
+      "original": "From (x-3) = 0, we get x = 4",
+      "corrected": "From (x-3) = 0, we get x = 3",
+      "reason": "Basic algebra: if (x-3) = 0, then x = 3, not x = 4. This is a simple arithmetic error."
+    }}
+  ],
+  "corrected_dag": {{
+    "target_variable": "solutions",
+    "expected_answer_type": "Tuple",
+    "knowns": {{}},
+    "causal_graph": [
+      {{"cause": ["equation"], "effect": "factored_form", "rule": "(x-2)(x-3) = 0"}},
+      {{"cause": ["factored_form"], "effect": "solution_x1", "rule": "x-2 = 0 => x = 2"}},
+      {{"cause": ["factored_form"], "effect": "solution_x2", "rule": "x-3 = 0 => x = 3"}}
+    ],
+    "computation_plan": [
+      {{"id": "step1", "target": "solution_x1", "inputs": [], "description": "From (x-2) = 0, we get x = 2"}},
+      {{"id": "step2", "target": "solution_x2", "inputs": [], "description": "From (x-3) = 0, we get x = 3"}},
+      {{"id": "step3", "target": "solutions", "inputs": [{{"ref": "step1"}}, {{"ref": "step2"}}], "description": "Combine solutions: x = 2 or x = 3"}}
+    ]
+  }},
+  "overall_assessment": "The factorization approach is correct, but there's an arithmetic error in the final step. Corrected: the solutions are x = 2 and x = 3."
+}}
+```
+
+**Example 3 - Correct DAG:**
+
+Problem: "An object is thrown upward with initial velocity 20 m/s. When does it reach maximum height?"
+
+Causal DAG is correct: v = v₀ - gt, at max height v = 0, so t = v₀/g = 20/9.8 ≈ 2.04 s
+
+Your review:
+```json
+{{
+  "problem_domain": "physics",
+  "issues": [],
+  "corrections": [],
+  "corrected_dag": {{
+    "target_variable": "time_at_max_height",
+    "expected_answer_type": "Numerical",
+    "knowns": {{"v0": 20, "g": 9.8}},
+    "causal_graph": [
+      {{"cause": ["v0", "g"], "effect": "time_at_max_height", "rule": "t = v0 / g"}}
+    ],
+    "computation_plan": [
+      {{"id": "step1", "target": "time_at_max_height", "inputs": ["v0", "g"], "description": "At maximum height, v = 0. Using v = v0 - gt, solve for t: t = v0/g = 20/9.8 ≈ 2.04 s"}}
+    ]
+  }},
+  "overall_assessment": "The DAG correctly applies physics (kinematic equation v = v₀ - gt) and mathematics (solving for t when v = 0). The reasoning is sound, formulas are correct, and the numerical calculation is accurate. No issues found, so corrected_dag is identical to input."
+}}
+```
+
+Now, please review the problem and causal DAG provided above:

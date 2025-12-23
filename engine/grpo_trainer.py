@@ -71,6 +71,19 @@ class TrainingFreeGRPOTrainer:
         self.num_epochs = num_epochs
         self.verbose = verbose
         
+        # Initialize 3D Reward Evaluator / 初始化三维奖励评估器 #TODO 这个地方没有加载critic的吗
+        from engine.reward_evaluator import RewardEvaluator
+        self.reward_evaluator = RewardEvaluator(
+            llm_client=self.llm_client,
+            alpha=0.6,   # 答案正确性权重
+            beta=0.25,   # 推理逻辑质量权重
+            gamma=0.15,  # 因果图质量权重
+            tau=0.05,    # 经验提取阈值（σ > τ 才触发）
+            verbose=self.verbose
+        )
+        self._print("✓ Reward evaluator initialized (α=0.6, β=0.25, γ=0.15, τ=0.05)")
+        self._print("✓ 奖励评估器已初始化（α=0.6, β=0.25, γ=0.15, τ=0.05）")
+        
         # Load answer comparison prompt for accurate evaluation
         # 加载答案比较提示词以实现准确评估
         self.answer_comparison_prompt = self._load_answer_comparison_prompt()
@@ -289,68 +302,220 @@ Provide recommendations in JSON format:
         
             self._print(f"\n✓ Got {len(results)} fused scaffolds (one per generator)")
             
-            # Step 2: Execute and evaluate each result
-            # 步骤2：执行并评估每个结果
-            self._print(f"\n📊 Evaluating answers...")
-            
+            # Initialize evaluations structure
+            # 初始化evaluations结构
             evaluations = []
             for result in results:
+                evaluations.append({
+                    'agent_id': result['agent_id'],
+                    'scaffold': result['scaffold'],
+                    'num_rollouts': result['num_rollouts']
+                })
+            
+            # ============================================================
+            # 阶段1：Generator评估（不融合，每个rollout单独评估）
+            # Phase 1: Generator Evaluation (No fusion, each rollout evaluated separately)
+            # ============================================================
+            self._print(f"\n{'='*80}")
+            self._print(f"📊 阶段1：Generator Rollouts 评估（不融合）")
+            self._print(f"📊 Phase 1: Generator Rollouts Evaluation (No Fusion)")
+            self._print(f"{'='*80}")
+            
+            generator_stats = []  # Store stats for each generator
+            
+            for i, result in enumerate(results):
                 agent_id = result['agent_id']
-                scaffold = result['scaffold']
+                rollouts = result.get('rollouts', [])
                 
-                # Execute scaffold using LLM Computer to get actual answer
-                # 使用LLM计算器执行scaffold获取实际答案
+                self._print(f"\n  🤖 Generator {agent_id}: Evaluating {len(rollouts)} rollouts")
+                
+                if not rollouts or len(rollouts) < 2:
+                    self._print(f"    ⚠️ Not enough rollouts ({len(rollouts)}), skipping")
+                    generator_stats.append(None)
+                    continue
+                
+                # Evaluate each rollout separately (not fused yet!)
+                # 单独评估每个rollout（还没有融合！）
+                rollout_rewards = []
+                for rollout in rollouts:
+                    scaffold = rollout['scaffold']
+                    rollout_id = rollout['rollout_id']
+                    
+                    self._print(f"\n    📝 Rollout {rollout_id}:")
+                    
+                    # Execute this rollout to get its answer
+                    # 执行这个rollout得到它的答案
+                    try:
+                        computation_result = self.llm_computer.compute_from_scaffold(
+                            causal_scaffold=scaffold,
+                            problem_text=problem_text
+                        )
+                        
+                        if computation_result['success']:
+                            rollout_answer = computation_result['result']
+                        else:
+                            rollout_answer = None
+                            self._print(f"      ⚠️ Computation failed: {computation_result.get('error', 'Unknown')}")
+                    except Exception as e:
+                        rollout_answer = None
+                        self._print(f"      ⚠️ Execution error: {e}")
+                    
+                    # Evaluate this rollout's answer correctness
+                    # 评估这个rollout的答案正确性
+                    if rollout_answer is not None:
+                        is_correct = self._compare_answers(rollout_answer, ground_truth, problem_text)
+                        r_ans = 1.0 if is_correct else 0.0
+                    else:
+                        is_correct = False
+                        r_ans = 0.0
+                    
+                    # Evaluate logic quality
+                    # 评估逻辑质量
+                    r_logic = self.reward_evaluator.evaluate_logic(
+                        trajectory=str(scaffold),
+                        problem_text=problem_text
+                    )
+                    
+                    # Evaluate graph quality
+                    # 评估图质量
+                    r_graph = self.reward_evaluator.evaluate_graph(scaffold)
+                    
+                    rollout_rewards.append({
+                        'rollout_id': rollout_id,
+                        'answer': rollout_answer,
+                        'is_correct': is_correct,
+                        'r_ans': r_ans,
+                        'r_logic': r_logic,
+                        'r_graph': r_graph
+                    })
+                    
+                    status = "✓" if is_correct else "✗"
+                    self._print(f"      {status} Answer: {rollout_answer}")
+                    self._print(f"      Rewards: r_ans={r_ans:.2f}, r_logic={r_logic:.2f}, r_graph={r_graph:.2f}")
+                
+                # Compute group statistics for this generator
+                # 计算这个generator的组内统计
+                total_rewards, group_stats = self.reward_evaluator.evaluate_group(rollout_rewards)
+                
+                self._print(f"\n    📊 Generator {agent_id} 统计:")
+                self._print(f"      奖励均值 μ={group_stats['mean']:.3f}")
+                self._print(f"      奖励标准差 σ={group_stats['std']:.3f}")
+                self._print(f"      奖励范围 [{group_stats['min']:.3f}, {group_stats['max']:.3f}]")
+                
+                if group_stats['should_extract']:
+                    self._print(f"      ✅ σ({group_stats['std']:.3f}) > τ({self.reward_evaluator.tau}) → 触发经验提炼")
+                else:
+                    self._print(f"      ℹ️  σ({group_stats['std']:.3f}) ≤ τ({self.reward_evaluator.tau}) → 跳过经验提炼")
+                
+                generator_stats.append({
+                    'agent_id': agent_id,
+                    'rollout_rewards': rollout_rewards,
+                    'group_stats': group_stats,
+                    'should_extract': group_stats['should_extract']
+                })
+            
+            # ============================================================
+            # 阶段2：Critic融合评估（根据agent_id分组融合）
+            # Phase 2: Critic Fusion Evaluation (Fuse by agent_id)
+            # ============================================================
+            self._print(f"\n{'='*80}")
+            self._print(f"📊 阶段2：Critic 融合评估")
+            self._print(f"📊 Phase 2: Critic Fusion Evaluation")
+            self._print(f"{'='*80}")
+            
+            for i, result in enumerate(results):
+                agent_id = result['agent_id']
+                fused_scaffold = result['scaffold']
+                rollouts = result.get('rollouts', [])
+                
+                self._print(f"\n  🧠 Critic Fusion for Generator {agent_id}:")
+                
+                # Execute fused scaffold
+                # 执行融合后的scaffold
                 try:
                     computation_result = self.llm_computer.compute_from_scaffold(
-                        causal_scaffold=scaffold,
+                        causal_scaffold=fused_scaffold,
                         problem_text=problem_text
                     )
                     
                     if computation_result['success']:
-                        answer = computation_result['result']
+                        fused_answer = computation_result['result']
                     else:
-                        answer = None
-                        self._print(f"  ⚠️ Generator {agent_id}: Computation failed - {computation_result.get('error', 'Unknown error')}")
+                        fused_answer = None
+                        self._print(f"    ⚠️ Fused computation failed")
                 except Exception as e:
-                    answer = None
-                    self._print(f"  ⚠️ Generator {agent_id}: Execution error - {e}")
+                    fused_answer = None
+                    self._print(f"    ⚠️ Fused execution error: {e}")
                 
-                # Evaluate with problem context for accurate comparison
-                # 使用问题上下文进行准确比较
-                is_correct = self._compare_answers(answer, ground_truth, problem_text) if answer is not None else False
+                # Evaluate fused answer
+                # 评估融合后的答案
+                if fused_answer is not None:
+                    is_correct = self._compare_answers(fused_answer, ground_truth, problem_text)
+                    r_ans_fused = 1.0 if is_correct else 0.0
+                else:
+                    is_correct = False
+                    r_ans_fused = 0.0
                 
-                evaluations.append({
-                    'agent_id': agent_id,
-                    'scaffold': scaffold,
-                    'answer': answer,
-                    'is_correct': is_correct,
-                    'num_rollouts': result['num_rollouts']
-                })
+                r_logic_fused = self.reward_evaluator.evaluate_logic(
+                    trajectory=str(fused_scaffold),
+                    problem_text=problem_text
+                )
                 
-                status = "✅ Correct" if is_correct else "❌ Incorrect"
-                self._print(f"  Generator {agent_id}: {status} (Answer: {answer})")
+                r_graph_fused = self.reward_evaluator.evaluate_graph(fused_scaffold)
+                
+                # NEW: Evaluate fusion quality (r_fusion)
+                # 新增：评估融合质量（r_fusion）
+                proposals = [r['scaffold'] for r in rollouts]
+                r_fusion = self.reward_evaluator.evaluate_fusion(
+                    proposals=proposals,
+                    fused_result=fused_scaffold,
+                    ground_truth=ground_truth
+                )
+                
+                status = "✅" if is_correct else "❌"
+                self._print(f"    {status} Fused Answer: {fused_answer}")
+                self._print(f"    Rewards: r_ans={r_ans_fused:.2f}, r_logic={r_logic_fused:.2f}, r_graph={r_graph_fused:.2f}")
+                self._print(f"    Fusion Quality: r_fusion={r_fusion:.3f}")
+                
+                # Update evaluations with both generator and critic info
+                # 更新evaluations，包含generator和critic信息
+                evaluations[i]['answer'] = fused_answer
+                evaluations[i]['is_correct'] = is_correct
+                evaluations[i]['fused_rewards'] = {
+                    'r_ans': r_ans_fused,
+                    'r_logic': r_logic_fused,
+                    'r_graph': r_graph_fused,
+                    'r_fusion': r_fusion
+                }
+                
+                # Add generator stats
+                # 添加generator统计信息
+                if generator_stats[i] is not None:
+                    evaluations[i]['rollout_rewards'] = generator_stats[i]['rollout_rewards']
+                    evaluations[i]['group_stats'] = generator_stats[i]['group_stats']
+                    evaluations[i]['should_extract'] = generator_stats[i]['should_extract']
+                else:
+                    evaluations[i]['should_extract'] = False
             
-            # Step 3: Extract and update experiences for each generator
-            # 步骤3：为每个生成器提取并更新经验
-            # Always extract experiences regardless of success/failure distribution
-            # 无论成功/失败分布如何，总是提取经验
-            
+            # Step 4: Extract experiences only for generators with σ > τ
+            # 步骤4：只为σ > τ的生成器提取经验
             correct_count = sum(1 for e in evaluations if e['is_correct'])
             total_count = len(evaluations)
+            extract_count = sum(1 for e in evaluations if e.get('should_extract', False))
             
-            if correct_count == 0:
-                self._print(f"\n🧠 Extracting experiences (All failed: 0/{total_count})...")
-            elif correct_count == total_count:
-                self._print(f"\n🧠 Extracting experiences (All correct: {total_count}/{total_count})...")
+            self._print(f"\n🧠 Experience extraction summary:")
+            self._print(f"   - Correct answers: {correct_count}/{total_count}")
+            self._print(f"   - Generators to extract: {extract_count}/{total_count} (σ > τ)")
+            
+            if extract_count > 0:
+                self._extract_and_update_experiences(
+                    problem_data,
+                    evaluations,
+                    epoch,
+                    problem_idx
+                )
             else:
-                self._print(f"\n🧠 Extracting experiences (Mixed: {correct_count}/{total_count} correct)...")
-            
-            self._extract_and_update_experiences(
-                problem_data,
-                evaluations,
-                epoch,
-                problem_idx
-            )
+                self._print(f"   ℹ️  No generators meet extraction threshold (σ > τ), skipping")
     
         except Exception as e:
             self._print(f"❌ Error during training: {e}")
@@ -593,13 +758,20 @@ YOUR RESPONSE:"""
         problem_text = problem_data['problem']
         ground_truth = problem_data.get('answer', '')
         
-        # Update experience for each generator
-        # 为每个生成器更新经验
+        # Update experience for each generator (only if should_extract=True)
+        # 为每个生成器更新经验（只有should_extract=True时）
         for eval_result in evaluations:
             agent_id = eval_result['agent_id']
             is_correct = eval_result['is_correct']
             answer = eval_result['answer']
             num_rollouts = eval_result['num_rollouts']
+            should_extract = eval_result.get('should_extract', False)
+            
+            # Skip if σ ≤ τ (no information gain)
+            # 如果 σ ≤ τ 则跳过（无信息增益）
+            if not should_extract:
+                self._print(f"\n  ⏭️  Skipping Generator {agent_id} (σ ≤ τ, no information gain)")
+                continue
             
             # Get current experiences for this generator
             # 获取这个生成器的当前经验
@@ -614,6 +786,17 @@ YOUR RESPONSE:"""
                 f"{exp.id}: {exp.content}" for exp in current_exp
             ]) if current_exp else "No experiences yet"
             
+            # Include reward information in prompt
+            # 在提示中包含奖励信息
+            group_stats = eval_result.get('group_stats', {})
+            reward_info = f"""
+Reward Statistics (三维奖励统计):
+- Mean (μ): {group_stats.get('mean', 0):.3f}
+- Std Dev (σ): {group_stats.get('std', 0):.3f}
+- Range: [{group_stats.get('min', 0):.3f}, {group_stats.get('max', 0):.3f}]
+- High variance detected (σ > τ) → Experience extraction triggered
+"""
+            
             # Construct prompt for this generator
             # 为这个生成器构造提示
             result_str = "Correct ✓" if is_correct else "Incorrect ✗"
@@ -626,12 +809,13 @@ YOUR RESPONSE:"""
                 final_answer=answer,
                 result=result_str,
                 current_experiences=current_exp_str
-            )
+            ) + reward_info
             
             # Extract experiences for this generator
             # 为这个生成器提取经验
             try:
                 self._print(f"\n  📝 Extracting experiences for Generator {agent_id}...")
+                self._print(f"     (σ={group_stats.get('std', 0):.3f} > τ={self.reward_evaluator.tau})")
                 
                 response = self.llm_client.complete(prompt, temperature=0.3)
                 operations = self._parse_operations(response)
@@ -655,20 +839,23 @@ YOUR RESPONSE:"""
         evaluations: List[Dict[str, Any]]
     ):
         """
-        Update critic's experience based on fusion performance.
-        根据融合表现更新critic经验
+        Update critic's experience based on fusion performance and r_fusion scores.
+        根据融合表现和r_fusion分数更新critic经验
         """
         self._print(f"\n  🧠 Analyzing Critic's fusion performance...")
         
-        # Build critic performance summary
-        # 构建critic表现总结
+        # Build critic performance summary with r_fusion
+        # 构建包含r_fusion的critic表现总结
         critic_perf_lines = []
         for eval_result in evaluations:
             agent_id = eval_result['agent_id']
             is_correct = eval_result['is_correct']
+            fused_rewards = eval_result.get('fused_rewards', {})
+            r_fusion = fused_rewards.get('r_fusion', 0.0)
+            
             status = "Successful" if is_correct else "Failed"
             critic_perf_lines.append(
-                f"- Generator {agent_id}: {eval_result['num_rollouts']} rollouts → {status}"
+                f"- Generator {agent_id}: {eval_result['num_rollouts']} rollouts → {status} (r_fusion={r_fusion:.3f})"
             )
         
         critic_performance = "\n".join(critic_perf_lines)
