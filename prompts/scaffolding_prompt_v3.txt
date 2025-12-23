@@ -9,7 +9,6 @@ Step 1 - CONSTRAINT & PREMISE IDENTIFICATION: Extract and list every constraint,
 
 Step 2 - GOAL IDENTIFICATION: What is the explicit final question? What is the precise form of the required output (e.g., a numerical value, a symbolic expression, an equation)?
 
-Step 3 - MODELING THE SCENARIO: Construct a mental model of the problem's domain.
   - For Physics: What are the objects? What are the phases of motion? What conservation laws apply?
   - For Math: What mathematical structure is involved? What are the key theorems?
 

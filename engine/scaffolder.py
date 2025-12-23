@@ -155,14 +155,14 @@ class CausalScaffolder:
         # 格式化知识列表
         knowledge_str = "\n".join(
             f"{i}. {rule}" for i, rule in enumerate(retrieved_knowledge, 1)
-        ) if retrieved_knowledge else "无额外知识"
+        ) if retrieved_knowledge else ""
 
         # 格式化经验列表
         if experiences is None:
             experiences = []
         experiences_str = "\n".join(
             f"{i}. {exp}" for i, exp in enumerate(experiences, 1)
-        ) if experiences else "无先前经验"
+        ) if experiences else ""
 
         # 构造完整提示词
         prompt = self.prompt_template.format(
