@@ -27,17 +27,32 @@ from baselines.dag_converter import DAGConverter
 class ZeroShotCoTRunner:
     """Zero-Shot Chain-of-Thought baseline runner with optimized structure."""
 
-    def __init__(self, output_dir: str = "results/zero_shot_cot") -> None:
+    def __init__(self, output_dir: str = "results/zero_shot_cot", model_override: Optional[str] = None) -> None:
         """
         Initialize runner with output directory and LLM client.
         
         Args:
             output_dir: Directory to save results
+            model_override: Optional model name to override .env configuration
         """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # 如果指定了模型，临时设置环境变量
+        if model_override:
+            import os
+            os.environ['SILICONFLOW_MODEL'] = model_override
+        
         self.llm_client = LLMClient()
         self.temperature = 0.0
+        
+        # 打印当前使用的模型信息
+        print(f"\n{'='*80}")
+        print(f"🤖 LLM Configuration")
+        print(f"{'='*80}")
+        print(f"Provider: {self.llm_client.provider}")
+        print(f"Model: {self.llm_client.model}")
+        print(f"{'='*80}\n")
         
         project_root = Path(__file__).resolve().parent.parent
         self.prompt_loader = PromptLoader(prompts_dir=str(project_root / "prompts"))
@@ -168,6 +183,7 @@ class ZeroShotCoTRunner:
             'math': project_root / "dataset/Math/test-00000-of-00001.parquet.json",
             'mydata': project_root / "dataset/mydata/data/2024A.json",
             'omnimath': project_root / "dataset/Omni-MATH/archive/main_test.jsonl",
+            'omnimath200': project_root / "dataset/Omni-Math-200-4-class.jsonl",
             'olympiad_math': project_root / "dataset/OlympiadBench_Dataset/OlympiadBench_Dataset/data/OE_TO_maths_en_COMP.json",
             'olympiad_physics': project_root / "dataset/OlympiadBench_Dataset/OlympiadBench_Dataset/data/OE_TO_physics_en_COMP.json",
         }
@@ -187,7 +203,7 @@ class ZeroShotCoTRunner:
         problems = []
         
         if dataset_name.lower() in ['gsm8k', 'omnimath']:
-            # JSONL format
+            # JSONL format (GSM8K, Omni-MATH)
             with open(path, 'r', encoding='utf-8') as f:
                 for i, line in enumerate(f):
                     if limit and i >= limit:
@@ -197,6 +213,21 @@ class ZeroShotCoTRunner:
                     problems.append({
                         'id': f'{dataset_name}_{i}',
                         'question': data['question'],
+                        'answer': answer
+                    })
+        
+        elif dataset_name.lower() == 'omnimath200':
+            # JSONL format (Omni-Math-200-4-class)
+            with open(path, 'r', encoding='utf-8') as f:
+                for i, line in enumerate(f):
+                    if limit and i >= limit:
+                        break
+                    data = json.loads(line.strip())
+                    # Remove LaTeX formatting from answer
+                    answer = data['answer'].replace('\\', '').replace('$', '').strip()
+                    problems.append({
+                        'id': f'{dataset_name}_{i}',
+                        'question': data['problem'],
                         'answer': answer
                     })
         
@@ -270,18 +301,49 @@ class ZeroShotCoTRunner:
 
 def main() -> None:
     """Main entry point."""
-    parser = argparse.ArgumentParser(description="Run Zero-Shot CoT Baseline with LLM-based Answer Evaluation")
+    parser = argparse.ArgumentParser(
+        description="Run Zero-Shot CoT Baseline with LLM-based Answer Evaluation",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Available Models (via SiliconFlow):
+  DeepSeek:
+    - deepseek-ai/DeepSeek-R1             (最新推理模型)
+    - deepseek-ai/DeepSeek-V3             (推理模型)
+    - deepseek-ai/DeepSeek-V2.5           (稳定版本)
+    - deepseek-ai/deepseek-coder-33b-instruct  (代码专用)
+  
+  Qwen:
+    - Qwen/Qwen2.5-72B-Instruct           (通用模型)
+    - Qwen/QwQ-32B-Preview                (推理模型)
+  
+  Llama:
+    - meta-llama/Llama-3.1-70B-Instruct
+    - meta-llama/Llama-3.3-70B-Instruct
+
+Examples:
+  # 使用默认模型 (.env 中配置的模型)
+  python run_zero_shot_cot.py --dataset gsm8k --limit 10
+  
+  # 指定使用 DeepSeek R1
+  python run_zero_shot_cot.py --dataset gsm8k --limit 10 --model deepseek-ai/DeepSeek-R1
+  
+  # 指定使用 Qwen
+  python run_zero_shot_cot.py --dataset math --limit 5 --model Qwen/Qwen2.5-72B-Instruct
+        """
+    )
     parser.add_argument('--dataset', type=str, required=True,
-                       choices=['gsm8k', 'math', 'mydata', 'omnimath', 'olympiad_math', 'olympiad_physics'],
+                       choices=['gsm8k', 'math', 'mydata', 'omnimath', 'omnimath200', 'olympiad_math', 'olympiad_physics'],
                        help='Dataset to evaluate')
     parser.add_argument('--limit', type=int, default=None,
                        help='Limit number of problems')
     parser.add_argument('--output-dir', type=str, default='results/zero_shot_cot',
                        help='Output directory')
+    parser.add_argument('--model', type=str, default=None,
+                       help='Model name to use (overrides .env configuration)')
     
     args = parser.parse_args()
     
-    runner = ZeroShotCoTRunner(output_dir=args.output_dir)
+    runner = ZeroShotCoTRunner(output_dir=args.output_dir, model_override=args.model)
     runner.run_on_dataset(args.dataset, args.limit)
 
 

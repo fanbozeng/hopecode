@@ -20,7 +20,7 @@ class LLMClient:
         初始化LLM客户端
 
         Args:
-            provider: API提供商名称 ('siliconflow', 'openai', 'anthropic')
+            provider: API提供商名称 ('siliconflow', 'openai', 'anthropic', 'deepseek')
         """
         load_dotenv()
         self.provider = provider or os.getenv("DEFAULT_PROVIDER", "siliconflow")
@@ -31,6 +31,8 @@ class LLMClient:
             self._init_openai()
         elif self.provider == "anthropic":
             self._init_anthropic()
+        elif self.provider == "deepseek":
+            self._init_deepseek()
         else:
             raise ValueError(f"不支持的提供商: {self.provider}")
 
@@ -58,6 +60,16 @@ class LLMClient:
         self.client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
         self.model = os.getenv("ANTHROPIC_MODEL", "claude-3-opus-20240229")
 
+    def _init_deepseek(self):
+        """初始化DeepSeek客户端"""
+        from openai import OpenAI
+
+        self.client = OpenAI(
+            api_key=os.getenv("DEEPSEEK_API_KEY"),
+            base_url=os.getenv("DEEPSEEK_API_BASE", "https://api.deepseek.com")
+        )
+        self.model = os.getenv("DEEPSEEK_MODEL", "deepseek-ai/DeepSeek-R1")
+
     def complete(self, prompt: str, temperature: float = 0.0) -> str:
         """
         生成文本补全
@@ -69,7 +81,7 @@ class LLMClient:
         Returns:
             生成的文本
         """
-        if self.provider in ["siliconflow", "openai"]:
+        if self.provider in ["siliconflow", "openai", "deepseek"]:
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
